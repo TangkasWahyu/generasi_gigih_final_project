@@ -6,4 +6,8 @@
 
 ## How to Run Locally
 
+```sh
+ruby main.rb
+```
+
 ## How to run test suite
