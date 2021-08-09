@@ -1,5 +1,6 @@
 require 'sinatra'
+require_relative 'controllers/user_controller'
 
-get '/' do
-    return 'hello world'
+post '/users/save' do
+    UserController.save(params)
 end

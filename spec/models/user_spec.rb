@@ -18,4 +18,25 @@ describe User do
             end
         end
     end
+
+    describe "#save" do
+        context "when mark attribute is valid_attribute" do
+            it "should call insert_query with mark attribute" do
+                mock_client = double
+                valid_attribute = {
+                    "username" => "mark",
+                    "email" => "mark@mail.com",
+                    "bio_description" => "20 years old and grow"
+                }
+                mark = User.new(valid_attribute)
+                insert_query = "insert into users (username, email, bio_description) values ('#{mark.username}', '#{mark.email}', '#{mark.bio_description}')"
+                
+                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+                expect(mock_client).to receive(:query).with(insert_query)
+
+                mark.save
+            end
+        end
+    end
+    
 end
