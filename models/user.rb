@@ -15,4 +15,8 @@ class User
         
         client.query(insert_query)
     end
+
+    def self.get_by_id(id)
+
+    end
 end

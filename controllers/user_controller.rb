@@ -5,4 +5,11 @@ class UserController
         user = User.new(user_attribute)
         user.save
     end
+
+    def self.post(params)
+        user = User.get_by_id(params["user_id"])
+        post = Post.new(params["text"])
+
+        user.post(post)
+    end
 end
