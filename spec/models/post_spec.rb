@@ -46,6 +46,20 @@ describe Post do
             end
         end
 
+        context "post contain no hashtag" do
+            it "return empty array" do
+                expected = []
+
+                valid_attribute = {
+                    "text" => "Hello world"
+                }
+                hello_world_post = Post.new(valid_attribute)
+                actual = hello_world_post.get_hashtags
+
+                expect(actual).to eq(expected)
+            end
+        end
+
         context "post contain #Monday" do
             it "return array that contain #monday only" do
                 expected = ["#monday"]
