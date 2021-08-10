@@ -1,4 +1,6 @@
 require_relative '../models/user'
+require_relative '../models/post'
+
 
 class UserController
     def self.save(user_attribute)
@@ -7,8 +9,12 @@ class UserController
     end
 
     def self.post(params)
+        post_attribute = {
+            "text" => params["text"]
+        }
+
         user = User.get_by_id(params["id"])
-        post = Post.new(params["text"])
+        post = Post.new(post_attribute)
 
         user.post(post)
     end

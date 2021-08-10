@@ -30,4 +30,12 @@ class User
 
         users.pop
     end
+
+    def post(post)
+        p post
+        client = create_db_client
+        insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{post.text}')"
+
+        client.query(insert_post_query)
+    end
 end
