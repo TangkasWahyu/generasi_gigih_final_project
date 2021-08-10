@@ -1,3 +1,4 @@
+require_relative '../test_helper'
 require_relative '../../controllers/user_controller'
 require_relative '../../models/user'
 
