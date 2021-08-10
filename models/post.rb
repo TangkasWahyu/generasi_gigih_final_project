@@ -9,11 +9,12 @@ class Post
     end
 
     def save_hashtags
-        hashtags = Post.get_hashtags
+        hashtags = self.get_hashtags
+        
         Hashtag.save_hashtags(hashtags)
     end
 
-    def self.get_hashtags
-
+    def get_hashtags
+        @text.scan(/[#]\w+/)
     end
 end
