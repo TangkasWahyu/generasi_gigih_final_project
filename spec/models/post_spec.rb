@@ -116,5 +116,19 @@ describe Post do
                 expect(actual).to be_falsy   
             end
         end
+
+        context "when text characters length is 1001" do
+            it "return true" do
+                text = 'o' * 1001
+                post_attribute = {
+                    "text" => text
+                }
+                post = Post.new(post_attribute)
+
+                actual = post.is_characters_maximum_limit?
+
+                expect(actual).to be_truthy   
+            end
+        end
     end
 end
