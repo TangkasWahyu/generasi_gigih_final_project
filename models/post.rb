@@ -15,6 +15,6 @@ class Post
     end
 
     def get_hashtags
-        @text.scan(/[#]\w+/)
+        @text.downcase.scan(/[#]\w+/)
     end
 end
