@@ -31,16 +31,16 @@ describe Post do
         end
     end
     
-    describe ".get_hashtags" do
+    describe "#get_hashtags" do
         context "post contain #monday" do
             it "return #monday" do
                 expected = ["#monday"]
-
-                valid_attribute = {
+                valid_post_attribute_with_1_hashtag = {
                     "text" => "Hello world #monday"
                 }
-                hello_world_post = Post.new(valid_attribute)
-                actual = hello_world_post.get_hashtags
+                post = Post.new(valid_post_attribute_with_1_hashtag)
+
+                actual = post.get_hashtags
 
                 expect(actual).to eq(expected)
             end
@@ -49,12 +49,12 @@ describe Post do
         context "post contain no hashtag" do
             it "return empty array" do
                 expected = []
-
-                valid_attribute = {
+                valid_post_attribute_without_hashtag = {
                     "text" => "Hello world"
                 }
-                hello_world_post = Post.new(valid_attribute)
-                actual = hello_world_post.get_hashtags
+                post = Post.new(valid_post_attribute_without_hashtag)
+
+                actual = post.get_hashtags
 
                 expect(actual).to eq(expected)
             end
@@ -63,12 +63,12 @@ describe Post do
         context "post contain #Monday" do
             it "return array that contain #monday only" do
                 expected = ["#monday"]
-
-                valid_attribute = {
+                valid_post_attribute_with_1_uppercase_hashtag = {
                     "text" => "Hello world #Monday"
                 }
-                hello_world_post = Post.new(valid_attribute)
-                actual = hello_world_post.get_hashtags
+                post = Post.new(valid_post_attribute_with_1_uppercase_hashtag)
+
+                actual = post.get_hashtags
 
                 expect(actual).to eq(expected)
             end
@@ -77,12 +77,12 @@ describe Post do
         context "post contain #Monday and #tuesday" do
             it "return array that contain #monday and #tuesday only" do
                 expected = ["#monday", "#tuesday"]
-
-                valid_attribute = {
+                valid_post_attribute_with_2_hashtag = {
                     "text" => "Hello world #monday #tuesday"
                 }
-                hello_world_post = Post.new(valid_attribute)
-                actual = hello_world_post.get_hashtags
+                post = Post.new(valid_post_attribute_with_2_hashtag)
+
+                actual = post.get_hashtags
 
                 expect(actual).to eq(expected)
             end
