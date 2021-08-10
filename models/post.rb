@@ -6,6 +6,7 @@ class Post
 
     def initialize(attribute)
         @text = attribute["text"]
+        @id = attribute["id"]
     end
 
     def is_characters_maximum_limit?

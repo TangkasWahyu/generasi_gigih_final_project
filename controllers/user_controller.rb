@@ -12,11 +12,16 @@ class UserController
         post_attribute = {
             "text" => params["text"]
         }
-
         user = User.get_by_id(params["id"])
         post = Post.new(post_attribute)
-        post.save_hashtags
+        post_id = user.post(post)
 
-        user.post(post)
+        post_attribute = {
+            "id" => post_id,
+            "text" => params["text"]
+        }
+
+        post = Post.new(post_attribute)
+        post.save_hashtags
     end
 end
