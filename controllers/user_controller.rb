@@ -15,6 +15,7 @@ class UserController
 
         user = User.get_by_id(params["id"])
         post = Post.new(post_attribute)
+        post.save_hashtags
 
         user.post(post)
     end

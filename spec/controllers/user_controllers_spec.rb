@@ -34,6 +34,7 @@ describe UserController do
 
                 expect(User).to receive(:get_by_id).with(valid_parameter["id"]).and_return(user_mock)
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
+                allow(post_mock).to receive(:save_hashtags)
                 expect(user_mock).to receive(:post).with(post_mock)
 
                 UserController.post(valid_parameter)
