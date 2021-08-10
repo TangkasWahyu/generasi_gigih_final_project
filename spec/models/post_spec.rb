@@ -17,17 +17,25 @@ describe Post do
     end
     
     describe "#save_hashtags" do
-        it "should call method get_hashtags with hashtags param and call method save_hashtags" do
-            valid_attribute = {
-                "text" => "Hello world #monday"
-            }
-            hashtags = ["monday"]
-            hello_world_post = Post.new(valid_attribute)
-            
-            expect(hello_world_post).to receive(:get_hashtags).and_return(hashtags)
-            expect(Hashtag).to receive(:save_hashtags).with(hashtags)
-
-            hello_world_post.save_hashtags
+        context "post_attribute contain 1 hashtag" do
+            it "should call hashtags and insert_post_details_query" do
+                post_attribute = {
+                    "id" => "1",
+                    "text" => "Hello world #monday"
+                }
+                hashtags = ["monday"]
+                post = Post.new(post_attribute)
+                hashtag_ids = ["1"]
+                mock_client = double
+                insert_post_details_query = "insert into postDetails (post_id, hashtag_id) values (#{post.id}, #{hashtag_ids[0]})"
+                
+                allow(post).to receive(:get_hashtags).and_return(hashtags)
+                expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
+                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+                expect(mock_client).to receive(:query).with(insert_post_details_query)
+    
+                post.save_hashtags
+            end
         end
     end
     
