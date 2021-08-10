@@ -7,7 +7,7 @@ class UserController
     end
 
     def self.post(params)
-        user = User.get_by_id(params["user_id"])
+        user = User.get_by_id(params["id"])
         post = Post.new(params["text"])
 
         user.post(post)

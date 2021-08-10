@@ -26,11 +26,11 @@ describe UserController do
                 user_mock = double
                 post_mock = double
                 valid_parameter = {
-                    "user_id" => "1",
+                    "id" => "1",
                     "text" => "Hello world"
                 }
 
-                expect(User).to receive(:get_by_id).with(valid_parameter["user_id"]).and_return(user_mock)
+                expect(User).to receive(:get_by_id).with(valid_parameter["id"]).and_return(user_mock)
                 expect(Post).to receive(:new).with(valid_parameter["text"]).and_return(post_mock)
                 expect(user_mock).to receive(:post).with(post_mock)
 
