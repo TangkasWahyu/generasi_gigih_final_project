@@ -32,7 +32,6 @@ class User
     end
 
     def post(post)
-        p post
         client = create_db_client
         insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{post.text}')"
 
