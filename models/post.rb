@@ -1,3 +1,6 @@
+require_relative 'hashtag'
+require_relative '../models/hashtag'
+
 class Post
     attr_reader :text
 
@@ -5,6 +8,12 @@ class Post
         @text = attribute["text"]
     end
 
-    def save
+    def save_hashtags
+        hashtags = Post.get_hashtags
+        Hashtag.save_hashtags(hashtags)
+    end
+
+    def self.get_hashtags
+
     end
 end

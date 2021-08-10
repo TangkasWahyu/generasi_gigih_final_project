@@ -16,4 +16,19 @@ describe Post do
         end
     end
     
+    describe "#save_hashtags" do
+        it "should call method get_hashtags with hashtags param and call method save_hashtags" do
+            valid_attribute = {
+                "text" => "Hello world #monday"
+            }
+            hashtags = ["monday"]
+            hello_world_post = Post.new(valid_attribute)
+            
+            expect(Post).to receive(:get_hashtags).and_return(hashtags)
+            expect(Hashtag).to receive(:save_hashtags).with(hashtags)
+
+            hello_world_post.save_hashtags
+        end
+    end
+    
 end
