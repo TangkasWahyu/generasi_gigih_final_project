@@ -2,40 +2,36 @@ require_relative '../test_helper'
 require_relative '../../models/user'
 
 describe User do
+    let(:user_valid_attribute) {{
+        "id" => "1",
+        "username" => "mark",
+        "email" => "mark@mail.com",
+        "bio_description" => "20 years old and grow"
+    }}
+    let(:user) { User.new user_valid_attribute }
+
+
     describe ".initialize" do
         context "given valid attribute" do
-            it "should create object that equal with valid_attribute" do
-                valid_attribute = {
-                    "username" => "mark",
-                    "email" => "mark@mail.com",
-                    "bio_description" => "20 years old and grow"
-                }
-
-                mark = User.new(valid_attribute)
-
-                expect(mark.username).to  eq(valid_attribute["username"])
-                expect(mark.email).to  eq(valid_attribute["email"])
-                expect(mark.bio_description).to  eq(valid_attribute["bio_description"])
+            it "should create object that equal with user_valid_attribute" do
+                expect(user.username).to  eq(user_valid_attribute["username"])
+                expect(user.email).to  eq(user_valid_attribute["email"])
+                expect(user.bio_description).to  eq(user_valid_attribute["bio_description"])
             end
         end
     end
 
     describe "#save" do
-        context "when mark attribute is valid_attribute" do
-            it "should call insert_query with mark attribute" do
+        context "when user attribute is user_valid_attribute" do
+            it "should call insert_query with user attribute" do
                 mock_client = double
-                valid_attribute = {
-                    "username" => "mark",
-                    "email" => "mark@mail.com",
-                    "bio_description" => "20 years old and grow"
-                }
-                mark = User.new(valid_attribute)
-                insert_query = "insert into users (username, email, bio_description) values ('#{mark.username}', '#{mark.email}', '#{mark.bio_description}')"
+
+                insert_query = "insert into users (username, email, bio_description) values ('#{user.username}', '#{user.email}', '#{user.bio_description}')"
                 
                 allow(Mysql2::Client).to receive(:new).and_return(mock_client)
                 expect(mock_client).to receive(:query).with(insert_query)
 
-                mark.save
+                user.save
             end
         end
     end
@@ -46,13 +42,7 @@ describe User do
                 mock_client = double
                 id = "1"
                 get_by_id_query = "select * from users where id = #{id}"
-                valid_attribute = {
-                    "id" => "1",
-                    "username" => "mark",
-                    "email" => "mark@mail.com",
-                    "bio_description" => "20 years old and grow"
-                }
-                rawData = [valid_attribute]                
+                rawData = [user_valid_attribute]                
 
                 allow(Mysql2::Client).to receive(:new).and_return(mock_client)
                 expect(mock_client).to receive(:query).with(get_by_id_query).and_return(rawData)
@@ -69,18 +59,11 @@ describe User do
       context "when user post with hello_world_post" do
         it "should call insert_post_query" do
             mock_client = double
-            user_attribute = {
-                "id" => "1",
-                "username" => "mark",
-                "email" => "mark@mail.com",
-                "bio_description" => "20 years old and grow"
-            }
-            user = User.new(user_attribute)
             hello_world_attribute = {
                 "text" => "Hello world"
             }
             hello_world_post = Post.new(hello_world_attribute)
-            insert_post_query = "insert into posts (user_id, text) values ('#{user_attribute["id"]}','#{hello_world_attribute["text"]}')"
+            insert_post_query = "insert into posts (user_id, text) values ('#{user_valid_attribute["id"]}','#{hello_world_attribute["text"]}')"
 
             allow(Mysql2::Client).to receive(:new).and_return(mock_client)
             expect(mock_client).to receive(:query).with(insert_post_query)
