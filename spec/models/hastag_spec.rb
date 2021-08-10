@@ -15,4 +15,15 @@ describe Hashtag do
         end
     end
     
+    describe "#initialize" do
+        context "given monday text" do
+            it "should create object.text that equal with monday text" do
+                text = "monday"
+                
+                expected = Hashtag.new(text)
+
+                expect(expected.text).to eq(text)
+            end
+        end
+    end
 end
