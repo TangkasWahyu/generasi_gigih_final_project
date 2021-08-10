@@ -73,6 +73,20 @@ describe Post do
                 expect(actual).to eq(expected)
             end
         end
+
+        context "post contain #Monday and #tuesday" do
+            it "return array that contain #monday and #tuesday only" do
+                expected = ["#monday", "#tuesday"]
+
+                valid_attribute = {
+                    "text" => "Hello world #monday #tuesday"
+                }
+                hello_world_post = Post.new(valid_attribute)
+                actual = hello_world_post.get_hashtags
+
+                expect(actual).to eq(expected)
+            end
+        end
     end
     
 end
