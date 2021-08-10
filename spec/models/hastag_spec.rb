@@ -26,4 +26,19 @@ describe Hashtag do
             end
         end
     end
+
+    describe ".save" do
+        it "should call insert_query" do
+            mock_client = double
+            text = "monday"
+            hashtag = Hashtag.new(text)
+            insert_query = "insert into hashtags (text) values ('#{text}')"
+
+            allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+            expect(mock_client).to receive(:query).with(insert_query)
+            allow(mock_client).to receive(:last_id)
+
+            hashtag.save
+        end
+    end
 end
