@@ -89,8 +89,8 @@ describe Post do
         end
     end
     
-    describe "#is_characters_maximum_limit" do
-        context "when text characters below 1000" do
+    describe "#is_characters_maximum_limit?" do
+        context "when text characters length below 1000" do
             it "return false" do
                 post_attribute = {
                     "text" => "Hello world #monday"
@@ -103,7 +103,7 @@ describe Post do
             end
         end
 
-        context "when text characters is 1000" do
+        context "when text characters length is 1000" do
             it "return false" do
                 text = 'o' * 1000
                 post_attribute = {
