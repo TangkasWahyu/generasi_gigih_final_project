@@ -55,19 +55,19 @@ describe User do
     end
     
     describe "#post" do
-      context "when user post with hello_world_post" do
-        it "should call insert_post_query" do
-            hello_world_attribute = {
-                "text" => "Hello world"
-            }
-            hello_world_post = Post.new(hello_world_attribute)
-            insert_post_query = "insert into posts (user_id, text) values ('#{user_valid_attribute["id"]}','#{hello_world_attribute["text"]}')"
+        context "when user post with hello_world_post" do
+            it "should call insert_post_query" do
+                hello_world_attribute = {
+                    "text" => "Hello world"
+                }
+                hello_world_post = Post.new(hello_world_attribute)
+                insert_post_query = "insert into posts (user_id, text) values ('#{user_valid_attribute["id"]}','#{hello_world_attribute["text"]}')"
 
-            expect(mock_client).to receive(:query).with(insert_post_query)
+                expect(mock_client).to receive(:query).with(insert_post_query)
 
-            user.post(hello_world_post)
+                user.post(hello_world_post)
+            end
         end
-      end
     end
     
 end
