@@ -8,6 +8,10 @@ class Post
         @text = attribute["text"]
     end
 
+    def is_characters_maximum_limit?
+        @text.length > 1000
+    end
+
     def save_hashtags
         hashtags = self.get_hashtags
         

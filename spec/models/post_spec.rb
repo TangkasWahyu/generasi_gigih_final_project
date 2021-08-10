@@ -89,4 +89,18 @@ describe Post do
         end
     end
     
+    describe "#is_characters_maximum_limit" do
+        context "when characters below 1000" do
+            it "return false" do
+                post_attribute = {
+                    "text" => "Hello world #monday"
+                }
+                post = Post.new(post_attribute)
+
+                actual = post.is_characters_maximum_limit?
+
+                expect(actual).to be_falsy   
+            end
+        end
+    end
 end

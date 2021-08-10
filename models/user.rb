@@ -34,6 +34,8 @@ class User
     def post(post)
         client = create_db_client
         insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{post.text}')"
+        
+        return if post.is_characters_maximum_limit?
 
         client.query(insert_post_query)
     end
