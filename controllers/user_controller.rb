@@ -1,7 +1,6 @@
 require_relative '../models/user'
 require_relative '../models/post'
 
-
 class UserController
     def self.save(user_attribute)
         user = User.new(user_attribute)
