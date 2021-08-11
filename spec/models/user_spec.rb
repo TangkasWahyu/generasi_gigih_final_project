@@ -74,4 +74,15 @@ describe User do
         end
     end
     
+    describe "#add_post" do
+        context "given mock_post" do
+            it "should return user.posts end_with mock_post" do
+                mock_post = double
+
+                user.add_post(mock_post)
+
+                expect(user.posts).to end_with(mock_post) 
+            end
+        end
+    end
 end

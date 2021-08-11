@@ -1,14 +1,14 @@
 require_relative '../db/mysql_connector'
 
 class User
-    attr_accessor :username, :email, :bio_description, :id
+    attr_accessor :username, :email, :bio_description, :id, :posts
 
     def initialize(attribute)
         @username = attribute["username"]
         @email = attribute["email"]
         @bio_description = attribute["bio_description"]
         @id = attribute["id"]
-        @posts = attribute["posts"]
+        @posts = attribute["posts"] || Array.new
     end
 
     def save
@@ -40,5 +40,9 @@ class User
 
         client.query(insert_post_query)
         client.last_id
+    end
+
+    def add_post(post)
+        self.posts << post
     end
 end
