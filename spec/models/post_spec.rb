@@ -95,6 +95,20 @@ describe Post do
                 expect(actual).to eq(expected)
             end
         end
+
+        context "post contain #monday and #monday" do
+            it "return array that contain #monday only" do
+                expected = ["#monday"]
+                valid_post_attribute_with_2_same_hashtag = {
+                    "text" => "Hello world #monday #monday"
+                }
+                post = Post.new(valid_post_attribute_with_2_same_hashtag)
+
+                actual = post.get_hashtags
+
+                expect(actual).to eq(expected)
+            end
+        end
     end
     
     describe "#is_characters_maximum_limit?" do
