@@ -1,7 +1,7 @@
 require_relative '../test_helper'
-require_relative '../../models/post'
+require_relative '../../models/text'
 
-describe Post do
+describe Text do
     describe ".initialize" do
         context "given valid attribute" do
             it "should create object that equal with valid_attribute" do
@@ -9,7 +9,7 @@ describe Post do
                     "text" => "Hello world"
                 }
 
-                hello_world_post = Post.new(valid_attribute)
+                hello_world_post = Text.new(valid_attribute)
 
                 expect(hello_world_post.text).to  eq(valid_attribute["text"])
             end
@@ -24,7 +24,7 @@ describe Post do
                     "text" => "Hello world #monday"
                 }
                 hashtags = ["monday"]
-                post = Post.new(post_attribute)
+                post = Text.new(post_attribute)
                 hashtag_ids = ["1"]
                 mock_client = double
                 insert_post_hashtags_query = "insert into postHashtags (post_id, hashtag_id) values (#{post.id}, #{hashtag_ids[0]})"
@@ -46,7 +46,7 @@ describe Post do
                 valid_post_attribute_with_1_hashtag = {
                     "text" => "Hello world #monday"
                 }
-                post = Post.new(valid_post_attribute_with_1_hashtag)
+                post = Text.new(valid_post_attribute_with_1_hashtag)
 
                 actual = post.get_hashtags
 
@@ -60,7 +60,7 @@ describe Post do
                 valid_post_attribute_without_hashtag = {
                     "text" => "Hello world"
                 }
-                post = Post.new(valid_post_attribute_without_hashtag)
+                post = Text.new(valid_post_attribute_without_hashtag)
 
                 actual = post.get_hashtags
 
@@ -74,7 +74,7 @@ describe Post do
                 valid_post_attribute_with_1_uppercase_hashtag = {
                     "text" => "Hello world #Monday"
                 }
-                post = Post.new(valid_post_attribute_with_1_uppercase_hashtag)
+                post = Text.new(valid_post_attribute_with_1_uppercase_hashtag)
 
                 actual = post.get_hashtags
 
@@ -88,7 +88,7 @@ describe Post do
                 valid_post_attribute_with_2_hashtag = {
                     "text" => "Hello world #monday #tuesday"
                 }
-                post = Post.new(valid_post_attribute_with_2_hashtag)
+                post = Text.new(valid_post_attribute_with_2_hashtag)
 
                 actual = post.get_hashtags
 
@@ -102,7 +102,7 @@ describe Post do
                 valid_post_attribute_with_2_same_hashtag = {
                     "text" => "Hello world #monday #monday"
                 }
-                post = Post.new(valid_post_attribute_with_2_same_hashtag)
+                post = Text.new(valid_post_attribute_with_2_same_hashtag)
 
                 actual = post.get_hashtags
 
@@ -117,7 +117,7 @@ describe Post do
                 post_attribute = {
                     "text" => "Hello world #monday"
                 }
-                post = Post.new(post_attribute)
+                post = Text.new(post_attribute)
 
                 actual = post.is_characters_maximum_limit?
 
@@ -131,7 +131,7 @@ describe Post do
                 post_attribute = {
                     "text" => text
                 }
-                post = Post.new(post_attribute)
+                post = Text.new(post_attribute)
 
                 actual = post.is_characters_maximum_limit?
 
@@ -145,7 +145,7 @@ describe Post do
                 post_attribute = {
                     "text" => text
                 }
-                post = Post.new(post_attribute)
+                post = Text.new(post_attribute)
 
                 actual = post.is_characters_maximum_limit?
 
