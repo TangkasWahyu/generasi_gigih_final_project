@@ -38,5 +38,6 @@ class User
         return if post.is_characters_maximum_limit?
 
         client.query(insert_post_query)
+        client.last_id
     end
 end
