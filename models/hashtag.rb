@@ -26,4 +26,7 @@ class Hashtag
 
         client.last_id.to_s
     end
+
+    def self.get_trending
+    end
 end
