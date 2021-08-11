@@ -11,5 +11,6 @@ post '/users/:id/post' do
 end
 
 get '/hashtags/trending' do
-    HashtagController.trending
+    trending_hashtags = HashtagController.trending
+    trending_hashtags.map.with_index(1) { |trending_hashtag, index| "#{index} #{trending_hashtag.to_s}" }.join(" | ")
 end
