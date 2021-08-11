@@ -14,9 +14,9 @@ class UserController
 
         user = User.get_by_id(params["id"])
         post = Post.new(post_attribute)
-        user.add_post(post)
+        post.add_user(user)
         
-        user.sent_text
+        post.sent
     end
 
     def self.comment(params)

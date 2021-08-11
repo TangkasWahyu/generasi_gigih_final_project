@@ -77,8 +77,6 @@ describe User do
                 allow(mock_client).to receive(:last_id).and_return(1)
 
                 actual = user_with_post.sent_text
-
-                expect(actual).to eq(1)
             end
         end
     end
