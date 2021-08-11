@@ -65,11 +65,11 @@ describe User do
                 insert_post_query = "insert into posts (user_id, text) values ('#{user_valid_attribute["id"]}','#{hello_world_attribute["text"]}')"
 
                 expect(mock_client).to receive(:query).with(insert_post_query)
-                allow(mock_client).to receive(:last_id).and_return("1")
+                allow(mock_client).to receive(:last_id).and_return(1)
 
                 actual = user.post(hello_world_post)
 
-                expect(actual).to eq("1")
+                expect(actual).to eq(1)
             end
         end
     end
