@@ -16,7 +16,7 @@ class UserController
         post = Post.new(post_attribute)
         user.add_post(post)
         
-        user.post
+        user.sent_text
     end
 
     def self.comment(params)

@@ -1,14 +1,14 @@
 require_relative '../db/mysql_connector'
 
 class User
-    attr_accessor :username, :email, :bio_description, :id, :posts
+    attr_accessor :username, :email, :bio_description, :id, :post
 
     def initialize(attribute)
         @username = attribute["username"]
         @email = attribute["email"]
         @bio_description = attribute["bio_description"]
         @id = attribute["id"]
-        @posts = attribute["posts"] || Array.new
+        @post = attribute["post"]
     end
 
     def save
@@ -32,9 +32,10 @@ class User
         users.pop
     end
 
-    def post(post)
+    def sent_text
         client = create_db_client
-        insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{post.text}')"
+        p @post
+        insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{@post.text}')"
         
         return if post.is_characters_maximum_limit?
 
@@ -43,6 +44,6 @@ class User
     end
 
     def add_post(post)
-        self.posts << post
+        self.post = post
     end
 end
