@@ -51,4 +51,28 @@ describe UserController do
             end
         end
     end
+
+    describe ".comment" do
+        context "given valid params" do
+            it "should call user_id_and_post_text" do
+                params = {
+                    "user_id" => "1",
+                    "post_id" => "1",
+                    "text" => "comment"
+                }
+                user_id_and_post_text = {
+                    "id" => "1",
+                    "text" => "comment"
+                }
+                post_mock = double
+                post_id_mock = double
+
+                expect(UserController).to receive(:post).with(user_id_and_post_text).and_return(post_id_mock)
+                allow(Post).to receive(:get_by_id).and_return(post_mock)
+                allow(post_mock).to receive(:save_comment).with(post_id_mock)
+
+                UserController.comment(params)
+            end
+        end
+    end
 end

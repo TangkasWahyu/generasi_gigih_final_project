@@ -24,5 +24,19 @@ class UserController
 
         post = Post.new(post_attribute)
         post.save_hashtags
+        
+        post_id
+    end
+
+    def self.comment(params)
+        user_id_and_post_text = {
+            "id" => params["user_id"],
+            "text" => params["text"]
+        }
+
+        comment_id = UserController.post(user_id_and_post_text)
+
+        post = Post.get_by_id(params["id"])
+        post.save_comment(comment_id)
     end
 end

@@ -29,4 +29,7 @@ class Post
     def get_hashtags
         @text.downcase.scan(/[#]\w+/).uniq
     end
+
+    def self.get_by_id(id)
+    end
 end
