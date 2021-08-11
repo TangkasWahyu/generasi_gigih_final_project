@@ -23,11 +23,10 @@ describe UserController do
 
     describe ".post" do
         context "given valid_parameter" do
-            it "should call user_id, post_attribute, post_mock and post_attribute_with_id" do
+            it "should call user_id, post_attribute" do
                 user_mock = double
                 post_mock = double
                 user_id = "1"
-                post_id = "1"
                 text = "Hello world"
                 valid_parameter = {
                     "id" => user_id,
@@ -36,16 +35,11 @@ describe UserController do
                 post_attribute = {
                     "text" => text
                 }
-                post_attribute_with_id = {
-                    "id" => post_id,
-                    "text" => text
-                }
 
                 expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
-                expect(user_mock).to receive(:post).with(post_mock).and_return(post_id)
-                expect(Post).to receive(:new).with(post_attribute_with_id).and_return(post_mock)
-                allow(post_mock).to receive(:save_hashtags)
+                allow(user_mock).to receive(:add_post).with(post_mock)
+                allow(user_mock).to receive(:post)
 
                 UserController.post(valid_parameter)
             end
