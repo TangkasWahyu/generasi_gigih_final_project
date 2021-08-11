@@ -24,6 +24,6 @@ class Hashtag
 
         client.query(insert_query)
 
-        return client.last_id
+        client.last_id.to_s
     end
 end

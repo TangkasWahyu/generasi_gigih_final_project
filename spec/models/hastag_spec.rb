@@ -9,11 +9,11 @@ describe Hashtag do
 
                 allow(Hashtag).to receive(:new).with(hashtag_texts[0]).and_return(hashtag)
                 allow(Hashtag).to receive(:new).with(hashtag_texts[1]).and_return(hashtag)
-                allow(hashtag).to receive(:save).and_return(1, 2)
+                allow(hashtag).to receive(:save).and_return("1", "2")
 
                 actual = Hashtag.save_hashtags(hashtag_texts)
 
-                expect(actual).to eq([1, 2])
+                expect(actual).to eq(["1", "2"])
             end
         end
     end
@@ -31,7 +31,7 @@ describe Hashtag do
     end
 
     describe ".save" do
-        it "should call insert_query" do
+        it "should call insert_query and return '1'" do
             mock_client = double
             text = "monday"
             hashtag = Hashtag.new(text)
@@ -39,9 +39,11 @@ describe Hashtag do
 
             allow(Mysql2::Client).to receive(:new).and_return(mock_client)
             expect(mock_client).to receive(:query).with(insert_query)
-            allow(mock_client).to receive(:last_id)
+            allow(mock_client).to receive(:last_id).and_return(1)
 
-            hashtag.save
+            actual = hashtag.save
+
+            expect(actual).to eq('1')
         end
     end
 end
