@@ -3,14 +3,17 @@ require_relative '../../models/hashtag'
 describe Hashtag do
     describe ".save_hashtags" do
         context "given array that contain 2 hashtags" do
-            it "should call save method and new method 2 times" do
-                hashtags = ["#monday", "#tuesday"]
+            it "should return array that contain 1 and 2 only" do
+                hashtag_texts = ["#monday", "#tuesday"]
                 hashtag = double
 
-                expect(Hashtag).to receive(:new).twice.and_return(hashtag)
-                expect(hashtag).to receive(:save).twice
+                allow(Hashtag).to receive(:new).with(hashtag_texts[0]).and_return(hashtag)
+                allow(Hashtag).to receive(:new).with(hashtag_texts[1]).and_return(hashtag)
+                allow(hashtag).to receive(:save).and_return(1, 2)
 
-                Hashtag.save_hashtags(hashtags)
+                actual = Hashtag.save_hashtags(hashtag_texts)
+
+                expect(actual).to eq([1, 2])
             end
         end
     end

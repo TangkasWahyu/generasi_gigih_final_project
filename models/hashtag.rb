@@ -1,3 +1,5 @@
+require_relative '../db/mysql_connector'
+
 class Hashtag
     attr_reader :text
 
@@ -5,11 +7,15 @@ class Hashtag
         @text = text
     end
 
-    def self.save_hashtags(hashtags)
-        hashtags.each do |hashtag|
-            hashtag = Hashtag.new(hashtag)
-            hashtag.save
+    def self.save_hashtags(hashtag_texts)
+        hashtag_ids = Array.new
+
+        hashtag_texts.each do |hashtag_text|
+            hashtag = Hashtag.new(hashtag_text)
+            hashtag_ids << hashtag.save
         end
+
+        hashtag_ids
     end
 
     def save
