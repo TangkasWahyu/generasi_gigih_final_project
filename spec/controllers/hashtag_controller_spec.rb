@@ -6,11 +6,11 @@ describe HashtagController do
         it "return top_5_hashtags_24_hours" do
             top_5_hashtags_24_hours = ["monday", "tuesday", "wednesday", "thursday", "friday"]
 
-            allow(Hashtag).to receive(:get_trending).and_return(tot_5_hashtags_24_hours)
+            allow(Hashtag).to receive(:get_trending).and_return(top_5_hashtags_24_hours)
 
             actual = HashtagController.trending
 
-            expect(actual).to eq(tot_5_hashtags_24_hours) 
+            expect(actual).to eq(top_5_hashtags_24_hours) 
         end
     end
 end
