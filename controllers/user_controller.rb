@@ -13,19 +13,7 @@ class UserController
         }
         user = User.get_by_id(params["id"])
         post = Post.new(post_attribute)
-        post_id = user.post(post)
-
-        return if post_id.nil?
-
-        post_attribute = {
-            "id" => post_id,
-            "text" => params["text"]
-        }
-
-        post = Post.new(post_attribute)
-        post.save_hashtags
-        
-        post_id
+        user.post(post)
     end
 
     def self.comment(params)
