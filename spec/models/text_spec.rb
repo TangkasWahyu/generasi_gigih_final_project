@@ -179,4 +179,21 @@ describe Text do
         #     end
         # end
     end
+
+    describe "#add_user" do
+        context "given user_mock" do
+            it "should post.user equal user_mock" do
+                user_mock = double
+                valid_attribute = {
+                    "text" => "Hello world"
+                }
+                post = Text.new(valid_attribute)
+
+                post.add_user(user_mock)
+
+                expect(post.user).to eq(user_mock)
+            end
+        end
+    end
+    
 end

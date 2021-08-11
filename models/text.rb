@@ -2,11 +2,12 @@ require_relative 'hashtag'
 require_relative '../db/mysql_connector'
 
 class Text
-    attr_reader :text, :id
+    attr_reader :text, :id, :user
 
     def initialize(attribute)
         @text = attribute["text"]
         @id = attribute["id"]
+        @user = attribute["user"]
     end
 
     def is_characters_maximum_limit?
@@ -46,6 +47,10 @@ class Text
 
         post = Post.new(post_attribute)
         post.save_hashtags
+    end
+
+    def add_user(user)
+        @user = user
     end
 
     def self.get_by_id(id)
