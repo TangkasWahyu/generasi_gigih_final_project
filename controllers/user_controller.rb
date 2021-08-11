@@ -16,6 +16,8 @@ class UserController
         post = Post.new(post_attribute)
         post_id = user.post(post)
 
+        return if post_id.nil?
+
         post_attribute = {
             "id" => post_id,
             "text" => params["text"]
