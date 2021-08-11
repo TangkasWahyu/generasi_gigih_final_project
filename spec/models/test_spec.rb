@@ -153,4 +153,30 @@ describe Text do
             end
         end
     end
+
+    describe "#sent" do
+        # context "when user post with hello_world_post" do
+        #     it "should call insert_post_query and return 1" do
+        #         hello_world_attribute = {
+        #             "text" => "Hello world"
+        #         }
+        #         hello_world_post = Post.new(hello_world_attribute)
+        #         user_with_post_attribute = {
+        #             "id" => "1",
+        #             "username" => "mark",
+        #             "email" => "mark@mail.com",
+        #             "bio_description" => "20 years old and grow",
+        #             "post" => hello_world_post
+        #         }
+                
+        #         user_with_post = User.new(user_with_post_attribute)
+        #         insert_post_query = "insert into posts (user_id, text) values ('#{user_valid_attribute["id"]}','#{hello_world_attribute["text"]}')"
+
+        #         expect(mock_client).to receive(:query).with(insert_post_query)
+        #         allow(mock_client).to receive(:last_id).and_return(1)
+
+        #         actual = user_with_post.sent_text
+        #     end
+        # end
+    end
 end
