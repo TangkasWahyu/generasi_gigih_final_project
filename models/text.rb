@@ -30,7 +30,7 @@ class Text
         @text.downcase.scan(/[#]\w+/).uniq
     end
 
-    def sent
+    def send
         client = create_db_client
 
         insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{@post.text}')"

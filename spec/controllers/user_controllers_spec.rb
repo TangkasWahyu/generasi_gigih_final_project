@@ -39,7 +39,7 @@ describe UserController do
                 expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
                 allow(post_mock).to receive(:add_user).with(user_mock)
-                allow(post_mock).to receive(:sent)
+                allow(post_mock).to receive(:send)
 
                 UserController.post(valid_parameter)
             end
