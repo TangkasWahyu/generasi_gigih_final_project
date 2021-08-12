@@ -10,7 +10,6 @@ class Comment < Post
     end
     
     def send
-        client = create_db_client
         return if self.is_characters_maximum_limit?
 
         client = create_db_client
