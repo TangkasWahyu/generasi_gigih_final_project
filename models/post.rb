@@ -31,7 +31,6 @@ class Post
     end
 
     def send
-        client = create_db_client
         return if self.is_characters_maximum_limit?
 
         client = create_db_client
@@ -50,5 +49,16 @@ class Post
     end
 
     def self.get_by_id(id)
+        client = create_db_client
+        posts = Array.new
+    
+        rawData = client.query("select * from posts where id = #{id}")
+    
+        rawData.each do |data|
+            post = Post.new(data);
+            posts.push(post)
+        end
+
+        posts.pop
     end
 end

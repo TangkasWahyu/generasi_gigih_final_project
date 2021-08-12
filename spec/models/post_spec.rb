@@ -194,5 +194,21 @@ describe Post do
             end
         end
     end
-    
+
+    describe ".get_by_id" do
+        context "given id is 1" do
+            it "should call get_by_id_query with id equal 1, get post with id and name same with post_valid_attribute_with_id" do
+                id = "1"
+                get_by_id_query = "select * from posts where id = #{id}"
+                rawData = [post_valid_attribute_with_id]                
+
+                expect(mock_client).to receive(:query).with(get_by_id_query).and_return(rawData)
+
+                post = Post.get_by_id(id)
+
+                expect(post.id).to eq(id)
+                expect(post.text).to eq(post_valid_attribute_with_id["text"])
+            end
+        end
+    end
 end
