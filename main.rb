@@ -20,5 +20,6 @@ post '/users/:user_id/posts/:post_id/comment' do
 end
 
 get '/hashtags/:hashtag_text/posts' do
-    HashtagController.get_by_hashtag_text(params)
+    posts_get_by_hashtag_text = HashtagController.get_by_hashtag_text(params)
+    posts_get_by_hashtag_text.map.with_index(1) { |post, index| "#{index} #{post.text}" }.join(" | ")
 end
