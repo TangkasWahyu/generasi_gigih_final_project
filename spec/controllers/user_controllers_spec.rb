@@ -1,6 +1,7 @@
 require_relative '../test_helper'
 require_relative '../../controllers/user_controller'
 require_relative '../../models/user'
+require_relative '../../models/comment'
 
 describe UserController do
     describe ".save" do
@@ -48,22 +49,30 @@ describe UserController do
 
     describe ".comment" do
         context "given valid params" do
-            it "should call user_id_and_post_text" do
+            it "should call user_id, post_id, comment_attribute, user_mock and post_mock" do
+                user_id = 1
+                post_id = 1
+                text = "comment"
                 params = {
-                    "user_id" => "1",
-                    "post_id" => "1",
-                    "text" => "comment"
+                    "user_id" => user_id,
+                    "post_id" => post_id,
+                    "text" => text
                 }
-                user_id_and_post_text = {
-                    "id" => "1",
-                    "text" => "comment"
+                comment_attribute = {
+                    "text" => text
                 }
-                post_mock = double
-                post_id_mock = double
 
-                expect(UserController).to receive(:post).with(user_id_and_post_text).and_return(post_id_mock)
-                allow(Post).to receive(:get_by_id).and_return(post_mock)
-                allow(post_mock).to receive(:save_comment).with(post_id_mock)
+                post_mock = double
+                user_mock = double
+                post_id_mock = double
+                comment_mock = double
+
+                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
+                expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
+                expect(comment_mock).to receive(:add_user).with(user_mock)
+                expect(comment_mock).to receive(:add_post).with(post_mock)
+                allow(comment_mock).to receive(:send)
 
                 UserController.comment(params)
             end

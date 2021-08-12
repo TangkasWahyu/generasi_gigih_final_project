@@ -20,14 +20,16 @@ class UserController
     end
 
     def self.comment(params)
-        user_id_and_post_text = {
-            "id" => params["user_id"],
+        comment_attribute = {
             "text" => params["text"]
         }
 
-        comment_id = UserController.post(user_id_and_post_text)
+        user = User.get_by_id(params["user_id"])
+        post = Post.get_by_id(params["post_id"])
+        comment = Comment.new(comment_attribute)
+        comment.add_user(user)
+        comment.add_post(post)
 
-        post = Post.get_by_id(params["id"])
-        post.save_comment(comment_id)
+        comment.send
     end
 end
