@@ -10,9 +10,9 @@ describe PostController do
 					"hashtag_text" => hashtag_text
 				}
 
-				expect(Post).to receive(:fetch_by_hashtag).with(hashtag_text)
+				expect(Post).to receive(:fetch_by_hashtag_text).with(hashtag_text)
 
-				PostController.get_by_hashtag(valid_params)
+				PostController.get_by_hashtag_text(valid_params)
 			end
         end
     end

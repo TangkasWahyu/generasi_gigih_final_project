@@ -61,6 +61,6 @@ class Post
         posts.pop
     end
 
-    def self.fetch_by_hashtag(hashtag_id)
+    def self.fetch_by_hashtag_text(hashtag_id)
     end
 end
