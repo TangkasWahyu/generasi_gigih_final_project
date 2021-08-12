@@ -4,6 +4,12 @@ require_relative '../../models/comment'
 require_relative '../../models/post'
 
 describe Comment do
+    let(:mock_client) {double}
+
+    before(:each) do
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+    end
+    
     describe "#send" do
         it "should call insert_comment_query" do
             mock_client = double
@@ -29,7 +35,6 @@ describe Comment do
             comment_id = 1
             insert_comment_query = "insert into comments (user_id, post_id, text) values ('#{comment.user.id}', '#{comment.post.id}', '#{comment.text}')"
 
-            allow(Mysql2::Client).to receive(:new).and_return(mock_client)
             expect(mock_client).to receive(:query).with(insert_comment_query)
             allow(mock_client).to receive(:last_id).and_return(comment_id)
 
@@ -52,7 +57,6 @@ describe Comment do
                 
                 allow(comment_with_id).to receive(:get_hashtags).and_return(hashtags)
                 expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
-                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
                 expect(mock_client).to receive(:query).with(insert_comment_hashtags_query)
     
                 comment_with_id.save_hashtags
