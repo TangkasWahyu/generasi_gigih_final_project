@@ -32,21 +32,17 @@ class Text
 
     def send
         client = create_db_client
+        return if self.is_characters_maximum_limit?
 
-        insert_post_query = "insert into posts (user_id, text) values ('#{@id}','#{@post.text}')"
-        
-        return if post.is_characters_maximum_limit?
+        client = create_db_client
+        insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
 
         client.query(insert_post_query)
         post_id = client.last_id
 
-        post_attribute = {
-            "id" => post_id,
-            "text" => @post.text
-        }
+        @id = post_id
 
-        post = Post.new(post_attribute)
-        post.save_hashtags
+        self.save_hashtags
     end
 
     def add_user(user)
