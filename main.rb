@@ -19,6 +19,6 @@ post '/users/:user_id/posts/:post_id/comment' do
     UserController.comment(params)
 end
 
-get '/posts/hashtags/:hashtag_text' do
-    PostController.get_by_hashtag_text(params)
+get '/hashtags/:hashtag_text/posts' do
+    HashtagController.get_by_hashtag_text(params)
 end
