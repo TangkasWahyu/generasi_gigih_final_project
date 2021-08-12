@@ -42,8 +42,4 @@ class Hashtag
 
         top_5_trending_24_hours_hashtags
     end
-
-    def to_s
-        "#{@text}"
-    end
 end
