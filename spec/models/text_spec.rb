@@ -4,16 +4,25 @@ require_relative '../../models/user'
 require_relative '../../models/post'
 
 describe Text do
+    let(:text_valid_attribute) {{
+        "text" => "Hello world"
+    }}
+    let(:text_valid_attribute_with_id) {{
+        "id" => "1",
+        "text" => "Hello world"
+    }}
+    let(:text) { Text.new text_valid_attribute }
+    let(:text_with_id) { Text.new text_valid_attribute_with_id }
+    let(:mock_client) {double}
+
+    before(:each) do
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+    end
+
     describe ".initialize" do
         context "given valid attribute" do
             it "should create object that equal with valid_attribute" do
-                valid_attribute = {
-                    "text" => "Hello world"
-                }
-
-                hello_world_post = Text.new(valid_attribute)
-
-                expect(hello_world_post.text).to  eq(valid_attribute["text"])
+                expect(text.text).to eq(text_valid_attribute["text"])
             end
         end
     end
@@ -21,22 +30,15 @@ describe Text do
     describe "#save_hashtags" do
         context "post_attribute contain 1 hashtag" do
             it "should call hashtags and insert_post_hashtags_query" do
-                post_attribute = {
-                    "id" => "1",
-                    "text" => "Hello world #monday"
-                }
                 hashtags = ["monday"]
-                post = Text.new(post_attribute)
                 hashtag_ids = ["1"]
-                mock_client = double
-                insert_post_hashtags_query = "insert into postHashtags (post_id, hashtag_id) values (#{post.id}, #{hashtag_ids[0]})"
+                insert_post_hashtags_query = "insert into postHashtags (post_id, hashtag_id) values (#{text_with_id.id}, #{hashtag_ids[0]})"
                 
-                allow(post).to receive(:get_hashtags).and_return(hashtags)
+                allow(text_with_id).to receive(:get_hashtags).and_return(hashtags)
                 expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
-                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
                 expect(mock_client).to receive(:query).with(insert_post_hashtags_query)
     
-                post.save_hashtags
+                text_with_id.save_hashtags
             end
         end
     end
@@ -158,7 +160,6 @@ describe Text do
 
     describe "#send" do
         it "should call insert_post_query" do
-            mock_client = double
             user_attribute = {
                 "id" => "1",
                 "username" => "mark",
@@ -176,7 +177,6 @@ describe Text do
             
             insert_post_query = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
             
-            allow(Mysql2::Client).to receive(:new).and_return(mock_client)
             expect(mock_client).to receive(:query).with(insert_post_query)
             allow(mock_client).to receive(:last_id).and_return(post_id)
 
@@ -188,14 +188,10 @@ describe Text do
         context "given user_mock" do
             it "should post.user equal user_mock" do
                 user_mock = double
-                valid_attribute = {
-                    "text" => "Hello world"
-                }
-                post = Text.new(valid_attribute)
 
-                post.add_user(user_mock)
+                text.add_user(user_mock)
 
-                expect(post.user).to eq(user_mock)
+                expect(text.user).to eq(user_mock)
             end
         end
     end
