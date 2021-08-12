@@ -17,7 +17,6 @@ class Comment < Post
 
         client.query(insert_comment_query)
         comment_id = client.last_id
-
         @id = comment_id
 
         self.save_hashtags
