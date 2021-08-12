@@ -1,5 +1,7 @@
 require_relative '../test_helper'
 require_relative '../../models/text'
+require_relative '../../models/user'
+require_relative '../../models/post'
 
 describe Text do
     describe ".initialize" do
@@ -154,30 +156,32 @@ describe Text do
         end
     end
 
-    describe "#sent" do
-        # context "when user post with hello_world_post" do
-        #     it "should call insert_post_query and return 1" do
-        #         hello_world_attribute = {
-        #             "text" => "Hello world"
-        #         }
-        #         hello_world_post = Post.new(hello_world_attribute)
-        #         user_with_post_attribute = {
-        #             "id" => "1",
-        #             "username" => "mark",
-        #             "email" => "mark@mail.com",
-        #             "bio_description" => "20 years old and grow",
-        #             "post" => hello_world_post
-        #         }
-                
-        #         user_with_post = User.new(user_with_post_attribute)
-        #         insert_post_query = "insert into posts (user_id, text) values ('#{user_valid_attribute["id"]}','#{hello_world_attribute["text"]}')"
+    describe "#send" do
+        it "should call insert_post_query" do
+            mock_client = double
+            user_attribute = {
+                "id" => "1",
+                "username" => "mark",
+                "email" => "mark@mail.com",
+                "bio_description" => "20 years old and grow"
+            }
+            user = User.new(user_attribute)
+            post_attribute = {
+                "text" => "Hello world",
+                "user" => user
+            }
+            post = Post.new(post_attribute)
+            post_with_id = double
+            post_id = 1
+            
+            insert_post_query = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
+            
+            allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+            expect(mock_client).to receive(:query).with(insert_post_query)
+            allow(mock_client).to receive(:last_id).and_return(post_id)
 
-        #         expect(mock_client).to receive(:query).with(insert_post_query)
-        #         allow(mock_client).to receive(:last_id).and_return(1)
-
-        #         actual = user_with_post.sent_text
-        #     end
-        # end
+            post.send
+        end
     end
 
     describe "#add_user" do
