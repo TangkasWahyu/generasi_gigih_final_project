@@ -1,5 +1,6 @@
 require_relative '../models/user'
 require_relative '../models/post'
+require_relative '../models/comment'
 
 class UserController
     def self.save(user_attribute)
