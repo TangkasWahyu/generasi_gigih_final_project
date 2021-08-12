@@ -10,6 +10,19 @@ class Post
         @user = attribute["user"]
     end
 
+    def send
+        return if self.is_characters_maximum_limit?
+
+        client = create_db_client
+        insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
+
+        client.query(insert_post_query)
+        post_id = client.last_id
+        @id = post_id
+
+        self.save_hashtags
+    end
+
     def is_characters_maximum_limit?
         @text.length > 1000
     end
@@ -28,20 +41,6 @@ class Post
 
     def get_hashtags
         @text.downcase.scan(/[#]\w+/).uniq
-    end
-
-    def send
-        return if self.is_characters_maximum_limit?
-
-        client = create_db_client
-        insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
-
-        client.query(insert_post_query)
-        post_id = client.last_id
-
-        @id = post_id
-
-        self.save_hashtags
     end
 
     def add_user(user)
