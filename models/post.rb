@@ -1,13 +1,13 @@
 require_relative 'hashtag'
-require_relative '../models/hashtag'
 require_relative '../db/mysql_connector'
 
 class Post
-    attr_reader :text, :id
+    attr_reader :text, :id, :user
 
     def initialize(attribute)
         @text = attribute["text"]
         @id = attribute["id"]
+        @user = attribute["user"]
     end
 
     def is_characters_maximum_limit?
@@ -28,6 +28,25 @@ class Post
 
     def get_hashtags
         @text.downcase.scan(/[#]\w+/).uniq
+    end
+
+    def send
+        client = create_db_client
+        return if self.is_characters_maximum_limit?
+
+        client = create_db_client
+        insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
+
+        client.query(insert_post_query)
+        post_id = client.last_id
+
+        @id = post_id
+
+        self.save_hashtags
+    end
+
+    def add_user(user)
+        @user = user
     end
 
     def self.get_by_id(id)
