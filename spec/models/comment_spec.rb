@@ -12,7 +12,6 @@ describe Comment do
     
     describe "#send" do
         it "should call insert_comment_query" do
-            mock_client = double
             user_attribute = {
                 "id" => "1",
                 "username" => "mark",
@@ -45,7 +44,6 @@ describe Comment do
     describe "#save_hashtags" do
         context "comment_attribute contain 1 hashtag" do
             it "should call hashtags and insert_comment_hashtags_query" do
-                mock_client = double
                 comment_attribute = {
                     "id" => "1",
                     "text" => "Hello world #monday"
@@ -59,6 +57,7 @@ describe Comment do
                 expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
                 expect(mock_client).to receive(:query).with(insert_comment_hashtags_query)
     
+
                 comment_with_id.save_hashtags
             end
         end
