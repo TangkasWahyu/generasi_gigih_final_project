@@ -37,6 +37,29 @@ describe Comment do
         end
     end
 
+    describe "#save_hashtags" do
+        context "comment_attribute contain 1 hashtag" do
+            it "should call hashtags and insert_comment_hashtags_query" do
+                mock_client = double
+                comment_attribute = {
+                    "id" => "1",
+                    "text" => "Hello world #monday"
+                }
+                comment_with_id = Comment.new(comment_attribute)
+                hashtags = ["monday"]
+                hashtag_ids = ["1"]
+                insert_comment_hashtags_query = "insert into commentHashtags (comment_id, hashtag_id) values (#{comment_with_id.id}, #{hashtag_ids[0]})"
+                
+                allow(comment_with_id).to receive(:get_hashtags).and_return(hashtags)
+                expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
+                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+                expect(mock_client).to receive(:query).with(insert_comment_hashtags_query)
+    
+                comment_with_id.save_hashtags
+            end
+        end
+    end
+
     describe "#add_post" do
         context "given post_mock" do
             it "should comment.post equal post_mock" do
