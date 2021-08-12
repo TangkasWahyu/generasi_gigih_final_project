@@ -61,6 +61,18 @@ class Post
         posts.pop
     end
 
-    def self.fetch_by_hashtag_text(hashtag_id)
+    def self.fetch_by_hashtag_text(hashtag_text)
+        client = create_db_client
+        posts = Array.new
+        fetch_by_hashtag_text_query = "select * from posts where text like '%#{hashtag_text}%'"
+    
+        rawData = client.query(fetch_by_hashtag_text_query)
+    
+        rawData.each do |data|
+            post = Post.new(data);
+            posts.push(post)
+        end
+
+        posts
     end
 end

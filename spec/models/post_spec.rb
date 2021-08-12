@@ -216,4 +216,22 @@ describe Post do
             end
         end
     end
+
+    describe ".fetch_by_hashtag_text" do
+        context "given monday" do
+            it "should call fetch_by_hashtag_text_query and first posts(id and text) to equal post_with_id_text_contain_hashtag" do
+                hashtag_text = "monday"
+                fetch_by_hashtag_text_query = "select * from posts where text like '%#{hashtag_text}%'"
+                rawData = [post_valid_attribute_with_id_text_contain_hashtag]                
+
+                expect(mock_client).to receive(:query).with(fetch_by_hashtag_text_query).and_return(rawData)
+
+                posts = Post.fetch_by_hashtag_text(hashtag_text)
+
+                expect(posts.first.id).to eq(post_with_id_text_contain_hashtag.id)
+                expect(posts.first.text).to eq(post_with_id_text_contain_hashtag.text)
+            end
+        end
+    end
+    
 end
