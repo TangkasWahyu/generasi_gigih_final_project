@@ -10,8 +10,13 @@ describe Post do
         "id" => "1",
         "text" => "Hello world"
     }}
+    let(:post_valid_attribute_with_id_text_contain_hashtag) {{
+        "id" => "1",
+        "text" => "Hello world #monday"
+    }}
     let(:post) { Post.new post_valid_attribute }
     let(:post_with_id) { Post.new post_valid_attribute_with_id }
+    let(:post_with_id_text_contain_hashtag) { Post.new post_valid_attribute_with_id_text_contain_hashtag }
     let(:mock_client) {double}
 
     before(:each) do
@@ -27,23 +32,23 @@ describe Post do
     end
     
     describe "#save_hashtags" do
-        context "post_attribute contain 1 hashtag" do
+        context "post_attribute text contain 1 hashtag" do
             it "should call hashtags and insert_post_hashtags_query" do
                 hashtags = ["monday"]
                 hashtag_ids = ["1"]
                 insert_post_hashtags_query = "insert into postHashtags (post_id, hashtag_id) values (#{post_with_id.id}, #{hashtag_ids[0]})"
                 
-                allow(post_with_id).to receive(:get_hashtags).and_return(hashtags)
+                allow(post_with_id_text_contain_hashtag).to receive(:get_hashtags).and_return(hashtags)
                 expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
                 expect(mock_client).to receive(:query).with(insert_post_hashtags_query)
     
-                post_with_id.save_hashtags
+                post_with_id_text_contain_hashtag.save_hashtags
             end
         end
     end
     
     describe "#get_hashtags" do
-        context "post contain #monday" do
+        context "post text contain #monday" do
             it "return #monday" do
                 expected = ["#monday"]
                 valid_post_attribute_with_1_hashtag = {
@@ -57,7 +62,7 @@ describe Post do
             end
         end
 
-        context "post contain no hashtag" do
+        context "post text contain no hashtag" do
             it "return empty array" do
                 expected = []
                 valid_post_attribute_without_hashtag = {
@@ -71,7 +76,7 @@ describe Post do
             end
         end
 
-        context "post contain #Monday" do
+        context "post text contain #Monday" do
             it "return array that contain #monday only" do
                 expected = ["#monday"]
                 valid_post_attribute_with_1_uppercase_hashtag = {
@@ -85,7 +90,7 @@ describe Post do
             end
         end
 
-        context "post contain #Monday and #tuesday" do
+        context "post text contain #Monday and #tuesday" do
             it "return array that contain #monday and #tuesday only" do
                 expected = ["#monday", "#tuesday"]
                 valid_post_attribute_with_2_hashtag = {
@@ -99,7 +104,7 @@ describe Post do
             end
         end
 
-        context "post contain #monday and #monday" do
+        context "post text contain #monday and #monday" do
             it "return array that contain #monday only" do
                 expected = ["#monday"]
                 valid_post_attribute_with_2_same_hashtag = {
@@ -115,7 +120,7 @@ describe Post do
     end
     
     describe "#is_characters_maximum_limit?" do
-        context "when text characters length below 1000" do
+        context "post text characters length below 1000" do
             it "return false" do
                 post_attribute = {
                     "text" => "Hello world #monday"
@@ -128,7 +133,7 @@ describe Post do
             end
         end
 
-        context "when text characters length is 1000" do
+        context "post text characters length is 1000" do
             it "return false" do
                 text = 'o' * 1000
                 post_attribute = {
@@ -142,7 +147,7 @@ describe Post do
             end
         end
 
-        context "when text characters length is 1001" do
+        context "post text characters length is 1001" do
             it "return true" do
                 text = 'o' * 1001
                 post_attribute = {
