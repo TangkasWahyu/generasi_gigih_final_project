@@ -23,4 +23,8 @@ class Comment < Post
 
         self.save_hashtags
     end
+
+    def add_post(post)
+        @post = post
+    end
 end
