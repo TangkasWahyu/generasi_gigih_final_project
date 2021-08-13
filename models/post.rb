@@ -15,15 +15,7 @@ class Post
         return if self.is_characters_maximum_limit?
 
         client = create_db_client
-        insert_post_query = String.new
-        
-        if @attachment
-            @attachment.save
-            attachment_path = "/public/#{@attachment.filename}"
-            insert_post_query = "insert into posts (user_id, text, attachment_path) values ('#{@user.id}','#{@text}', '#{attachment_path}')"
-        else
-            insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
-        end
+        insert_post_query = get_insert_query_and_save_attachment_if_attached
 
         client.query(insert_post_query)
         post_id = client.last_id
@@ -34,6 +26,17 @@ class Post
 
     def is_characters_maximum_limit?
         @text.length > 1000
+    end
+
+    def get_insert_query_and_save_attachment_if_attached
+        if @attachment
+            @attachment.save
+            attachment_path = "/public/#{@attachment.filename}"
+            
+            return "insert into posts (user_id, text, attachment_path) values ('#{@user.id}','#{@text}', '#{attachment_path}')"
+        else
+            return "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
+        end
     end
 
     def save_hashtags

@@ -9,17 +9,15 @@ class Comment < Post
         @post = attribute["post"]
     end
     
-    def send
-        return if self.is_characters_maximum_limit?
+    def get_insert_query_and_save_attachment_if_attached
+        if @attachment
+            @attachment.save
+            attachment_path = "/public/#{@attachment.filename}"
 
-        client = create_db_client
-        insert_comment_query = "insert into comments (user_id, post_id, text) values ('#{@user.id}', '#{@post.id}', '#{@text}')"
-
-        client.query(insert_comment_query)
-        comment_id = client.last_id
-        @id = comment_id
-
-        self.save_hashtags
+            return "insert into comments (user_id, post_id, text, attachment_path) values ('#{@user.id}', '#{@post.id}', '#{@text}', '#{attachment_path}')"
+        else
+            return "insert into comments (user_id, post_id, text) values ('#{@user.id}', '#{@post.id}', '#{@text}')"
+        end
     end
 
     def save_hashtags

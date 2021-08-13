@@ -15,6 +15,13 @@ describe Post do
         "id" => "1",
         "text" => "Hello world #monday"
     }}
+    let(:user_attribute_with_id) {{
+        "id" => "1",
+        "username" => "mark",
+        "email" => "mark@mail.com",
+        "bio_description" => "20 years old and grow"
+    }}
+    let(:user_with_id) { User.new user_attribute_with_id }
     let(:post) { Post.new post_valid_attribute }
     let(:post_with_id) { Post.new post_valid_attribute_with_id }
     let(:post_with_id_text_contain_hashtag) { Post.new post_valid_attribute_with_id_text_contain_hashtag }
@@ -164,36 +171,30 @@ describe Post do
     end
 
     describe "#send" do
-        let(:user_attribute) {{
-            "id" => "1",
-            "username" => "mark",
-            "email" => "mark@mail.com",
-            "bio_description" => "20 years old and grow"
-        }}
-        let(:user) { User.new user_attribute }
-        let(:post_id) { 1 }
-        let(:post_with_id) { double }
-
         context "post don't have attachment" do
             it "should call insert_post_query" do
+                post_id = 1
+                post_with_id = double
+                mock_query = double
                 post_attribute = {
                     "text" => "Hello world",
-                    "user" => user
+                    "user" => user_with_id
                 }
                 post = Post.new(post_attribute)
                 
-                insert_post_query = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
-                
-                expect(mock_client).to receive(:query).with(insert_post_query)
+                allow(post).to receive(:get_insert_query_and_save_attachment_if_attached).and_return(mock_query)
+                expect(mock_client).to receive(:query).with(mock_query)
                 allow(mock_client).to receive(:last_id).and_return(post_id)
                 allow(post_with_id).to receive(:save_hashtags)
     
                 post.send
             end
         end
+    end
 
+    describe ".get_insert_query_and_save_attachment_if_attached" do
         context "post have attachment" do
-            it "should call insert_post_query_with_attachment_path" do
+            it "should to equal expected" do
                 attachment_attribute = {
                     "filename" => "filename", 
                     "tempfile" => "tempfile"
@@ -201,20 +202,33 @@ describe Post do
                 attachment = Attachment.new(attachment_attribute)
                 post_attribute = {
                     "text" => "Hello world",
-                    "user" => user,
+                    "user" => user_with_id,
                     "attachment" => attachment
                 }
                 post = Post.new(post_attribute)
                 attachment_path = "/public/#{attachment.filename}"
-    
-                insert_post_query_with_attachment_path = "insert into posts (user_id, text, attachment_path) values ('#{post.user.id}','#{post.text}', '#{attachment_path}')"
-    
+                
+                expected = "insert into posts (user_id, text, attachment_path) values ('#{post.user.id}','#{post.text}', '#{attachment_path}')"
+                
                 allow(attachment).to receive(:save)
-                expect(mock_client).to receive(:query).with(insert_post_query_with_attachment_path)
-                allow(mock_client).to receive(:last_id).and_return(post_id)
-                allow(post_with_id).to receive(:save_hashtags)
-    
-                post.send
+                actual = post.get_insert_query_and_save_attachment_if_attached
+
+                expect(actual).to eq(expected)
+            end
+        end
+
+        context "post don't attachment" do
+            it "should to equal expected" do
+                post_attribute = {
+                    "text" => "Hello world",
+                    "user" => user_with_id
+                }
+                post = Post.new(post_attribute)
+                expected = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
+                
+                actual = post.get_insert_query_and_save_attachment_if_attached
+
+                expect(actual).to eq(expected)
             end
         end
     end

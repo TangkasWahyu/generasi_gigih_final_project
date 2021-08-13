@@ -9,35 +9,60 @@ describe Comment do
     before(:each) do
         allow(Mysql2::Client).to receive(:new).and_return(mock_client)
     end
-    
-    describe "#send" do
-        it "should call insert_comment_query" do
-            user_attribute = {
-                "id" => "1",
-                "username" => "mark",
-                "email" => "mark@mail.com",
-                "bio_description" => "20 years old and grow"
-            }
-            user = User.new(user_attribute)
-            post_attribute = {
-                "id" => "1",
-                "text" => "Hello world #monday"
-            }
-            post = Post.new(post_attribute)
-            comment_attribute = {
-                "text" => "Hello world",
-                "user" => user,
-                "post" => post
-            }
-            comment = Comment.new(comment_attribute)
-            comment_with_id = double
-            comment_id = 1
-            insert_comment_query = "insert into comments (user_id, post_id, text) values ('#{comment.user.id}', '#{comment.post.id}', '#{comment.text}')"
 
-            expect(mock_client).to receive(:query).with(insert_comment_query)
-            allow(mock_client).to receive(:last_id).and_return(comment_id)
+    describe ".get_insert_query_and_save_attachment_if_attached" do
+        let(:user_attribute) {{
+            "id" => "1",
+            "username" => "mark",
+            "email" => "mark@mail.com",
+            "bio_description" => "20 years old and grow"
+        }}
+        let(:user) { User.new user_attribute }
+        let(:post_attribute) {{
+            "id" => "1",
+            "text" => "Hello world #monday"
+        }}
+        let(:post) { Post.new post_attribute }
 
-            comment.send
+        context "comment have attachment" do
+            it "should to equal expected" do
+                attachment_attribute = {
+                    "filename" => "filename", 
+                    "tempfile" => "tempfile"
+                }
+                attachment = Attachment.new(attachment_attribute)
+
+                comment_attribute = {
+                    "text" => "Hello world",
+                    "user" => user,
+                    "attachment" => attachment,
+                    "post" => post
+                }
+                comment = Comment.new(comment_attribute)
+                attachment_path = "/public/#{attachment.filename}"
+                expected = "insert into comments (user_id, post_id, text, attachment_path) values ('#{user.id}', '#{post.id}', '#{comment.text}', '#{attachment_path}')"
+
+                allow(attachment).to receive(:save)
+                actual = comment.get_insert_query_and_save_attachment_if_attached
+
+                expect(actual).to eq(expected)
+            end
+        end
+        
+        context "comment don't have attachment" do
+            it "should to equal expected" do
+                comment_attribute = {
+                    "text" => "Hello world",
+                    "user" => user,
+                    "post" => post
+                }
+                comment = Comment.new(comment_attribute)
+                expected = "insert into comments (user_id, post_id, text) values ('#{user.id}', '#{post.id}', '#{comment.text}')"
+
+                actual = comment.get_insert_query_and_save_attachment_if_attached
+
+                expect(actual).to eq(expected)
+            end
         end
     end
 
