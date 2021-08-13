@@ -2,7 +2,7 @@ require_relative '../test_helper'
 require_relative '../../models/attachment'
 
 describe Attachment do
-    describe ".initialize" do
+    describe "#initialize" do
         context "given attachment_attribute" do
             it "should expected(filename, file) equal to attachment_attribute(filename, tempfile)" do
                 attachment_attribute = {
