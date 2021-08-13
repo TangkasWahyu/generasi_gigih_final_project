@@ -5,7 +5,6 @@ describe Attachment do
     let(:file_mock) { double }
     let(:attachment_attribute) {{
         "filename" => "filename", 
-        "tempfile" => file_mock,
         "tempfile" => file_mock
     }}
     
