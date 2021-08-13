@@ -46,9 +46,13 @@ class Post
         hashtag_ids = Hashtag.save_hashtags(hashtags)
 
         hashtag_ids.each do |hashtag_id|
-            insert_query = "insert into postHashtags (post_id, hashtag_id) values (#{@id}, #{hashtag_id})"
+            insert_query = get_insert_hashtag_referenced_query(hashtag_id)
             client.query(insert_query)
         end
+    end
+
+    def get_insert_hashtag_referenced_query(hashtag_id)
+        "insert into postHashtags (post_id, hashtag_id) values (#{@id}, #{hashtag_id})"
     end
 
     def get_hashtags

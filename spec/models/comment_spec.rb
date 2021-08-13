@@ -66,24 +66,20 @@ describe Comment do
         end
     end
 
-    describe "#save_hashtags" do
-        context "comment_attribute contain 1 hashtag" do
-            it "should call hashtags and insert_comment_hashtags_query" do
+    describe "#get_insert_hashtag_referenced_query" do
+        context "comment have id and given hashtag_id" do
+            it "should to equal expected" do
+                hashtag_id = double
                 comment_attribute = {
-                    "id" => "1",
-                    "text" => "Hello world #monday"
+                    "id" => double,
+                    "text" => double
                 }
                 comment_with_id = Comment.new(comment_attribute)
-                hashtags = ["monday"]
-                hashtag_ids = ["1"]
-                insert_comment_hashtags_query = "insert into commentHashtags (comment_id, hashtag_id) values (#{comment_with_id.id}, #{hashtag_ids[0]})"
-                
-                allow(comment_with_id).to receive(:get_hashtags).and_return(hashtags)
-                expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
-                expect(mock_client).to receive(:query).with(insert_comment_hashtags_query)
-    
+                expected = "insert into commentHashtags (comment_id, hashtag_id) values (#{comment_with_id.id}, #{hashtag_id})"
 
-                comment_with_id.save_hashtags
+                actual = comment_with_id.get_insert_hashtag_referenced_query(hashtag_id)
+
+                expect(actual).to eq(expected)
             end
         end
     end

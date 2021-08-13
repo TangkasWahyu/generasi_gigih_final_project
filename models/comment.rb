@@ -20,16 +20,8 @@ class Comment < Post
         end
     end
 
-    def save_hashtags
-        hashtags = get_hashtags
-        client = create_db_client
-        
-        hashtag_ids = Hashtag.save_hashtags(hashtags)
-
-        hashtag_ids.each do |hashtag_id|
-            insert_query = "insert into commentHashtags (comment_id, hashtag_id) values (#{@id}, #{hashtag_id})"
-            client.query(insert_query)
-        end
+    def get_insert_hashtag_referenced_query(hashtag_id)
+        "insert into commentHashtags (comment_id, hashtag_id) values (#{@id}, #{hashtag_id})"
     end
 
     def add_post(post)

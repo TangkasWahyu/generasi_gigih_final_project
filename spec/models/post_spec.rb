@@ -41,16 +41,30 @@ describe Post do
     
     describe "#save_hashtags" do
         context "post_attribute text contain 1 hashtag" do
-            it "should call hashtags and insert_post_hashtags_query" do
+            it "post_attribute text contain 1 hashtag" do
                 hashtags = ["monday"]
                 hashtag_ids = ["1"]
-                insert_post_hashtags_query = "insert into postHashtags (post_id, hashtag_id) values (#{post_with_id.id}, #{hashtag_ids[0]})"
+                mock_insert_post_hashtags_query = double
                 
                 allow(post_with_id_text_contain_hashtag).to receive(:get_hashtags).and_return(hashtags)
                 expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
-                expect(mock_client).to receive(:query).with(insert_post_hashtags_query)
-    
+                allow(post_with_id_text_contain_hashtag).to receive(:get_insert_hashtag_referenced_query).and_return(mock_insert_post_hashtags_query)
+                expect(mock_client).to receive(:query).with(mock_insert_post_hashtags_query)
+
                 post_with_id_text_contain_hashtag.save_hashtags
+            end
+        end
+    end
+
+    describe "#get_insert_hashtag_referenced_query" do
+        context "post have id and given hashtag_id" do
+            it "should to equal expected" do
+                hashtag_id = double
+                expected = "insert into postHashtags (post_id, hashtag_id) values (#{post_with_id.id}, #{hashtag_id})"
+
+                actual = post_with_id.get_insert_hashtag_referenced_query(hashtag_id)
+
+                expect(actual).to eq(expected) 
             end
         end
     end
