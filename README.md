@@ -7,7 +7,9 @@
 3. As a user, I want to see all posts that contain a certain hashtag.
 4. As a user, I want to see the list of trending hashtags.
 5. As a user, I want to comment on a post
+6. As a user, I want to attach things to a post
 
+    - Three kinds of attachment are allowed: pictures (jpg, png, gif), video (mp4), and file (any other extensions outside of pictures and videos)
 ## How to Run Locally
 
 ```sh
