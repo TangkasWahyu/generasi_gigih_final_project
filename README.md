@@ -17,3 +17,7 @@ ruby main.rb
 ```
 
 ## How to run test suite
+
+```sh
+rspec
+```
