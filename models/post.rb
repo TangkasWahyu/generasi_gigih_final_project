@@ -8,13 +8,23 @@ class Post
         @text = attribute["text"]
         @id = attribute["id"]
         @user = attribute["user"]
+        @attachment = attribute["attachment"]
     end
 
-    def send
+    def send 
         return if self.is_characters_maximum_limit?
 
         client = create_db_client
-        insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
+        insert_post_query = String.new
+        
+        if @attachment
+            @attachment.save
+            attachment_path = "/public/#{@attachment.filename}"
+            insert_post_query = "insert into posts (user_id, text, attachment_path) values ('#{@user.id}','#{@text}', '#{attachment_path}')"
+        else
+            attachment_path = "/public/#{@filename}"
+            insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
+        end
 
         client.query(insert_post_query)
         post_id = client.last_id

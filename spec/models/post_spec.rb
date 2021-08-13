@@ -1,6 +1,7 @@
 require_relative '../test_helper'
 require_relative '../../models/user'
 require_relative '../../models/post'
+require_relative '../../models/attachment'
 
 describe Post do
     let(:post_valid_attribute) {{
@@ -163,28 +164,66 @@ describe Post do
     end
 
     describe "#send" do
-        it "should call insert_post_query" do
-            user_attribute = {
-                "id" => "1",
-                "username" => "mark",
-                "email" => "mark@mail.com",
-                "bio_description" => "20 years old and grow"
-            }
-            user = User.new(user_attribute)
-            post_attribute = {
-                "text" => "Hello world",
-                "user" => user
-            }
-            post = Post.new(post_attribute)
-            post_with_id = double
-            post_id = 1
-            
-            insert_post_query = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
-            
-            expect(mock_client).to receive(:query).with(insert_post_query)
-            allow(mock_client).to receive(:last_id).and_return(post_id)
+        context "post don't have attachment" do
+            it "should call insert_post_query" do
+                user_attribute = {
+                    "id" => "1",
+                    "username" => "mark",
+                    "email" => "mark@mail.com",
+                    "bio_description" => "20 years old and grow"
+                }
+                user = User.new(user_attribute)
+                post_attribute = {
+                    "text" => "Hello world",
+                    "user" => user
+                }
+                post = Post.new(post_attribute)
+                post_with_id = double
+                post_id = 1
+                
+                insert_post_query = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
+                
+                expect(mock_client).to receive(:query).with(insert_post_query)
+                allow(mock_client).to receive(:last_id).and_return(post_id)
+                
+    
+                post.send
+            end
+        end
 
-            post.send
+        context "post have attachment" do
+            it "should call insert_post_query_with_attachment_path" do
+                user_attribute = {
+                    "id" => "1",
+                    "username" => "mark",
+                    "email" => "mark@mail.com",
+                    "bio_description" => "20 years old and grow"
+                }
+                user = User.new(user_attribute)
+                attachment_attribute = {
+                    "filename" => "filename", 
+                    "tempfile" => "tempfile"
+                }
+                attachment = Attachment.new(attachment_attribute)
+                post_attribute = {
+                    "text" => "Hello world",
+                    "user" => user,
+                    "attachment" => attachment
+                }
+                post = Post.new(post_attribute)
+                post_with_id = double
+                post_id = 1
+                attachment_path = "/public/#{attachment.filename}"
+    
+                insert_post_query_with_attachment_path = "insert into posts (user_id, text, attachment_path) values ('#{post.user.id}','#{post.text}', '#{attachment_path}')"
+    
+                allow(attachment).to receive(:save)
+                expect(mock_client).to receive(:query).with(insert_post_query_with_attachment_path)
+                allow(mock_client).to receive(:last_id).and_return(post_id)
+                allow(post_with_id).to receive(:save_hashtags)
+    
+                post.send
+            end
         end
     end
 

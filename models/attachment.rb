@@ -5,4 +5,7 @@ class Attachment
         @filename = attribute["filename"]
         @file = attribute["tempfile"]
     end
+
+    def save
+    end
 end
