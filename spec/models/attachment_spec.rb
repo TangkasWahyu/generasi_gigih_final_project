@@ -43,7 +43,6 @@ describe Attachment do
                     "type" => "video/mp4",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_video_mp4 = Attachment.new(attachment_attribute_with_type_video_mp4)
                 
                 expected = attachment_with_type_video_mp4.is_allowed?
@@ -59,7 +58,6 @@ describe Attachment do
                     "type" => "image/png",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_image_png = Attachment.new(attachment_attribute_with_type_image_png)
                 
                 expected = attachment_with_type_image_png.is_allowed?
@@ -75,7 +73,6 @@ describe Attachment do
                     "type" => "image/gif",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_image_gif = Attachment.new(attachment_attribute_with_type_image_gif)
                 
                 expected = attachment_with_type_image_gif.is_allowed?
@@ -91,7 +88,6 @@ describe Attachment do
                     "type" => "image/jpeg",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_image_jpeg = Attachment.new(attachment_attribute_with_type_image_jpeg)
                 
                 expected = attachment_with_type_image_jpeg.is_allowed?
@@ -107,7 +103,6 @@ describe Attachment do
                     "type" => "text/plain",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_text_plain = Attachment.new(attachment_attribute_with_type_text_plain)
                 
                 expected = attachment_with_type_text_plain.is_allowed?
@@ -123,7 +118,6 @@ describe Attachment do
                     "type" => "text/csv",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_text_csv = Attachment.new(attachment_attribute_with_type_text_csv)
                 
                 expected = attachment_with_type_text_csv.is_allowed?
@@ -139,7 +133,6 @@ describe Attachment do
                     "type" => "application/x-tar",
                     "tempfile" => file_mock
                 }
-
                 attachment_with_type_text_application_x_tar = Attachment.new(attachment_attribute_with_type_application_x_tar)
                 
                 expected = attachment_with_type_text_application_x_tar.is_allowed?
