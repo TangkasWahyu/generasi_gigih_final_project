@@ -14,8 +14,10 @@ class UserController
         }
 
         user = User.get_by_id(params["id"])
+        attachment = Attachment.new(params["attachment"]) if params["attachment"]
         post = Post.new(post_attribute)
         post.add_user(user)
+        post.add_attachment(attachment) if params["attachment"]
         
         post.send
     end

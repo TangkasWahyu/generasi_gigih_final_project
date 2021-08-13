@@ -2,6 +2,7 @@ require_relative '../test_helper'
 require_relative '../../controllers/user_controller'
 require_relative '../../models/user'
 require_relative '../../models/comment'
+require_relative '../../models/attachment'
 
 describe UserController do
     describe ".save" do
@@ -43,6 +44,34 @@ describe UserController do
                 allow(post_mock).to receive(:send)
 
                 UserController.post(valid_parameter)
+            end
+        end
+
+        context "given valid_parameter_with_attachment" do
+            it "should call user_id, post_attribute, attachment_attribute_mock" do
+                attachment_attribute_mock = double
+                attachment_mock = double
+                user_mock = double
+                post_mock = double
+                user_id = "1"
+                text = "Hello world"
+                valid_parameter_with_attachment = {
+                    "id" => user_id,
+                    "text" => text,
+                    "attachment" => attachment_attribute_mock
+                }
+                post_attribute = {
+                    "text" => text
+                }
+
+                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)
+                expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
+                allow(post_mock).to receive(:add_user).with(user_mock)
+                allow(post_mock).to receive(:add_attachment).with(attachment_mock)
+                allow(post_mock).to receive(:send)
+
+                UserController.post(valid_parameter_with_attachment)
             end
         end
     end
