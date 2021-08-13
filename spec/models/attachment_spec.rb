@@ -19,5 +19,25 @@ describe Attachment do
             end
         end
     end
+
+    describe "#save" do
+        it "should call save_location" do
+            f_mock = double
+            file_mock = double
+            file_read = double
+            attachment_attribute = {
+                "filename" => "filename", 
+                "tempfile" => file_mock
+            }
+            attachment = Attachment.new(attachment_attribute)
+            save_location = "./public/#{attachment.filename}"
+
+            expect(File).to receive(:open).with(save_location, 'wb').and_yield(f_mock)
+            allow(attachment.file).to receive(:read).and_return(file_read)
+            allow(f_mock).to receive(:write).with(file_read)
+
+            attachment.save
+        end
+    end
 end
 
