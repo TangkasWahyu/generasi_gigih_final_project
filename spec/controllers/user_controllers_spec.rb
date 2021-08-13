@@ -68,7 +68,7 @@ describe UserController do
                 expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
                 allow(post_mock).to receive(:add_user).with(user_mock)
-                allow(post_mock).to receive(:add_attachment).with(attachment_mock)
+                allow(post_mock).to receive(:set_attachment).with(attachment_mock)
                 allow(post_mock).to receive(:send)
 
                 UserController.post(valid_parameter_with_attachment)

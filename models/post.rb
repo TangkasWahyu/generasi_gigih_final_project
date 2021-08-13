@@ -47,7 +47,7 @@ class Post
         @user = user
     end
 
-    def add_attachment(attachment)
+    def set_attachment(attachment)
     end
 
     def self.get_by_id(id)
