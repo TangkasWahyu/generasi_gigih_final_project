@@ -106,5 +106,38 @@ describe UserController do
                 UserController.comment(params)
             end
         end
+
+        context "given valid_parameter_with_attachment" do
+            it "should call user_id, post_id, comment_attribute and attachment_attribute_mock" do
+                attachment_attribute_mock = double
+                attachment_mock = double
+                user_mock = double
+                post_mock = double
+                comment_mock = double
+                user_id = "1"
+                post_id = "1"
+                text = "comment"
+                valid_parameter_with_attachment = {
+                    "user_id" => user_id,
+                    "text" => text,
+                    "post_id" => post_id,
+                    "attachment" => attachment_attribute_mock
+                }
+                comment_attribute = {
+                    "text" => text
+                }
+
+                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
+                expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
+                allow(comment_mock).to receive(:add_user).with(user_mock)
+                allow(comment_mock).to receive(:add_post).with(post_mock)
+                expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)
+                allow(comment_mock).to receive(:set_attachment).with(attachment_mock)
+                allow(comment_mock).to receive(:send)
+
+                UserController.comment(valid_parameter_with_attachment)
+            end
+        end
     end
 end

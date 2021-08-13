@@ -37,6 +37,11 @@ class UserController
         comment.add_user(user)
         comment.add_post(post)
 
+        if params["attachment"]
+            attachment = Attachment.new(params["attachment"]) 
+            comment.set_attachment(attachment)
+        end
+
         comment.send
     end
 end
