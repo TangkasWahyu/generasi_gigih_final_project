@@ -234,4 +234,16 @@ describe Post do
         end
     end
     
+    describe "#set_attachment" do
+        context "given mock_attachment" do
+            it "should post(attachment) to equal mock_attachment" do
+                mock_attachment = double
+
+                post.set_attachment(mock_attachment)
+
+                expect(post.attachment).to eq(mock_attachment)
+            end
+        end
+    end
+    
 end

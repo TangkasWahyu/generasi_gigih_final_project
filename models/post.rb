@@ -2,7 +2,7 @@ require_relative 'hashtag'
 require_relative '../db/mysql_connector'
 
 class Post
-    attr_reader :text, :id, :user
+    attr_reader :text, :id, :user, :attachment
 
     def initialize(attribute)
         @text = attribute["text"]
@@ -48,6 +48,7 @@ class Post
     end
 
     def set_attachment(attachment)
+        @attachment = attachment
     end
 
     def self.get_by_id(id)
