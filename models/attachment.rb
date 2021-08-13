@@ -1,7 +1,8 @@
 class Attachment
+    attr_reader :filename, :file
+    
     def initialize(attribute)
-    end
-
-    def save
+        @filename = attribute["filename"]
+        @file = attribute["tempfile"]
     end
 end
