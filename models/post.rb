@@ -22,7 +22,6 @@ class Post
             attachment_path = "/public/#{@attachment.filename}"
             insert_post_query = "insert into posts (user_id, text, attachment_path) values ('#{@user.id}','#{@text}', '#{attachment_path}')"
         else
-            attachment_path = "/public/#{@filename}"
             insert_post_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
         end
 
