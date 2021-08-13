@@ -2,14 +2,8 @@
 
 ## Problem Description
 
-1. As a user, I want to save my username, email, and bio description.
-2. As a user, I want to post a text that might contain hashtag(s).
-3. As a user, I want to see all posts that contain a certain hashtag.
-4. As a user, I want to see the list of trending hashtags.
-5. As a user, I want to comment on a post
-6. As a user, I want to attach things to a post
+Social media application which can be used to share information with other people. This application will only be used by people that work in a certain company so we cannot use existing public social media.
 
-    - Three kinds of attachment are allowed: pictures (jpg, png, gif), video (mp4), and file (any other extensions outside of pictures and videos)
 ## How to Run Locally
 
 ```sh
