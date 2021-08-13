@@ -1,5 +1,5 @@
 class Attachment
-    attr_reader :filename, :file
+    attr_reader :filename, :type, :file
 
     def initialize(attribute)
         @filename = attribute["filename"]
