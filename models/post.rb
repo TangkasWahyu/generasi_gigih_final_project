@@ -12,7 +12,7 @@ class Post
     end
 
     def send 
-        return if self.is_characters_maximum_limit?
+        return if is_characters_maximum_limit?
 
         client = create_db_client
         insert_post_query = get_insert_query_and_save_attachment_if_attached
@@ -21,7 +21,7 @@ class Post
         post_id = client.last_id
         @id = post_id
 
-        self.save_hashtags
+        save_hashtags
     end
 
     def is_characters_maximum_limit?
@@ -40,7 +40,7 @@ class Post
     end
 
     def save_hashtags
-        hashtags = self.get_hashtags
+        hashtags = get_hashtags
         client = create_db_client
         
         hashtag_ids = Hashtag.save_hashtags(hashtags)

@@ -21,7 +21,7 @@ class Comment < Post
     end
 
     def save_hashtags
-        hashtags = self.get_hashtags
+        hashtags = get_hashtags
         client = create_db_client
         
         hashtag_ids = Hashtag.save_hashtags(hashtags)
