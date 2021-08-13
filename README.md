@@ -26,4 +26,9 @@ ruby main.rb
 
 ```sh
 rspec
+
 ```
+
+___
+
+💪 Generasi Gigih Backend 2021
