@@ -247,18 +247,6 @@ describe Post do
         end
     end
 
-    describe "#add_user" do
-        context "given user_mock" do
-            it "should post.user equal user_mock" do
-                user_mock = double
-
-                post.add_user(user_mock)
-
-                expect(post.user).to eq(user_mock)
-            end
-        end
-    end
-
     describe ".get_by_id" do
         context "given id is 1" do
             it "should call get_by_id_query with id equal 1, get post with id and name same with post_valid_attribute_with_id" do

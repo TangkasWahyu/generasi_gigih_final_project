@@ -23,8 +23,4 @@ class Comment < Post
     def get_insert_hashtag_referenced_query(hashtag_id)
         "insert into commentHashtags (comment_id, hashtag_id) values (#{@id}, #{hashtag_id})"
     end
-
-    def add_post(post)
-        @post = post
-    end
 end

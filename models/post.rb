@@ -59,10 +59,6 @@ class Post
         @text.downcase.scan(/[#]\w+/).uniq
     end
 
-    def add_user(user)
-        @user = user
-    end
-
     def set_attachment(attachment)
         @attachment = attachment
     end

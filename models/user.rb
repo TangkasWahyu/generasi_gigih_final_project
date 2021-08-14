@@ -30,4 +30,10 @@ class User
 
         users.pop
     end
+
+    def send(text)
+    end
+
+    def on(text)
+    end
 end

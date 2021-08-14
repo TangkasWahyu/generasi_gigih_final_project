@@ -83,20 +83,4 @@ describe Comment do
             end
         end
     end
-
-    describe "#add_post" do
-        context "given post_mock" do
-            it "should comment.post equal post_mock" do
-                comment_attribute = {
-                    "text" => "Hello world"
-                }
-                comment = Comment.new(comment_attribute)
-                post_mock = double
-
-                comment.add_post(post_mock)
-
-                expect(comment.post).to eq(post_mock)
-            end
-        end
-    end
 end
