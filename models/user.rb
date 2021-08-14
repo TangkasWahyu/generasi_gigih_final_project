@@ -1,13 +1,14 @@
 require_relative '../db/mysql_connector'
 
 class User
-    attr_accessor :username, :email, :bio_description, :id
+    attr_reader :username, :email, :bio_description, :id, :text
 
     def initialize(attribute)
         @username = attribute["username"]
         @email = attribute["email"]
         @bio_description = attribute["bio_description"]
         @id = attribute["id"]
+        @text = attribute["text"]
     end
 
     def save
@@ -29,5 +30,15 @@ class User
         end
 
         users.pop
+    end
+
+    def send(text)
+        text.send_by(self)
+    end
+
+    def on(text)
+        @text = text
+
+        self
     end
 end

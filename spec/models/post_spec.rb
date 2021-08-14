@@ -184,11 +184,12 @@ describe Post do
         end
     end
 
-    describe "#send" do
-        context "post don't have attachment" do
+    describe "#send_by" do
+        context "given mock_user" do
             it "should call insert_post_query" do
                 post_id = 1
-                post_with_id = double
+                mock_user = double
+                mock_id = double
                 mock_query = double
                 post_attribute = {
                     "text" => "Hello world",
@@ -196,17 +197,17 @@ describe Post do
                 }
                 post = Post.new(post_attribute)
                 
-                allow(post).to receive(:get_insert_query_and_save_attachment_if_attached).and_return(mock_query)
+                allow(post).to receive(:get_insert_query_and_save_attachment_if_attached_by).with(mock_user).and_return(mock_query)
                 expect(mock_client).to receive(:query).with(mock_query)
-                allow(mock_client).to receive(:last_id).and_return(post_id)
+                allow(mock_client).to receive(:last_id).and_return(mock_id)
                 allow(post_with_id).to receive(:save_hashtags)
     
-                post.send
+                post.send_by(mock_user)
             end
         end
     end
 
-    describe ".get_insert_query_and_save_attachment_if_attached" do
+    describe ".get_insert_query_and_save_attachment_if_attached_by" do
         context "post have attachment" do
             it "should to equal expected" do
                 attachment_attribute = {
@@ -216,16 +217,15 @@ describe Post do
                 attachment = Attachment.new(attachment_attribute)
                 post_attribute = {
                     "text" => "Hello world",
-                    "user" => user_with_id,
                     "attachment" => attachment
                 }
                 post = Post.new(post_attribute)
                 attachment_path = "/public/#{attachment.filename}"
                 
-                expected = "insert into posts (user_id, text, attachment_path) values ('#{post.user.id}','#{post.text}', '#{attachment_path}')"
+                expected = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{post.text}', '#{attachment_path}')"
                 
                 allow(attachment).to receive(:save)
-                actual = post.get_insert_query_and_save_attachment_if_attached
+                actual = post.get_insert_query_and_save_attachment_if_attached_by(user_with_id)
 
                 expect(actual).to eq(expected)
             end
@@ -238,23 +238,11 @@ describe Post do
                     "user" => user_with_id
                 }
                 post = Post.new(post_attribute)
-                expected = "insert into posts (user_id, text) values ('#{post.user.id}','#{post.text}')"
+                expected = "insert into posts (user_id, text) values ('#{user_with_id.id}','#{post.text}')"
                 
-                actual = post.get_insert_query_and_save_attachment_if_attached
+                actual = post.get_insert_query_and_save_attachment_if_attached_by(user_with_id)
 
                 expect(actual).to eq(expected)
-            end
-        end
-    end
-
-    describe "#add_user" do
-        context "given user_mock" do
-            it "should post.user equal user_mock" do
-                user_mock = double
-
-                post.add_user(user_mock)
-
-                expect(post.user).to eq(user_mock)
             end
         end
     end

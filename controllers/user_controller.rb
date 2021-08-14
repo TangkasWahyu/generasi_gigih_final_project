@@ -16,14 +16,13 @@ class UserController
 
         user = User.get_by_id(params["id"])
         post = Post.new(post_attribute)
-        post.add_user(user)
-        
+
         if params["attachment"]
             attachment = Attachment.new(params["attachment"]) 
             post.set_attachment(attachment)
         end
         
-        post.send
+        user.send(post)
     end
 
     def self.comment(params)
@@ -34,14 +33,12 @@ class UserController
         user = User.get_by_id(params["user_id"])
         post = Post.get_by_id(params["post_id"])
         comment = Comment.new(comment_attribute)
-        comment.add_user(user)
-        comment.add_post(post)
 
         if params["attachment"]
             attachment = Attachment.new(params["attachment"]) 
             comment.set_attachment(attachment)
         end
 
-        comment.send
+        user.on(post).send(comment)
     end
 end
