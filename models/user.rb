@@ -32,6 +32,7 @@ class User
     end
 
     def send(text)
+        text.send_by(self)
     end
 
     def on(text)
