@@ -48,6 +48,85 @@ describe Hashtag do
         end
     end
 
+    describe ".contained?" do
+        context "given text contain #monday" do
+            it "should return true" do
+                text = "Hello world #monday"
+
+                actual = Hashtag.contained?(text)
+
+                expect(actual).to be_truthy 
+            end
+        end
+
+        context "given text contain no hashtag" do
+            it "should return false" do
+                text = "Hello world"
+
+                actual = Hashtag.contained?(text)
+
+                expect(actual).to be_falsy
+            end
+        end
+    end
+
+    describe ".get_hashtags_by_text" do
+        context "text contain #monday" do
+            it "return #monday" do
+                expected = ["#monday"]
+                text = "Hello world #monday"
+
+                actual = Hashtag.get_hashtags_by_text(text)
+
+                expect(actual).to eq(expected)
+            end
+        end
+
+        context "text contain no hashtag" do
+            it "return empty array" do
+                expected = []
+                text = "Hello world"
+
+                actual = Hashtag.get_hashtags_by_text(text)
+
+                expect(actual).to eq(expected)
+            end
+        end
+
+        context "text contain #Monday" do
+            it "return array that contain #monday only" do
+                expected = ["#monday"]
+                text = "Hello world #Monday"
+
+                actual = Hashtag.get_hashtags_by_text(text)
+
+                expect(actual).to eq(expected)
+            end
+        end
+
+        context "text contain #Monday and #tuesday" do
+            it "return array that contain #monday and #tuesday only" do
+                expected = ["#monday", "#tuesday"]
+                text = "Hello world #monday #tuesday"
+                
+                actual = Hashtag.get_hashtags_by_text(text)
+
+                expect(actual).to eq(expected)
+            end
+        end
+
+        context "text contain #monday and #monday" do
+            it "return array that contain #monday only" do
+                expected = ["#monday"]
+                text = "Hello world #monday #monday"
+
+                actual = Hashtag.get_hashtags_by_text(text)
+
+                expect(actual).to eq(expected)
+            end
+        end
+    end
+
     describe ".trending" do
         it "should call get_trending_24_hours_query" do
             mock_client = double

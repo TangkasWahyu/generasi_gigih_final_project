@@ -54,10 +54,6 @@ class Post
         "insert into postHashtags (post_id, hashtag_id) values (#{@id}, #{hashtag_id})"
     end
 
-    def get_hashtags
-        @text.downcase.scan(/[#]\w+/).uniq
-    end
-
     def set_attachment(attachment)
         @attachment = attachment
     end

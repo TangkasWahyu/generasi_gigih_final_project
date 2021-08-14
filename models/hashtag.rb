@@ -7,10 +7,12 @@ class Hashtag
         @text = text
     end
 
-    def self.contained?(test)
+    def self.contained?(text)
+        not (text =~ /[#]\w+/).nil?
     end
 
     def self.get_hashtags_by_text(text)
+        text.downcase.scan(/[#]\w+/).uniq
     end
     
     def self.save_hashtags(hashtag_texts)
