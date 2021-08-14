@@ -38,20 +38,22 @@ describe Post do
             end
         end
     end
-    
-    describe "#save_hashtags" do
-        context "post_attribute text contain 1 hashtag" do
-            it "post_attribute text contain 1 hashtag" do
-                hashtags = ["monday"]
-                hashtag_ids = ["1"]
-                mock_insert_post_hashtags_query = double
-                
-                allow(post_with_id_text_contain_hashtag).to receive(:get_hashtags).and_return(hashtags)
-                expect(Hashtag).to receive(:save_hashtags).with(hashtags).and_return(hashtag_ids)
-                allow(post_with_id_text_contain_hashtag).to receive(:get_insert_hashtag_referenced_query).and_return(mock_insert_post_hashtags_query)
-                expect(mock_client).to receive(:query).with(mock_insert_post_hashtags_query)
 
-                post_with_id_text_contain_hashtag.save_hashtags
+    describe "#send_by" do
+        context "given mock_user" do
+            it "should call mock_user" do
+                mock_user = double
+                post_attribute = {
+                    "text" => "Hello world"
+                }
+                post = Post.new(post_attribute)
+                
+                allow(post).to receive(:is_characters_maximum_limit?).and_return(false)
+                expect(post).to receive(:save_by).with(mock_user)
+                allow(Hashtag).to receive(:contained?).with(post_attribute["text"]).and_return(true)
+                allow(post).to receive(:save_hashtags)
+    
+                post.send_by(mock_user)
             end
         end
     end
@@ -184,26 +186,38 @@ describe Post do
         end
     end
 
-    describe "#send_by" do
+    describe "#save_by" do
         context "given mock_user" do
-            it "should call insert_post_query" do
-                post_id = 1
-                mock_user = double
-                mock_id = double
+            it "should call mock_query and set_post_id" do
                 mock_query = double
+                mock_id = double
+                mock_user = double
                 post_attribute = {
-                    "text" => "Hello world",
-                    "user" => user_with_id
+                    "text" => "Hello world"
                 }
                 post = Post.new(post_attribute)
-                
                 allow(post).to receive(:get_insert_query_and_save_attachment_if_attached_by).with(mock_user).and_return(mock_query)
                 expect(mock_client).to receive(:query).with(mock_query)
                 allow(mock_client).to receive(:last_id).and_return(mock_id)
-                allow(post_with_id).to receive(:save_hashtags)
-    
-                post.send_by(mock_user)
+
+                post.save_by(mock_user)
+
+                expect(post.id).to eq(mock_id)  
             end
+        end
+    end
+
+    describe "#save_hashtags" do
+        it "should call post_with_id" do
+            hashtag_text = double
+            hashtag_texts = [hashtag_text]
+            hashtag = double
+
+            allow(Hashtag).to receive(:get_hashtags_by_text).with(post_valid_attribute_with_id["text"]).and_return(hashtag_texts)
+            allow(Hashtag).to receive(:new).with(hashtag_text).and_return(hashtag)
+            expect(hashtag).to receive(:save_on).with(post_with_id)
+
+            post_with_id.save_hashtags
         end
     end
 

@@ -7,6 +7,12 @@ class Hashtag
         @text = text
     end
 
+    def self.contained?(test)
+    end
+
+    def self.get_hashtags_by_text(text)
+    end
+    
     def self.save_hashtags(hashtag_texts)
         hashtag_ids = Array.new
 

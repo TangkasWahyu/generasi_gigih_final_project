@@ -13,17 +13,30 @@ class Post
     def send_by(user)
         return if is_characters_maximum_limit?
 
+        save_by(user)
+
+        save_hashtags if Hashtag.contained?(@text)
+    end
+
+    def is_characters_maximum_limit?
+        @text.length > 1000
+    end
+
+    def save_by(user)
         client = create_db_client
         insert_post_query = get_insert_query_and_save_attachment_if_attached_by(user)
 
         client.query(insert_post_query)
         @id = client.last_id
-
-        save_hashtags
     end
 
-    def is_characters_maximum_limit?
-        @text.length > 1000
+    def save_hashtags
+        hashtag_texts = Hashtag.get_hashtags_by_text(@text) 
+
+        hashtag_texts.each do |hashtag_text|
+            hashtag = Hashtag.new(hashtag_text)
+            hashtag.save_on(self)
+        end
     end
 
     def get_insert_query_and_save_attachment_if_attached_by(user)
@@ -34,18 +47,6 @@ class Post
             return "insert into posts (user_id, text, attachment_path) values ('#{user.id}','#{@text}', '#{attachment_path}')"
         else
             return "insert into posts (user_id, text) values ('#{user.id}','#{@text}')"
-        end
-    end
-
-    def save_hashtags
-        hashtags = get_hashtags
-        client = create_db_client
-        
-        hashtag_ids = Hashtag.save_hashtags(hashtags)
-
-        hashtag_ids.each do |hashtag_id|
-            insert_query = get_insert_hashtag_referenced_query(hashtag_id)
-            client.query(insert_query)
         end
     end
 
