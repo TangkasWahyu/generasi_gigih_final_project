@@ -31,20 +31,25 @@ describe Hashtag do
         end
     end
 
-    describe ".save" do
-        it "should call insert_query and return '1'" do
-            mock_client = double
-            text = "monday"
-            hashtag = Hashtag.new(text)
-            insert_query = "insert into hashtags (text) values ('#{text}')"
+    describe "#save_on" do
+        context "given mock_post" do
+            it "should call insert_query" do
+                mock_client = double
+                mock_last_id = double
+                mock_post = double
+                text = "monday"
+                hashtag = Hashtag.new(text)
+                insert_hashtag_query = "insert into hashtags (text) values ('#{text}')"
+                mock_insert_hashtag_referenced_query = double
+    
+                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+                expect(mock_client).to receive(:query).with(insert_hashtag_query)
+                allow(mock_client).to receive(:last_id).and_return(mock_last_id)
+                allow(mock_post).to receive(:get_insert_hashtag_referenced_query).with(mock_last_id).and_return(mock_insert_hashtag_referenced_query)
+                allow(mock_client).to receive(:query).with(mock_insert_hashtag_referenced_query)
 
-            allow(Mysql2::Client).to receive(:new).and_return(mock_client)
-            expect(mock_client).to receive(:query).with(insert_query)
-            allow(mock_client).to receive(:last_id).and_return(1)
-
-            actual = hashtag.save
-
-            expect(actual).to eq('1')
+                hashtag.save_on(mock_post)
+            end
         end
     end
 

@@ -26,13 +26,15 @@ class Hashtag
         hashtag_ids
     end
 
-    def save
+    def save_on(text)
         client = create_db_client
-        insert_query = "insert into hashtags (text) values ('#{@text}')"
+        insert_hashtag_query = "insert into hashtags (text) values ('#{@text}')"
 
-        client.query(insert_query)
+        client.query(insert_hashtag_query)
+        hashtag_id = client.last_id
 
-        client.last_id.to_s
+        insert_hashtag_referenced_query = text.get_insert_hashtag_referenced_query(hashtag_id)
+        client.query(insert_hashtag_referenced_query)
     end
 
     def self.get_trending
