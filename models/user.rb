@@ -8,6 +8,7 @@ class User
         @email = attribute["email"]
         @bio_description = attribute["bio_description"]
         @id = attribute["id"]
+        @text = attribute["text"]
     end
 
     def save
