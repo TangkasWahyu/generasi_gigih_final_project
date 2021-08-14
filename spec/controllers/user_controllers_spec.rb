@@ -11,18 +11,18 @@ describe UserController do
     let(:text) { "Hello world" }
 
     describe ".save" do
-        context "given valid parameter" do
-            it "should call valid_parameter and save the user" do
-                valid_parameter = {
+        context "given user_attribute" do
+            it "should call user_attribute" do
+                user_attribute = {
                     "username" => "mark",
                     "email" => "mark@mail.com",
                     "bio" => "20 years old and always grow"
                 }
                 
-                expect(User).to receive(:new).with(valid_parameter).and_return(user_mock)
-                expect(user_mock).to receive(:save) 
+                expect(User).to receive(:new).with(user_attribute).and_return(user_mock)
+                allow(user_mock).to receive(:save) 
 
-                UserController.save(valid_parameter)
+                UserController.save(user_attribute)
             end
         end
     end
