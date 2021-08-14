@@ -5,10 +5,14 @@ require_relative '../../models/comment'
 require_relative '../../models/attachment'
 
 describe UserController do
+    let(:user_mock) { double }
+    let(:post_mock) { double }
+    let(:user_id) { "1" }
+    let(:text) { "Hello world" }
+
     describe ".save" do
         context "given valid parameter" do
             it "should call valid_parameter and save the user" do
-                user_mock = double
                 valid_parameter = {
                     "username" => "mark",
                     "email" => "mark@mail.com",
@@ -24,17 +28,14 @@ describe UserController do
     end
 
     describe ".post" do
+        let(:post_attribute) {{
+            "text" => text
+        }}
+
         context "given valid_parameter" do
             it "should call user_id, post_attribute" do
-                user_mock = double
-                post_mock = double
-                user_id = "1"
-                text = "Hello world"
                 valid_parameter = {
                     "id" => user_id,
-                    "text" => text
-                }
-                post_attribute = {
                     "text" => text
                 }
 
@@ -50,17 +51,10 @@ describe UserController do
             it "should call user_id, post_attribute, attachment_attribute_mock" do
                 attachment_attribute_mock = double
                 attachment_mock = double
-                user_mock = double
-                post_mock = double
-                user_id = "1"
-                text = "Hello world"
                 valid_parameter_with_attachment = {
                     "id" => user_id,
                     "text" => text,
                     "attachment" => attachment_attribute_mock
-                }
-                post_attribute = {
-                    "text" => text
                 }
 
                 expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
@@ -75,24 +69,19 @@ describe UserController do
     end
 
     describe ".comment" do
+        let(:comment_mock) { double }
+        let(:post_id) { "1" }
+        let(:comment_attribute) {{
+            "text" => text
+        }}
+
         context "given valid params" do
             it "should call user_id, post_id, comment_attribute" do
-                user_id = 1
-                post_id = 1
-                text = "comment"
                 params = {
                     "user_id" => user_id,
                     "post_id" => post_id,
                     "text" => text
                 }
-                comment_attribute = {
-                    "text" => text
-                }
-
-                post_mock = double
-                user_mock = double
-                post_id_mock = double
-                comment_mock = double
 
                 expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
@@ -108,20 +97,11 @@ describe UserController do
             it "should call user_id, post_id, comment_attribute and attachment_attribute_mock" do
                 attachment_attribute_mock = double
                 attachment_mock = double
-                user_mock = double
-                post_mock = double
-                comment_mock = double
-                user_id = "1"
-                post_id = "1"
-                text = "comment"
                 valid_parameter_with_attachment = {
                     "user_id" => user_id,
                     "text" => text,
                     "post_id" => post_id,
                     "attachment" => attachment_attribute_mock
-                }
-                comment_attribute = {
-                    "text" => text
                 }
 
                 expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
