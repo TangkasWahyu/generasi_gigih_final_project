@@ -1,7 +1,7 @@
 require_relative '../db/mysql_connector'
 
 class User
-    attr_accessor :username, :email, :bio_description, :id
+    attr_reader :username, :email, :bio_description, :id, :text
 
     def initialize(attribute)
         @username = attribute["username"]
@@ -36,5 +36,8 @@ class User
     end
 
     def on(text)
+        @text = text
+
+        self
     end
 end

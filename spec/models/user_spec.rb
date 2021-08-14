@@ -64,4 +64,20 @@ describe User do
             user.send(mock_text)
         end
     end
+
+    describe "#on" do
+        context "given mock_test" do
+            it "should return same user and user(text) to equal mock_text" do
+                mock_text = double
+    
+                user_with_text = user.on(mock_text)
+                
+                expect(user_with_text.id).to eq(user.id)
+                expect(user_with_text.username).to eq(user.username)
+                expect(user_with_text.email).to eq(user.email)
+                expect(user_with_text.bio_description).to eq(user.bio_description)
+                expect(user_with_text.text).to eq(mock_text)
+            end
+        end
+    end
 end
