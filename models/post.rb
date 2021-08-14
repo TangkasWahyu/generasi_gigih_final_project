@@ -2,24 +2,22 @@ require_relative 'hashtag'
 require_relative '../db/mysql_connector'
 
 class Post
-    attr_reader :text, :id, :user, :attachment
+    attr_reader :text, :id, :attachment
 
     def initialize(attribute)
         @text = attribute["text"]
         @id = attribute["id"]
-        @user = attribute["user"]
         @attachment = attribute["attachment"]
     end
 
-    def send 
+    def send_by(user)
         return if is_characters_maximum_limit?
 
         client = create_db_client
-        insert_post_query = get_insert_query_and_save_attachment_if_attached
+        insert_post_query = get_insert_query_and_save_attachment_if_attached_by(user)
 
         client.query(insert_post_query)
-        post_id = client.last_id
-        @id = post_id
+        @id = client.last_id
 
         save_hashtags
     end
@@ -28,14 +26,14 @@ class Post
         @text.length > 1000
     end
 
-    def get_insert_query_and_save_attachment_if_attached
+    def get_insert_query_and_save_attachment_if_attached_by(user)
         if @attachment
             @attachment.save
             attachment_path = "/public/#{@attachment.filename}"
             
-            return "insert into posts (user_id, text, attachment_path) values ('#{@user.id}','#{@text}', '#{attachment_path}')"
+            return "insert into posts (user_id, text, attachment_path) values ('#{user.id}','#{@text}', '#{attachment_path}')"
         else
-            return "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
+            return "insert into posts (user_id, text) values ('#{user.id}','#{@text}')"
         end
     end
 
