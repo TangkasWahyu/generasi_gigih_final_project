@@ -137,10 +137,11 @@ describe Post do
                     "attachment" => attachment
                 }
                 post = Post.new(post_attribute)
-                attachment_path = "/public/#{post_id}"
+                attachment_path = double
                 expected = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{post.text}', '#{attachment_path}')"
                 
-                expect(attachment).to receive(:save_at).with(attachment_path)
+                expect(attachment).to receive(:save_by).with(user_with_id)
+                allow(attachment).to receive(:saved_filename).and_return(attachment_path)
                 
                 actual = post.get_insert_query_and_save_attachment_if_attached_by(user_with_id)
 

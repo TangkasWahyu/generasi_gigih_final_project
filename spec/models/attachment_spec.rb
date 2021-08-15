@@ -21,19 +21,26 @@ describe Attachment do
         end
     end
 
-    describe "#save_at" do
-        it "should call save_location" do
-            f_mock = double
-            file_read = double
-            mock_path = double
-            attachment = Attachment.new(attachment_attribute)
-
-            allow(attachment).to receive(:is_allowed?).and_return(true)
-            expect(File).to receive(:open).with(mock_path, 'wb').and_yield(f_mock)
-            allow(attachment.file).to receive(:read).and_return(file_read)
-            allow(f_mock).to receive(:write).with(file_read)
-
-            attachment.save_at(mock_path)
+    describe "#save_by" do
+        context "given mock_sender" do
+            it "should call file_path and mock_file_read" do
+                f_mock = double
+                mock_file_read = double
+                mock_sender = double
+                mock_random_number = double
+                mock_extension = double
+                file_path = "./public/#{mock_random_number}#{mock_extension}"
+                attachment = Attachment.new(attachment_attribute)
+    
+                allow(attachment).to receive(:is_allowed?).and_return(true)
+                allow(attachment).to receive(:get_random_number_by).with(mock_sender).and_return(mock_random_number)
+                allow(File).to receive(:extname).with(attachment_attribute["filename"]).and_return(mock_extension)
+                allow(attachment.file).to receive(:read).and_return(mock_file_read)
+                expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
+                expect(f_mock).to receive(:write).with(mock_file_read)
+    
+                attachment.save_by(mock_sender)
+            end
         end
     end
 
