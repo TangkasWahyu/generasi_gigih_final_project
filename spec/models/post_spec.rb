@@ -122,20 +122,6 @@ describe Post do
         end
     end
 
-    describe "#save_hashtags" do
-        it "should call post_with_id" do
-            hashtag_text = double
-            hashtag_texts = [hashtag_text]
-            hashtag = double
-
-            allow(Hashtag).to receive(:get_hashtags_by_text).with(post_valid_attribute_with_id["text"]).and_return(hashtag_texts)
-            allow(Hashtag).to receive(:new).with(hashtag_text).and_return(hashtag)
-            expect(hashtag).to receive(:save_on).with(post_with_id)
-
-            post_with_id.save_hashtags
-        end
-    end
-
     describe ".get_insert_query_and_save_attachment_if_attached_by" do
         context "post have attachment" do
             it "should to equal expected" do
@@ -176,6 +162,32 @@ describe Post do
         end
     end
 
+    describe "#save_hashtags" do
+        it "should call post_with_id" do
+            hashtag_text = double
+            hashtag_texts = [hashtag_text]
+            hashtag = double
+
+            allow(Hashtag).to receive(:get_hashtags_by_text).with(post_valid_attribute_with_id["text"]).and_return(hashtag_texts)
+            allow(Hashtag).to receive(:new).with(hashtag_text).and_return(hashtag)
+            expect(hashtag).to receive(:save_on).with(post_with_id)
+
+            post_with_id.save_hashtags
+        end
+    end
+
+    describe "#set_attachment" do
+        context "given mock_attachment" do
+            it "should post(attachment) to equal mock_attachment" do
+                mock_attachment = double
+
+                post.set_attachment(mock_attachment)
+
+                expect(post.attachment).to eq(mock_attachment)
+            end
+        end
+    end
+
     describe ".get_by_id" do
         context "given id is 1" do
             it "should call get_by_id_query with id equal 1, get post with id and name same with post_valid_attribute_with_id" do
@@ -209,17 +221,4 @@ describe Post do
             end
         end
     end
-    
-    describe "#set_attachment" do
-        context "given mock_attachment" do
-            it "should post(attachment) to equal mock_attachment" do
-                mock_attachment = double
-
-                post.set_attachment(mock_attachment)
-
-                expect(post.attachment).to eq(mock_attachment)
-            end
-        end
-    end
-    
 end

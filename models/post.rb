@@ -30,15 +30,6 @@ class Post
         @id = client.last_id
     end
 
-    def save_hashtags
-        hashtag_texts = Hashtag.get_hashtags_by_text(@text) 
-
-        hashtag_texts.each do |hashtag_text|
-            hashtag = Hashtag.new(hashtag_text)
-            hashtag.save_on(self)
-        end
-    end
-
     def get_insert_query_and_save_attachment_if_attached_by(user)
         if @attachment
             @attachment.save
@@ -47,6 +38,15 @@ class Post
             return "insert into posts (user_id, text, attachment_path) values ('#{user.id}','#{@text}', '#{attachment_path}')"
         else
             return "insert into posts (user_id, text) values ('#{user.id}','#{@text}')"
+        end
+    end
+
+    def save_hashtags
+        hashtag_texts = Hashtag.get_hashtags_by_text(@text) 
+
+        hashtag_texts.each do |hashtag_text|
+            hashtag = Hashtag.new(hashtag_text)
+            hashtag.save_on(self)
         end
     end
 
