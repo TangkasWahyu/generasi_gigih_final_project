@@ -124,22 +124,24 @@ describe Post do
 
     describe ".get_insert_query_and_save_attachment_if_attached_by" do
         context "post have attachment" do
-            it "should to equal expected" do
+            it "should call post_id and return to equal expected" do
+                post_id = "1"
                 attachment_attribute = {
                     "filename" => "filename", 
                     "tempfile" => "tempfile"
                 }
                 attachment = Attachment.new(attachment_attribute)
                 post_attribute = {
+                    "id" => post_id,
                     "text" => "Hello world",
                     "attachment" => attachment
                 }
                 post = Post.new(post_attribute)
-                attachment_path = "/public/#{attachment.filename}"
-                
+                attachment_path = "/public/#{post_id}"
                 expected = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{post.text}', '#{attachment_path}')"
                 
-                allow(attachment).to receive(:save)
+                expect(attachment).to receive(:save_at).with(attachment_path)
+                
                 actual = post.get_insert_query_and_save_attachment_if_attached_by(user_with_id)
 
                 expect(actual).to eq(expected)

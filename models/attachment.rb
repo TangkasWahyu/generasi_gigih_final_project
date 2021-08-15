@@ -7,13 +7,12 @@ class Attachment
         @file = attribute["tempfile"]
     end
 
-    def save
+    def save_at(path)
         return unless is_allowed?
 
-        save_location = "./public/#{@filename}"
         file_read = @file.read
         
-        File.open(save_location, 'wb') do |f|
+        File.open(path, 'wb') do |f|
             f.write(file_read)
         end
     end

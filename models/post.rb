@@ -32,8 +32,8 @@ class Post
 
     def get_insert_query_and_save_attachment_if_attached_by(user)
         if @attachment
-            @attachment.save
-            attachment_path = "/public/#{@attachment.filename}"
+            attachment_path = "/public/#{@id}"
+            @attachment.save_at(attachment_path)
             
             return "insert into posts (user_id, text, attachment_path) values ('#{user.id}','#{@text}', '#{attachment_path}')"
         else

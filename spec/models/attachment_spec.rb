@@ -21,19 +21,19 @@ describe Attachment do
         end
     end
 
-    describe "#save" do
+    describe "#save_at" do
         it "should call save_location" do
             f_mock = double
             file_read = double
+            mock_path = double
             attachment = Attachment.new(attachment_attribute)
-            save_location = "./public/#{attachment.filename}"
 
             allow(attachment).to receive(:is_allowed?).and_return(true)
-            expect(File).to receive(:open).with(save_location, 'wb').and_yield(f_mock)
+            expect(File).to receive(:open).with(mock_path, 'wb').and_yield(f_mock)
             allow(attachment.file).to receive(:read).and_return(file_read)
             allow(f_mock).to receive(:write).with(file_read)
 
-            attachment.save
+            attachment.save_at(mock_path)
         end
     end
 
