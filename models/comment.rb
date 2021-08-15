@@ -15,7 +15,7 @@ class Comment < Post
 
     def save_ref(user)
         client = create_db_client
-        post = user.text
+        post = user.post
 
         insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{@id}, #{post.id})"
         client.query(insert_post_ref_query)

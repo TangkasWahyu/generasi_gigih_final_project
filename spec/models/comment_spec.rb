@@ -18,7 +18,7 @@ describe Comment do
 				comment = Comment.new(comment_attribute)
 				insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{@id}, #{mock_post_id})"
 
-				allow(mock_user).to receive(:text).and_return(mock_post)
+				allow(mock_user).to receive(:post).and_return(mock_post)
 				allow(mock_post).to receive(:id).and_return(mock_post_id)
 				allow(Mysql2::Client).to receive(:new).and_return(mock_client)
 				expect(mock_client).to receive(:query).and_return(mock_client)
