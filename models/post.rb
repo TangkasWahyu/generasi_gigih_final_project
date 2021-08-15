@@ -71,7 +71,7 @@ class Post
     def self.fetch_by_hashtag_text(hashtag_text)
         client = create_db_client
         posts = Array.new
-        fetch_by_hashtag_text_query = "select * from posts where text like '%#{hashtag_text}%'"
+        fetch_by_hashtag_text_query = "select * from posts left join postRefs on posts.id = postRefs.post_id where postRefs.post_ref_id is null and posts.text like '%##{hashtag_text}%';"
     
         rawData = client.query(fetch_by_hashtag_text_query)
     
