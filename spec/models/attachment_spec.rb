@@ -64,7 +64,7 @@ describe Attachment do
         end
     end
     
-    describe "#is_valid?" do
+    describe "#is_allowed?" do
         context "attachment type is video/mp4" do
             it "should be true" do
                 attachment_attribute_with_type_video_mp4 = {
