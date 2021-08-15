@@ -119,7 +119,7 @@ describe Hashtag do
             mock_client = double
             mock_hashtag = double
             mock_trending_hashtags = [mock_hashtag, mock_hashtag, mock_hashtag]
-            get_trending_24_hours_query = "select text, COUNT(text) as total from ( select hashtags.text as 'text', posts.date as 'date' from hashtags join postHashtags on hashtags.id = postHashtags.hashtag_id join posts on postHashtags.post_id = posts.id union all select hashtags.text as 'text', comments.date as 'date' from hashtags join commentHashtags on hashtags.id = commentHashtags.hashtag_id join comments on commentHashtags.comment_id = comments.id )as postAndCommentHashtag where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) group by text order by total desc limit 5;"
+            get_trending_24_hours_query = "select hashtags.text, count(hashtags.text) as total from posts left join hashtags on hashtags.post_id = posts.id where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) group by hashtags.text order by total desc limit 5;"
 
             allow(Mysql2::Client).to receive(:new).and_return(mock_client)
             expect(mock_client).to receive(:query).with(get_trending_24_hours_query).and_return(mock_trending_hashtags)
