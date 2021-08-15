@@ -44,6 +44,26 @@ describe Attachment do
         end
     end
 
+    describe "#get_random_number_by" do
+        context "given mock_sender" do
+            it "should be to equal expected" do
+                mock_sender = double
+                mock_sender_id = double
+                mock_time_array = Array.new(10, double)
+                attachment = Attachment.new(attachment_attribute)
+                joined06_mock_time_array = mock_time_array[0,6].join
+                expected = "#{joined06_mock_time_array}#{mock_sender_id}"
+    
+                allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
+                allow(mock_sender).to receive(:id).and_return(mock_sender_id)
+    
+                actual = attachment.get_random_number_by(mock_sender)
+    
+                expect(actual).to eq(expected)
+            end
+        end
+    end
+    
     describe "#is_valid?" do
         context "attachment type is video/mp4" do
             it "should be true" do

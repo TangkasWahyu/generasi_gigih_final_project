@@ -20,13 +20,13 @@ class Attachment
         end
     end
 
+    def get_random_number_by(sender)
+        "#{Time.new.to_a[0,6].join}#{sender.id}"
+    end
+
     def is_allowed?
         return true if ["video/mp4", "image/png", "image/gif", "image/jpeg"].include?(@type) || (@type.include?("text"))
 
         false
-    end
-
-    def get_random_number_by(sender)
-        "#{Time.new.to_a[0,6].join}#{sender.id}"
     end
 end
