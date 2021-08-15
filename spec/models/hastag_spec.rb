@@ -20,16 +20,15 @@ describe Hashtag do
                 mock_client = double
                 mock_last_id = double
                 mock_post = double
+                mock_post_id = double
                 text = "monday"
                 hashtag = Hashtag.new(text)
-                insert_hashtag_query = "insert into hashtags (text) values ('#{text}')"
-                mock_insert_hashtag_referenced_query = double
+                insert_hashtag_query = "insert into hashtags (text, post_id) values ('#{text}', #{mock_last_id})"
     
                 allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+                allow(mock_post).to receive(:id).and_return(mock_post_id)
                 expect(mock_client).to receive(:query).with(insert_hashtag_query)
                 allow(mock_client).to receive(:last_id).and_return(mock_last_id)
-                allow(mock_post).to receive(:get_insert_hashtag_referenced_query).with(mock_last_id).and_return(mock_insert_hashtag_referenced_query)
-                allow(mock_client).to receive(:query).with(mock_insert_hashtag_referenced_query)
 
                 hashtag.save_on(mock_post)
             end

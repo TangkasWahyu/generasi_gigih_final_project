@@ -50,10 +50,6 @@ class Post
         end
     end
 
-    def get_insert_hashtag_referenced_query(hashtag_id)
-        "insert into postHashtags (post_id, hashtag_id) values (#{@id}, #{hashtag_id})"
-    end
-
     def set_attachment(attachment)
         @attachment = attachment
     end

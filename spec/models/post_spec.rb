@@ -58,19 +58,6 @@ describe Post do
         end
     end
 
-    describe "#get_insert_hashtag_referenced_query" do
-        context "post have id and given hashtag_id" do
-            it "should to equal expected" do
-                hashtag_id = double
-                expected = "insert into postHashtags (post_id, hashtag_id) values (#{post_with_id.id}, #{hashtag_id})"
-
-                actual = post_with_id.get_insert_hashtag_referenced_query(hashtag_id)
-
-                expect(actual).to eq(expected) 
-            end
-        end
-    end
-    
     describe "#is_characters_maximum_limit?" do
         context "post text characters length below 1000" do
             it "return false" do
