@@ -7,20 +7,20 @@ class Hashtag
         @text = text
     end
 
-    def self.contained?(text)
-        not (text =~ /[#]\w+/).nil?
-    end
-
-    def self.get_hashtags_by_text(text)
-        text.downcase.scan(/[#]\w+/).uniq
-    end
-
     def save_on(text)
         client = create_db_client
         insert_hashtag_query = "insert into hashtags (text, post_id) values ('#{@text}', #{text.id})"
 
         client.query(insert_hashtag_query)
         hashtag_id = client.last_id
+    end
+
+    def self.contained?(text)
+        not (text =~ /[#]\w+/).nil?
+    end
+
+    def self.get_hashtags_by_text(text)
+        text.downcase.scan(/[#]\w+/).uniq
     end
 
     def self.get_trending

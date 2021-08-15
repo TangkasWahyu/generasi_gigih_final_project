@@ -114,7 +114,7 @@ describe Hashtag do
         end
     end
 
-    describe ".trending" do
+    describe ".get_trending" do
         it "should call get_trending_24_hours_query" do
             mock_client = double
             mock_hashtag = double
