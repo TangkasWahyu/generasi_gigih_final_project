@@ -2,23 +2,6 @@ require_relative '../test_helper'
 require_relative '../../models/hashtag'
 
 describe Hashtag do
-    describe ".save_hashtags" do
-        context "given array that contain 2 hashtags" do
-            it "should return array that contain 1 and 2 only" do
-                hashtag_texts = ["#monday", "#tuesday"]
-                hashtag = double
-
-                allow(Hashtag).to receive(:new).with(hashtag_texts[0]).and_return(hashtag)
-                allow(Hashtag).to receive(:new).with(hashtag_texts[1]).and_return(hashtag)
-                allow(hashtag).to receive(:save).and_return("1", "2")
-
-                actual = Hashtag.save_hashtags(hashtag_texts)
-
-                expect(actual).to eq(["1", "2"])
-            end
-        end
-    end
-    
     describe "#initialize" do
         context "given monday text" do
             it "should create object.text that equal with monday text" do

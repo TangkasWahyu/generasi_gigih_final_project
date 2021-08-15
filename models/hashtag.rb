@@ -14,17 +14,6 @@ class Hashtag
     def self.get_hashtags_by_text(text)
         text.downcase.scan(/[#]\w+/).uniq
     end
-    
-    def self.save_hashtags(hashtag_texts)
-        hashtag_ids = Array.new
-
-        hashtag_texts.each do |hashtag_text|
-            hashtag = Hashtag.new(hashtag_text)
-            hashtag_ids << hashtag.save
-        end
-
-        hashtag_ids
-    end
 
     def save_on(text)
         client = create_db_client
