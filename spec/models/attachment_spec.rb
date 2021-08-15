@@ -22,42 +22,42 @@ describe Attachment do
     end
 
     describe "#save_by" do
-        context "given mock_sender" do
+        context "given mock_user" do
             it "should call file_path and mock_file_read" do
                 f_mock = double
                 mock_file_read = double
-                mock_sender = double
+                mock_user = double
                 mock_random_number = double
                 mock_extension = double
                 file_path = "./public/#{mock_random_number}#{mock_extension}"
                 attachment = Attachment.new(attachment_attribute)
     
                 allow(attachment).to receive(:is_allowed?).and_return(true)
-                allow(attachment).to receive(:get_random_number_by).with(mock_sender).and_return(mock_random_number)
+                allow(attachment).to receive(:get_random_number_by).with(mock_user).and_return(mock_random_number)
                 allow(File).to receive(:extname).with(attachment_attribute["filename"]).and_return(mock_extension)
                 allow(attachment.file).to receive(:read).and_return(mock_file_read)
                 expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                 expect(f_mock).to receive(:write).with(mock_file_read)
     
-                attachment.save_by(mock_sender)
+                attachment.save_by(mock_user)
             end
         end
     end
 
     describe "#get_random_number_by" do
-        context "given mock_sender" do
+        context "given mock_user" do
             it "should be to equal expected" do
-                mock_sender = double
-                mock_sender_id = double
+                mock_user = double
+                mock_user_id = double
                 mock_time_array = Array.new(10, double)
                 attachment = Attachment.new(attachment_attribute)
                 joined06_mock_time_array = mock_time_array[0,6].join
-                expected = "#{joined06_mock_time_array}#{mock_sender_id}"
+                expected = "#{joined06_mock_time_array}#{mock_user_id}"
     
                 allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
-                allow(mock_sender).to receive(:id).and_return(mock_sender_id)
+                allow(mock_user).to receive(:id).and_return(mock_user_id)
     
-                actual = attachment.get_random_number_by(mock_sender)
+                actual = attachment.get_random_number_by(mock_user)
     
                 expect(actual).to eq(expected)
             end

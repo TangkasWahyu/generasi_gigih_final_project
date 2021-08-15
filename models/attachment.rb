@@ -8,10 +8,10 @@ class Attachment
         @saved_filename = attribute["saved_filename"] 
     end
 
-    def save_by(sender)
+    def save_by(user)
         return unless is_allowed?
 
-        @saved_filename = "#{get_random_number_by(sender)}#{File.extname(@filename)}"
+        @saved_filename = "#{get_random_number_by(user)}#{File.extname(@filename)}"
         file_path = "./public/#{@saved_filename}"
         file_read = @file.read
         
@@ -20,8 +20,8 @@ class Attachment
         end
     end
 
-    def get_random_number_by(sender)
-        "#{Time.new.to_a[0,6].join}#{sender.id}"
+    def get_random_number_by(user)
+        "#{Time.new.to_a[0,6].join}#{user.id}"
     end
 
     def is_allowed?
