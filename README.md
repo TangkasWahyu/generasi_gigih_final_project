@@ -33,7 +33,15 @@ use tweet_db;
 source [working_directory]/tweet_db.sql
 ```
 
-## How to run test suite
+## How to Run Test Suite
+
+### Before Run Test Suite
+
+#### Please Install 
+| Dependency | Link |
+| ------ | ------ |
+| Rspec | https://github.com/rspec/rspec |
+| SimpleCov | https://github.com/simplecov-ruby/simplecov |
 
 ```sh
 rspec
