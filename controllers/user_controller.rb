@@ -31,7 +31,7 @@ class UserController
         }
 
         user = User.fetch_by_id(params["user_id"])
-        post = Post.get_by_id(params["post_id"])
+        post = Post.fetch_by_id(params["post_id"])
         comment = Comment.new(comment_attribute)
 
         if params["attachment"]

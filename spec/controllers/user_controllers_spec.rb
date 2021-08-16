@@ -84,7 +84,7 @@ describe UserController do
                 }
 
                 expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
-                expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
+                expect(Post).to receive(:fetch_by_id).with(post_id).and_return(post_mock)
                 expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
                 allow(user_mock).to receive(:on).with(post_mock).and_return(user_mock)
                 allow(user_mock).to receive(:send).with(comment_mock)
@@ -105,7 +105,7 @@ describe UserController do
                 }
 
                 expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
-                expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
+                expect(Post).to receive(:fetch_by_id).with(post_id).and_return(post_mock)
                 expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
                 expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)
                 allow(comment_mock).to receive(:set_attachment).with(attachment_mock)

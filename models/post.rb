@@ -52,7 +52,7 @@ class Post
         @attachment = attachment
     end
 
-    def self.get_by_id(id)
+    def self.fetch_by_id(id)
         client = create_db_client
         posts = Array.new
     
