@@ -102,6 +102,23 @@ describe Post do
         end
     end
 
+    describe ".is_attached?" do
+        context "post have attachment" do
+            it "should return true" do
+                post_valid_with_attachment_attribute = {
+                    "text" => "Hello world",
+                    "attachment" => double
+                }
+                post_valid_with_attachment = Post.new(post_valid_with_attachment_attribute)
+
+                actual = post_valid_with_attachment.is_attached?
+
+                expect(actual).to be_truthy
+            end
+        end
+    end
+    
+
     describe "#save_hashtags" do
         it "should call post_with_id" do
             hashtag_text = double

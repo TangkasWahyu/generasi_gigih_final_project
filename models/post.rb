@@ -23,6 +23,7 @@ class Post
     end
 
     def is_attached?
+        not @attachment.nil?
     end
 
     def attached_save_by(user)
