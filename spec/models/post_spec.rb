@@ -48,19 +48,13 @@ describe Post do
 
     describe "#send_by" do
         context "given mock_user" do
-            it "should call mock_user" do
+            it "should call mock_user and text" do
                 mock_user = double
-                post_attribute = {
-                    "text" => "Hello world"
-                }
-                post = Post.new(post_attribute)
                 
-                allow(post).to receive(:is_characters_maximum_limit?).and_return(false)
-                allow(post).to receive(:is_attached?).and_return(false)
                 expect(post).to receive(:save_by).with(mock_user)
-                allow(Hashtag).to receive(:contained?).with(post_attribute["text"]).and_return(true)
-                allow(post).to receive(:save_hashtags)
-    
+                allow(Hashtag).to receive(:contained?).with(text).and_return(true)
+                expect(post).to receive(:save_hashtags)
+
                 post.send_by(mock_user)
             end
         end
@@ -108,7 +102,7 @@ describe Post do
             end
         end
     end
-
+    
     describe "#is_attached?" do
         context "post have attachment" do
             it "should return true" do

@@ -13,9 +13,11 @@ class Post
     def send_by(user)
         return if is_characters_maximum_limit?
 
-        is_attached? ? attached_save_by(user) : save_by(user)
-
+        save_by(user)
         save_hashtags if Hashtag.contained?(@text)
+    end
+
+    def save_by(user)
     end
 
     def is_characters_maximum_limit?
