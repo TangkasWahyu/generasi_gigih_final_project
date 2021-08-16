@@ -30,7 +30,7 @@ rspec
 ```
 
 ## Database schema
-![gg_final_project](https://user-images.githubusercontent.com/86975716/129525403-5e0bd144-c4eb-4c29-a679-519a2231132f.png)
+![gg_final_project](https://user-images.githubusercontent.com/86975716/129534967-0b7b353e-76ad-4abb-9873-124bbe405051.png)
 
 ## Postman Collection
 [Postman collection with file sample](https://github.com/YudoWorks/generasi_gigih_final_project/tree/main/postman_collection_with_file_sample)
