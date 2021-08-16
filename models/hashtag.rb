@@ -23,13 +23,13 @@ class Hashtag
         text.downcase.scan(/[#]\w+/).uniq
     end
 
-    def self.get_trending
+    def self.fetch_trending
         client = create_db_client
         top_5_trending_24_hours_hashtags = Array.new
 
-        get_trending_24_hours_query = "select hashtags.text, count(hashtags.text) as total from posts left join hashtags on hashtags.post_id = posts.id where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) group by hashtags.text order by total desc limit 5;"
+        fetch_trending_24_hours_query = "select hashtags.text, count(hashtags.text) as total from posts left join hashtags on hashtags.post_id = posts.id where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) group by hashtags.text order by total desc limit 5;"
         
-        rawData = client.query(get_trending_24_hours_query)
+        rawData = client.query(fetch_trending_24_hours_query)
 
         rawData.each do |data|
             hashtag = Hashtag.new(data["text"]);

@@ -1,6 +1,6 @@
 class HashtagController
     def self.trending
-        Hashtag.get_trending
+        Hashtag.fetch_trending
     end
     
     def self.get_by_hashtag_text(params)
