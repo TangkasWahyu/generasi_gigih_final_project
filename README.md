@@ -35,6 +35,10 @@ source [working_directory]/tweet_db.sql
 
 ## How to Run Test Suite
 
+```sh
+rspec
+
+```
 ### Before Run Test Suite
 
 #### Please Install 
@@ -42,11 +46,6 @@ source [working_directory]/tweet_db.sql
 | ------ | ------ |
 | Rspec | https://github.com/rspec/rspec |
 | SimpleCov | https://github.com/simplecov-ruby/simplecov |
-
-```sh
-rspec
-
-```
 
 ## Database schema
 ![gg_final_project](https://user-images.githubusercontent.com/86975716/129534967-0b7b353e-76ad-4abb-9873-124bbe405051.png)
