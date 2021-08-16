@@ -27,6 +27,7 @@ class Attachment
     def is_allowed?
         return true if ["video/mp4", "image/png", "image/gif", "image/jpeg"].include?(@type) || (@type.include?("text"))
 
+        @saved_filename = "NULL"
         false
     end
 end

@@ -156,7 +156,7 @@ describe Attachment do
         end
 
         context "attachment type is application/x-tar" do
-            it "should be false" do
+            it "should be false and set attachment(saved_filename) to equal NULL" do
                 attachment_attribute_with_type_application_x_tar = {
                     "filename" => "filename", 
                     "type" => "application/x-tar",
@@ -167,6 +167,7 @@ describe Attachment do
                 expected = attachment_with_type_text_application_x_tar.is_allowed?
 
                 expect(expected).to be_falsy
+                expect(attachment_with_type_text_application_x_tar.saved_filename).to eq("NULL")
             end
         end
     end
