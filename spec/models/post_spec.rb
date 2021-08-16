@@ -102,7 +102,7 @@ describe Post do
         end
     end
 
-    describe "##is_attached?" do
+    describe "#is_attached?" do
         context "post have attachment" do
             it "should return true" do
                 post_valid_with_attachment_attribute = {
@@ -119,12 +119,7 @@ describe Post do
 
         context "post don't have attachment" do
             it "should return false" do
-                post_valid_with_attachment_attribute = {
-                    "text" => "Hello world",
-                }
-                post_valid_with_attachment = Post.new(post_valid_with_attachment_attribute)
-
-                actual = post_valid_with_attachment.is_attached?
+                actual = post.is_attached?
 
                 expect(actual).to be_falsy
             end
