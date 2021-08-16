@@ -29,6 +29,9 @@ rspec
 
 ```
 
+## Database schema
+![gg_final_project](https://user-images.githubusercontent.com/86975716/129525403-5e0bd144-c4eb-4c29-a679-519a2231132f.png)
+
 ___
 
 💪 Generasi Gigih Backend 2021
