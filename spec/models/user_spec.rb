@@ -38,17 +38,17 @@ describe User do
         end
     end
     
-    describe ".get_by_id" do
+    describe ".fetch_by_id" do
         context "given id is 1" do
-            it "should call get_by_id_query with id equal 1 and get user with id 1" do
+            it "should call fetch_by_id_query with id equal 1 and get user with id 1" do
                 id = "1"
-                get_by_id_query = "select * from users where id = #{id}"
+                fetch_by_id_query = "select * from users where id = #{id}"
                 rawData = [user_valid_attribute]                
 
-                expect(mock_client).to receive(:query).with(get_by_id_query).and_return(rawData)
-                expect(get_by_id_query).to include(id) 
+                expect(mock_client).to receive(:query).with(fetch_by_id_query).and_return(rawData)
+                expect(fetch_by_id_query).to include(id) 
 
-                user = User.get_by_id(id)
+                user = User.fetch_by_id(id)
 
                 expect(user.id).to eq(id) 
             end

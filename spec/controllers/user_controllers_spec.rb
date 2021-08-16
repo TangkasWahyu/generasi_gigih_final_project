@@ -39,7 +39,7 @@ describe UserController do
                     "text" => text
                 }
 
-                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
                 allow(user_mock).to receive(:send).with(post_mock)
 
@@ -57,7 +57,7 @@ describe UserController do
                     "attachment" => attachment_attribute_mock
                 }
 
-                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
                 expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)
                 allow(post_mock).to receive(:set_attachment).with(attachment_mock)
@@ -83,7 +83,7 @@ describe UserController do
                     "text" => text
                 }
 
-                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
                 expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
                 allow(user_mock).to receive(:on).with(post_mock).and_return(user_mock)
@@ -104,7 +104,7 @@ describe UserController do
                     "attachment" => attachment_attribute_mock
                 }
 
-                expect(User).to receive(:get_by_id).with(user_id).and_return(user_mock)
+                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
                 expect(Post).to receive(:get_by_id).with(post_id).and_return(post_mock)
                 expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
                 expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)

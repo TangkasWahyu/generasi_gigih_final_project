@@ -18,7 +18,7 @@ class User
         client.query(insert_query)
     end
 
-    def self.get_by_id(id)
+    def self.fetch_by_id(id)
         client = create_db_client
         users = Array.new
     

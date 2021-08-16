@@ -14,7 +14,7 @@ class UserController
             "text" => params["text"]
         }
 
-        user = User.get_by_id(params["id"])
+        user = User.fetch_by_id(params["id"])
         post = Post.new(post_attribute)
 
         if params["attachment"]
@@ -30,7 +30,7 @@ class UserController
             "text" => params["text"]
         }
 
-        user = User.get_by_id(params["user_id"])
+        user = User.fetch_by_id(params["user_id"])
         post = Post.get_by_id(params["post_id"])
         comment = Comment.new(comment_attribute)
 
