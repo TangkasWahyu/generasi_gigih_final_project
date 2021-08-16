@@ -1,5 +1,5 @@
 class HashtagController
-    def self.trending
+    def self.get_trending
         Hashtag.fetch_trending
     end
     
