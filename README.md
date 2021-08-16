@@ -15,12 +15,23 @@ Social media application which can be used to share information with other peopl
 ruby main.rb
 ```
 
-### Before Run This App Please Install 
+### Before Run This App Locally
+
+#### Please Install 
 | Dependency | Link |
 | ------ | ------ |
 | Ruby | https://www.ruby-lang.org/en/downloads/ |
 | Sinatra | http://sinatrarb.com/intro.html |
 | Mysql2 | https://github.com/brianmario/mysql2 |
+
+#### Create tweet_db
+In mysql shell
+
+```sh
+create database tweet_db; 
+use tweet_db;
+source [working_directory]/tweet_db.sql
+```
 
 ## How to run test suite
 
