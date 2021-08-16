@@ -47,16 +47,14 @@ describe Post do
     end
 
     describe "#send_by" do
-        context "given mock_user" do
-            it "should call mock_user and text" do
-                mock_user = double
-                
-                expect(post).to receive(:save_by).with(mock_user)
-                allow(Hashtag).to receive(:contained?).with(text).and_return(true)
-                expect(post).to receive(:save_hashtags)
+        it "should call text" do
+            mock_user = double
+            
+            expect(post).to receive(:save)
+            allow(Hashtag).to receive(:contained?).with(text).and_return(true)
+            expect(post).to receive(:save_hashtags)
 
-                post.send_by(mock_user)
-            end
+            post.send_by(mock_user)
         end
     end
 

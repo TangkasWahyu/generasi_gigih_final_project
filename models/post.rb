@@ -2,7 +2,7 @@ require_relative 'hashtag'
 require_relative '../db/mysql_connector'
 
 class Post
-    attr_reader :text, :id, :attachment
+    attr_reader :text, :id, :attachment, :user
 
     def initialize(attribute)
         @text = attribute["text"]
@@ -13,11 +13,13 @@ class Post
     def send_by(user)
         return if is_characters_maximum_limit?
 
-        save_by(user)
+        @user = user
+
+        save
         save_hashtags if Hashtag.contained?(@text)
     end
 
-    def save_by(user)
+    def save
     end
 
     def is_characters_maximum_limit?
