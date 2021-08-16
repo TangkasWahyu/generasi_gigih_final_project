@@ -20,6 +20,10 @@ class Post
         save_hashtags if Hashtag.contained?(@text)
     end
 
+    def is_characters_maximum_limit?
+        @text.length > 1000
+    end
+    
     def save
         client = create_db_client
         insert_query = get_insert_query
@@ -36,10 +40,6 @@ class Post
         else
             insert_query = "insert into posts (user_id, text) values ('#{@user.id}','#{@text}')"
         end
-    end
-
-    def is_characters_maximum_limit?
-        @text.length > 1000
     end
 
     def is_attached?

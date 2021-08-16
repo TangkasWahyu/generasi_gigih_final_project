@@ -58,6 +58,49 @@ describe Post do
         end
     end
 
+    describe "#is_characters_maximum_limit?" do
+        context "post text characters length below 1000" do
+            it "return false" do
+                post_attribute = {
+                    "text" => "Hello world #monday"
+                }
+                post = Post.new(post_attribute)
+
+                actual = post.is_characters_maximum_limit?
+
+                expect(actual).to be_falsy   
+            end
+        end
+
+        context "post text characters length is 1000" do
+            it "return false" do
+                text = 'o' * 1000
+                post_attribute = {
+                    "text" => text
+                }
+                post = Post.new(post_attribute)
+
+                actual = post.is_characters_maximum_limit?
+
+                expect(actual).to be_falsy   
+            end
+        end
+
+        context "post text characters length is 1001" do
+            it "return true" do
+                text = 'o' * 1001
+                post_attribute = {
+                    "text" => text
+                }
+                post = Post.new(post_attribute)
+
+                actual = post.is_characters_maximum_limit?
+
+                expect(actual).to be_truthy   
+            end
+        end
+    end
+
     describe "#save" do
         it "should call mock_query" do
             mock_query = double
@@ -105,49 +148,6 @@ describe Post do
     
                     expect(actual).to eq(expected)  
                 end
-            end
-        end
-    end
-
-    describe "#is_characters_maximum_limit?" do
-        context "post text characters length below 1000" do
-            it "return false" do
-                post_attribute = {
-                    "text" => "Hello world #monday"
-                }
-                post = Post.new(post_attribute)
-
-                actual = post.is_characters_maximum_limit?
-
-                expect(actual).to be_falsy   
-            end
-        end
-
-        context "post text characters length is 1000" do
-            it "return false" do
-                text = 'o' * 1000
-                post_attribute = {
-                    "text" => text
-                }
-                post = Post.new(post_attribute)
-
-                actual = post.is_characters_maximum_limit?
-
-                expect(actual).to be_falsy   
-            end
-        end
-
-        context "post text characters length is 1001" do
-            it "return true" do
-                text = 'o' * 1001
-                post_attribute = {
-                    "text" => text
-                }
-                post = Post.new(post_attribute)
-
-                actual = post.is_characters_maximum_limit?
-
-                expect(actual).to be_truthy   
             end
         end
     end
