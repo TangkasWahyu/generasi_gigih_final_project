@@ -27,6 +27,13 @@ class Post
     end
 
     def attached_save_by(user)
+        client = create_db_client
+        @attachment.save_by(user)
+
+        insert_query = "insert into posts (user_id, text, attachment_path) values ('#{user.id}','#{@text}', '#{@attachment.saved_filename}')"
+
+        client.query(insert_query)
+        @id = client.last_id
     end
 
     def save_by(user)

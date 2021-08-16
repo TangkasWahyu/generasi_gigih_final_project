@@ -4,16 +4,22 @@ require_relative '../../models/post'
 require_relative '../../models/attachment'
 
 describe Post do
+    let(:text){ "Hello world" }
+    let(:mock_attachment){ double }
     let(:post_valid_attribute) {{
-        "text" => "Hello world"
+        "text" => text
+    }}
+    let(:post_valid_with_attachment_attribute) {{
+        "text" => text,
+        "attachment" => mock_attachment
     }}
     let(:post_valid_attribute_with_id) {{
         "id" => "1",
-        "text" => "Hello world"
+        "text" => text
     }}
     let(:post_valid_attribute_with_id_text_contain_hashtag) {{
         "id" => "1",
-        "text" => "Hello world #monday"
+        "text" => text
     }}
     let(:user_attribute_with_id) {{
         "id" => "1",
@@ -22,6 +28,7 @@ describe Post do
         "bio_description" => "20 years old and grow"
     }}
     let(:user_with_id) { User.new user_attribute_with_id }
+    let(:post_with_attachment) { Post.new post_valid_with_attachment_attribute }
     let(:post) { Post.new post_valid_attribute }
     let(:post_with_id) { Post.new post_valid_attribute_with_id }
     let(:post_with_id_text_contain_hashtag) { Post.new post_valid_attribute_with_id_text_contain_hashtag }
@@ -105,13 +112,7 @@ describe Post do
     describe "#is_attached?" do
         context "post have attachment" do
             it "should return true" do
-                post_valid_with_attachment_attribute = {
-                    "text" => "Hello world",
-                    "attachment" => double
-                }
-                post_valid_with_attachment = Post.new(post_valid_with_attachment_attribute)
-
-                actual = post_valid_with_attachment.is_attached?
+                actual = post_with_attachment.is_attached?
 
                 expect(actual).to be_truthy
             end
@@ -126,6 +127,22 @@ describe Post do
         end
     end
 
+    describe "#attached_save_by" do
+        context "given mock_user" do
+            it "should call user_with_id and insert_query" do
+                mock_attachment_saved_filename = double
+                insert_query = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{text}', '#{mock_attachment_saved_filename}')"
+                
+                expect(mock_attachment).to receive(:save_by).with(user_with_id)
+                allow(mock_attachment).to receive(:saved_filename).and_return(mock_attachment_saved_filename)
+                expect(mock_client).to receive(:query).with(insert_query)
+                allow(mock_client).to receive(:last_id)
+
+                post_with_attachment.attached_save_by(user_with_id)
+            end
+        end
+    end
+    
     describe "#save_hashtags" do
         it "should call post_with_id" do
             hashtag_text = double
