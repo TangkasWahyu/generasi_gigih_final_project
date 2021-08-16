@@ -71,27 +71,43 @@ describe Post do
     end
 
     describe "#get_insert_query" do
-        context "post have attachment and user" do
-            it "should to equal expected" do
-                post_valid_with_attachment_attribute_and_user = {
-                    "text" => text,
-                    "attachment" => mock_attachment,
-                    "user" => user_with_id
-                }
-                post_with_attachment_attribute_and_user = Post.new(post_valid_with_attachment_attribute_and_user)
-                mock_saved_filename = double
-                expected = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{text}', '#{mock_saved_filename}')"
-                
-                expect(mock_attachment).to receive(:save_by).with(user_with_id)
-                allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
-
-                actual = post_with_attachment_attribute_and_user.get_insert_query
-
-                expect(actual).to eq(expected)  
+        context "have user" do
+            context "have attachment" do
+                it "should to equal expected" do
+                    post_valid_with_attachment_attribute_and_user = {
+                        "text" => text,
+                        "attachment" => mock_attachment,
+                        "user" => user_with_id
+                    }
+                    post_with_attachment_attribute_and_user = Post.new(post_valid_with_attachment_attribute_and_user)
+                    mock_saved_filename = double
+                    expected = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{text}', '#{mock_saved_filename}')"
+                    
+                    expect(mock_attachment).to receive(:save_by).with(user_with_id)
+                    allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
+    
+                    actual = post_with_attachment_attribute_and_user.get_insert_query
+    
+                    expect(actual).to eq(expected)  
+                end
+            end
+    
+            context "don't have attachment" do
+                it "should to equal expected" do
+                    post_valid_with_attachment_attribute = {
+                        "text" => text,
+                        "user" => user_with_id
+                    }
+                    post_with_attachment_attribute = Post.new(post_valid_with_attachment_attribute)
+                    expected = "insert into posts (user_id, text) values ('#{user_with_id.id}','#{text}')"
+                    
+                    actual = post_with_attachment_attribute.get_insert_query
+    
+                    expect(actual).to eq(expected)  
+                end
             end
         end
     end
-    
 
     describe "#is_characters_maximum_limit?" do
         context "post text characters length below 1000" do
@@ -150,35 +166,6 @@ describe Post do
                 actual = post.is_attached?
 
                 expect(actual).to be_falsy
-            end
-        end
-    end
-
-    describe "#attached_save_by" do
-        context "given mock_user" do
-            it "should call user_with_id and insert_query" do
-                mock_attachment_saved_filename = double
-                insert_query = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{text}', '#{mock_attachment_saved_filename}')"
-                
-                expect(mock_attachment).to receive(:save_by).with(user_with_id)
-                allow(mock_attachment).to receive(:saved_filename).and_return(mock_attachment_saved_filename)
-                expect(mock_client).to receive(:query).with(insert_query)
-                allow(mock_client).to receive(:last_id)
-
-                post_with_attachment.attached_save_by(user_with_id)
-            end
-        end
-    end
-
-    describe "#save_by" do
-        context "given mock_user" do
-            it "should call insert_query" do
-                insert_query = "insert into posts (user_id, text) values ('#{user_with_id.id}','#{text}')"
-                
-                expect(mock_client).to receive(:query).with(insert_query)
-                allow(mock_client).to receive(:last_id)
-
-                post.save_by(user_with_id)
             end
         end
     end
