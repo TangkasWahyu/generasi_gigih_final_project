@@ -13,7 +13,7 @@ class Post
     def send_by(user)
         return if is_characters_maximum_limit?
 
-        save_by(user)
+        is_attached? ? attached_save_by(user) : save_by(user)
 
         save_hashtags if Hashtag.contained?(@text)
     end
@@ -22,21 +22,13 @@ class Post
         @text.length > 1000
     end
 
-    def save_by(user)
-        client = create_db_client
-        insert_post_query = get_insert_query_and_save_attachment_if_attached_by(user)
-
-        client.query(insert_post_query)
-        @id = client.last_id
+    def is_attached?
     end
 
-    def get_insert_query_and_save_attachment_if_attached_by(user)
-        if @attachment
-            @attachment.save_by(user)
-            return "insert into posts (user_id, text, attachment_path) values ('#{user.id}','#{@text}', '#{@attachment.saved_filename}')"
-        else
-            return "insert into posts (user_id, text) values ('#{user.id}','#{@text}')"
-        end
+    def attached_save_by(user)
+    end
+
+    def save_by(user)
     end
 
     def save_hashtags
