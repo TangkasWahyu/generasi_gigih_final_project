@@ -37,6 +37,11 @@ class Post
     end
 
     def save_by(user)
+        client = create_db_client
+        insert_query = "insert into posts (user_id, text) values ('#{user.id}','#{@text}')"
+
+        client.query(insert_query)
+        @id = client.last_id
     end
 
     def save_hashtags

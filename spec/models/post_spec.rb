@@ -142,6 +142,19 @@ describe Post do
             end
         end
     end
+
+    describe "#save_by" do
+        context "given mock_user" do
+            it "should call insert_query" do
+                insert_query = "insert into posts (user_id, text) values ('#{user_with_id.id}','#{text}')"
+                
+                expect(mock_client).to receive(:query).with(insert_query)
+                allow(mock_client).to receive(:last_id)
+
+                post.save_by(user_with_id)
+            end
+        end
+    end
     
     describe "#save_hashtags" do
         it "should call post_with_id" do
