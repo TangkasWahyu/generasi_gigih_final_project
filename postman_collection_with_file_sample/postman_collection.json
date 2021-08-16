@@ -132,7 +132,7 @@
 						{
 							"key": "attachment",
 							"type": "file",
-							"src": "/C:/Users/User/Desktop/sample.txt"
+							"src": "/C:/Users/User/Documents/file sample/sample.txt"
 						}
 					]
 				},
@@ -171,7 +171,7 @@
 						{
 							"key": "attachment",
 							"type": "file",
-							"src": "/C:/Users/User/AppData/Local/Discord/Update.exe"
+							"src": "/C:/Users/User/Documents/file sample/sample.rar"
 						}
 					]
 				},
