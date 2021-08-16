@@ -20,6 +20,14 @@ class Post
     end
 
     def save
+        client = create_db_client
+        insert_query = get_insert_query
+
+        client.query(insert_query)
+        @id = client.last_id
+    end
+
+    def get_insert_query
     end
 
     def is_characters_maximum_limit?

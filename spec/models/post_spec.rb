@@ -58,6 +58,18 @@ describe Post do
         end
     end
 
+    describe "#save" do
+        it "should call mock_query" do
+            mock_query = double
+
+            allow(post).to receive(:get_insert_query).and_return(mock_query)
+            expect(mock_client).to receive(:query).with(mock_query)
+            expect(mock_client).to receive(:last_id)
+
+            post.save
+        end
+    end
+
     describe "#is_characters_maximum_limit?" do
         context "post text characters length below 1000" do
             it "return false" do
