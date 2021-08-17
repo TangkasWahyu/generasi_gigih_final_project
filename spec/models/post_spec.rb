@@ -288,17 +288,26 @@ describe Post do
     end
 
     describe ".fetch_by_id" do
-        context "given id is 1" do
-            it "should call fetch_by_id_query with id equal 1, get post with id and name same with post_valid_attribute_with_id" do
-                id = "1"
-                fetch_by_id_query = "select * from posts where id = #{id}"
-                rawData = [post_valid_attribute_with_id]                
+        context "given id" do
+            before(:each) do
+                @id = "1"
+                rawData = [post_valid_attribute_with_id]        
+                        
+                allow(mock_client).to receive(:query).and_return(rawData)
+            end
 
-                expect(mock_client).to receive(:query).with(fetch_by_id_query).and_return(rawData)
+            it "does fetch_query with id" do
+                fetch_by_id_query = "select * from posts where id = #{@id}"
 
-                post = Post.fetch_by_id(id)
+                expect(mock_client).to receive(:query).with(fetch_by_id_query)
+                
+                Post.fetch_by_id(@id)
+            end
 
-                expect(post.id).to eq(id)
+            it "does get post(id, name) to equal with post_valid_attribute_with_id" do
+                post = Post.fetch_by_id(@id)
+
+                expect(post.id).to eq(@id)
                 expect(post.text).to eq(post_valid_attribute_with_id["text"])
             end
         end
