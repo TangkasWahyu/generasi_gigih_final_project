@@ -58,14 +58,14 @@ describe Post do
     end
 
     describe "#is_characters_maximum_limit?" do
-        context "post text characters length below 1000" do
-            it "return false" do
-                post_attribute = {
-                    "text" => "Hello world #monday"
-                }
-                post = Post.new(post_attribute)
-
-                actual = post.is_characters_maximum_limit?
+        context "have text characters length below 1000" do
+            before(:each) do
+                post_attribute = { "text" => "Hello world #monday" }
+                @post = Post.new(post_attribute)
+            end
+            
+            it "does return false" do
+                actual = @post.is_characters_maximum_limit?
 
                 expect(actual).to be_falsy   
             end
