@@ -277,7 +277,7 @@ describe Post do
 
     describe "#set_attachment" do
         context "given mock_attachment" do
-            it "should post(attachment) to equal mock_attachment" do
+            it "does have attachment to equal mock_attachment" do
                 mock_attachment = double
 
                 post.set_attachment(mock_attachment)
