@@ -71,6 +71,24 @@ describe Post do
                     post.send_by(@mock_user)
                 end 
             end
+            
+            context "is_characters_maximum_limit? is true" do
+                before(:each) do
+                    allow(post).to receive(:is_characters_maximum_limit?).and_return(true)
+                end
+                
+                it "does not have user" do
+                    post.send_by(@mock_user)
+
+                    expect(post.user).to_not eq(@mock_user) 
+                end 
+    
+                it "does not save" do
+                    expect(post).to_not receive(:save)
+    
+                    post.send_by(@mock_user)
+                end 
+            end
         end
     end
 
