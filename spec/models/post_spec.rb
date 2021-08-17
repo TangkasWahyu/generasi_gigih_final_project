@@ -1,5 +1,4 @@
 require_relative '../test_helper'
-require_relative '../../models/user'
 require_relative '../../models/post'
 require_relative '../../models/attachment'
 
@@ -22,13 +21,6 @@ describe Post do
         "id" => "1",
         "text" => text_contain_hashtag
     }}
-    let(:user_attribute_with_id) {{
-        "id" => "1",
-        "username" => "mark",
-        "email" => "mark@mail.com",
-        "bio_description" => "20 years old and grow"
-    }}
-    let(:user_with_id) { User.new user_attribute_with_id }
     let(:post_with_attachment) { Post.new post_valid_with_attachment_attribute }
     let(:post) { Post.new post_valid_attribute }
     let(:post_with_id) { Post.new post_valid_attribute_with_id }
@@ -258,14 +250,26 @@ describe Post do
     end
     
     describe "#save_hashtags" do
-        it "should call post_with_id" do
+        before(:each) do 
             hashtag_text = double
-            hashtag_texts = [hashtag_text]
-            hashtag = double
+            @hashtag_texts = [hashtag_text]
+            @hashtag = double
 
-            allow(Hashtag).to receive(:get_hashtags_by_text).with(post_valid_attribute_with_id["text"]).and_return(hashtag_texts)
-            allow(Hashtag).to receive(:new).with(hashtag_text).and_return(hashtag)
-            expect(hashtag).to receive(:save_on).with(post_with_id)
+            allow(Hashtag).to receive(:get_hashtags_by_text).and_return(@hashtag_texts)
+            allow(Hashtag).to receive(:new).and_return(@hashtag)
+            allow(@hashtag).to receive(:save_on)
+        end
+
+        it "does get hashtags from post text" do
+            expect(Hashtag).to receive(:get_hashtags_by_text).with(text_contain_hashtag)
+
+            actual = post_with_id_text_contain_hashtag.save_hashtags
+
+            expect(actual).to eq(@hashtag_texts)
+        end
+
+        it "should save hashtags" do
+            expect(@hashtag).to receive(:save_on).with(post_with_id)
 
             post_with_id.save_hashtags
         end
