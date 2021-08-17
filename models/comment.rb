@@ -8,16 +8,11 @@ class Comment < Post
         super(attribute)
     end
 
-    def save_by(user)
-        super(user)
-        save_ref(user)
-    end
-
-    def save_ref(user)
+    def save
+        super
         client = create_db_client
-        post = user.post
 
-        insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{@id}, #{post.id})"
+        insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{@id}, #{@user.post.id})"
         client.query(insert_post_ref_query)
     end
 end
