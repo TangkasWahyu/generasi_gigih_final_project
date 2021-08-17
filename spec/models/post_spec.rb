@@ -48,12 +48,16 @@ describe Post do
     end
 
     describe "#send_by" do
-        it "does save" do
-            mock_user = double
+        context "given mock_user" do
+            before(:each) do
+                @mock_user = double
+            end
             
-            expect(post).to receive(:save)
+            it "does save" do
+                expect(post).to receive(:save)
 
-            post.send_by(mock_user)
+                post.send_by(@mock_user)
+            end 
         end
     end
 
