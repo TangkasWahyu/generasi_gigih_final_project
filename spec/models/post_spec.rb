@@ -86,14 +86,14 @@ describe Post do
         end
 
         context "post text characters length is 1001" do
-            it "return true" do
+            before(:each) do
                 text = 'o' * 1001
-                post_attribute = {
-                    "text" => text
-                }
-                post = Post.new(post_attribute)
+                post_attribute = { "text" => text }
+                @post = Post.new(post_attribute)
+            end
 
-                actual = post.is_characters_maximum_limit?
+            it "does return true" do
+                actual = @post.is_characters_maximum_limit?
 
                 expect(actual).to be_truthy   
             end
