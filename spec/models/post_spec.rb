@@ -183,36 +183,55 @@ describe Post do
 
     describe "#get_insert_query" do
         context "have user" do
+            before(:each) do
+                @mock_user = double
+                @user_id = double
+
+                allow(@mock_user).to receive(:id).and_return(@user_id)
+            end
+
             context "have attachment" do
-                it "should to equal expected" do
-                    post_valid_with_attachment_attribute_and_user = {
+                before(:each) do
+                    @mock_saved_filename = double
+                    post_have_attachment_and_user_attribute = {
                         "text" => text,
                         "attachment" => mock_attachment,
-                        "user" => user_with_id
+                        "user" => @mock_user
                     }
-                    post_with_attachment_attribute_and_user = Post.new(post_valid_with_attachment_attribute_and_user)
-                    mock_saved_filename = double
-                    expected = "insert into posts (user_id, text, attachment_path) values ('#{user_with_id.id}','#{text}', '#{mock_saved_filename}')"
+                    @post_have_attachment_and_user = Post.new(post_have_attachment_and_user_attribute)
+
+                    allow(mock_attachment).to receive(:save_by)
+                    allow(mock_attachment).to receive(:saved_filename).and_return(@mock_saved_filename)
+                end
+
+                it "does save attachment with mock user" do
+                    expect(mock_attachment).to receive(:save_by).with(@mock_user)
+
+                    @post_have_attachment_and_user.get_insert_query
+                end
+
+                it "get insert_query_with_attachment" do
+                    expected = "insert into posts (user_id, text, attachment_path) values ('#{@user_id}','#{text}', '#{@mock_saved_filename}')"
                     
-                    expect(mock_attachment).to receive(:save_by).with(user_with_id)
-                    allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
-    
-                    actual = post_with_attachment_attribute_and_user.get_insert_query
+                    actual = @post_have_attachment_and_user.get_insert_query
     
                     expect(actual).to eq(expected)  
                 end
             end
     
-            context "don't have attachment" do
-                it "should to equal expected" do
-                    post_valid_with_attachment_attribute = {
+            context "does not have attachment" do
+                before(:each) do
+                    post_attribute_and_user_attribute = {
                         "text" => text,
-                        "user" => user_with_id
+                        "user" => @mock_user
                     }
-                    post_with_attachment_attribute = Post.new(post_valid_with_attachment_attribute)
-                    expected = "insert into posts (user_id, text) values ('#{user_with_id.id}','#{text}')"
+                    @post_attribute_and_user = Post.new(post_attribute_and_user_attribute)
+                end
+
+                it "does get insert_query" do
+                    expected = "insert into posts (user_id, text) values ('#{@user_id}','#{text}')"
                     
-                    actual = post_with_attachment_attribute.get_insert_query
+                    actual = @post_attribute_and_user.get_insert_query
     
                     expect(actual).to eq(expected)  
                 end
