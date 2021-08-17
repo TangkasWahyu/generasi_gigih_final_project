@@ -52,12 +52,25 @@ describe Post do
             before(:each) do
                 @mock_user = double
             end
-            
-            it "does save" do
-                expect(post).to receive(:save)
 
-                post.send_by(@mock_user)
-            end 
+            context "is_characters_maximum_limit? is false" do
+                before(:each) do
+                    allow(post).to receive(:is_characters_maximum_limit?).and_return(false)
+                    allow(post).to receive(:save)
+                end
+                
+                it "does have user" do
+                    post.send_by(@mock_user)
+
+                    expect(post.user).to eq(@mock_user) 
+                end 
+    
+                it "does save" do
+                    expect(post).to receive(:save)
+    
+                    post.send_by(@mock_user)
+                end 
+            end
         end
     end
 
