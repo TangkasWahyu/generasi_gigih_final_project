@@ -21,6 +21,7 @@ describe Comment do
 				allow(mock_user).to receive_message_chain(:post, :id).and_return(@post_id)
 				allow(@comment).to receive(:get_insert_query).and_return(@mock_query)
 				allow(@mock_client).to receive(:last_id).and_return(@id)
+				allow(Hashtag).to receive(:contained?)
 			end
 		
 			it "mock_client receive query with mock_query and insert_post_ref_query" do
