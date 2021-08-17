@@ -314,19 +314,29 @@ describe Post do
     end
 
     describe ".fetch_by_hashtag_text" do
-        context "given monday" do
-            it "should call fetch_by_hashtag_text_query and first posts(id and text) to equal post_with_id_text_contain_hashtag" do
-                hashtag_text = "monday"
-                fetch_by_hashtag_text_query = "select * from posts left join postRefs on posts.id = postRefs.post_id where postRefs.post_ref_id is null and posts.text like '%##{hashtag_text}%';"
+        context "given hashtag text" do
+            before(:each) do
+                @hashtag_text = "monday"
                 rawData = [post_valid_attribute_with_id_text_contain_hashtag]                
+    
+                allow(mock_client).to receive(:query).and_return(rawData)
+            end
 
-                expect(mock_client).to receive(:query).with(fetch_by_hashtag_text_query).and_return(rawData)
+            it "does fetch by hashtag text query by hashtag text" do
+                fetch_by_hashtag_text_query = "select * from posts left join postRefs on posts.id = postRefs.post_id where postRefs.post_ref_id is null and posts.text like '%##{@hashtag_text}%';"
 
-                posts = Post.fetch_by_hashtag_text(hashtag_text)
+                expect(mock_client).to receive(:query).with(fetch_by_hashtag_text_query)
 
+                Post.fetch_by_hashtag_text(@hashtag_text)
+            end
+
+            it "does get first posts(id and text) to equal post_with_id_text_contain_hashtag" do
+                posts = Post.fetch_by_hashtag_text(@hashtag_text)
+                
                 expect(posts.first.id).to eq(post_with_id_text_contain_hashtag.id)
                 expect(posts.first.text).to eq(post_with_id_text_contain_hashtag.text)
             end
+            
         end
     end
 end
