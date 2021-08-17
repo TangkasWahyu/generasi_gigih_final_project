@@ -17,7 +17,6 @@ class Post
         @user = user
 
         save
-        save_hashtags if Hashtag.contained?(@text)
     end
 
     def is_characters_maximum_limit?
@@ -30,6 +29,8 @@ class Post
 
         client.query(insert_query)
         @id = client.last_id
+
+        save_hashtags if Hashtag.contained?(@text)
     end
 
     def get_insert_query

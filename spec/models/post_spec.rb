@@ -48,12 +48,10 @@ describe Post do
     end
 
     describe "#send_by" do
-        it "should call text" do
+        it "does save" do
             mock_user = double
             
             expect(post).to receive(:save)
-            allow(Hashtag).to receive(:contained?).with(text).and_return(true)
-            expect(post).to receive(:save_hashtags)
 
             post.send_by(mock_user)
         end
@@ -103,12 +101,14 @@ describe Post do
     end
 
     describe "#save" do
-        it "should call mock_query" do
+        it "should call mock_query and call text" do
             mock_query = double
 
             allow(post).to receive(:get_insert_query).and_return(mock_query)
             expect(mock_client).to receive(:query).with(mock_query)
             expect(mock_client).to receive(:last_id)
+            allow(Hashtag).to receive(:contained?).with(text).and_return(true)
+            expect(post).to receive(:save_hashtags)
 
             post.save
         end
