@@ -5,6 +5,7 @@ require_relative '../../models/attachment'
 
 describe Post do
     let(:text){ "Hello world" }
+    let(:text_contain_hashtag){ "Hello world #monday" }
     let(:mock_attachment){ double }
     let(:post_valid_attribute) {{
         "text" => text
@@ -19,7 +20,7 @@ describe Post do
     }}
     let(:post_valid_attribute_with_id_text_contain_hashtag) {{
         "id" => "1",
-        "text" => text
+        "text" => text_contain_hashtag
     }}
     let(:user_attribute_with_id) {{
         "id" => "1",
