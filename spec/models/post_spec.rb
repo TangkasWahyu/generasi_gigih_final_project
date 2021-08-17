@@ -45,13 +45,13 @@ describe Post do
                 @mock_user = double
             end
 
-            context "is_characters_maximum_limit? is false" do
+            context "text character is not limit" do
                 before(:each) do
                     allow(post).to receive(:is_characters_maximum_limit?).and_return(false)
                     allow(post).to receive(:save)
                 end
                 
-                it "does have user" do
+                it "does have user to equal mock_user" do
                     post.send_by(@mock_user)
 
                     expect(post.user).to eq(@mock_user) 
@@ -64,7 +64,7 @@ describe Post do
                 end 
             end
 
-            context "is_characters_maximum_limit? is true" do
+            context "text character is limit" do
                 before(:each) do
                     allow(post).to receive(:is_characters_maximum_limit?).and_return(true)
                 end
@@ -72,7 +72,7 @@ describe Post do
                 it "does not have user" do
                     post.send_by(@mock_user)
 
-                    expect(post.user).to_not eq(@mock_user) 
+                    expect(post.user).to be_nil
                 end 
     
                 it "does not save" do
