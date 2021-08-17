@@ -240,16 +240,16 @@ describe Post do
     end
     
     describe "#is_attached?" do
-        context "post have attachment" do
-            it "should return true" do
+        context "have attachment" do
+            it "does return true" do
                 actual = post_with_attachment.is_attached?
 
                 expect(actual).to be_truthy
             end
         end
 
-        context "post don't have attachment" do
-            it "should return false" do
+        context "does not have attachment" do
+            it "does return false" do
                 actual = post.is_attached?
 
                 expect(actual).to be_falsy
