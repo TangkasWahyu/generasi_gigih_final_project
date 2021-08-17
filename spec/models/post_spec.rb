@@ -71,7 +71,7 @@ describe Post do
                     post.send_by(@mock_user)
                 end 
             end
-            
+
             context "is_characters_maximum_limit? is true" do
                 before(:each) do
                     allow(post).to receive(:is_characters_maximum_limit?).and_return(true)
@@ -136,16 +136,48 @@ describe Post do
     end
 
     describe "#save" do
-        it "should call mock_query and call text" do
-            mock_query = double
+        before(:each) do
+            @mock_query = double
+            @last_id = double
+            allow(post).to receive(:get_insert_query).and_return(@mock_query)
+            allow(mock_client).to receive(:last_id).and_return(@last_id)
+            allow(mock_client).to receive(:query)
+        end
 
-            allow(post).to receive(:get_insert_query).and_return(mock_query)
-            expect(mock_client).to receive(:query).with(mock_query)
-            expect(mock_client).to receive(:last_id)
-            allow(Hashtag).to receive(:contained?).with(text).and_return(true)
-            expect(post).to receive(:save_hashtags)
+        it "does insert_query" do
+            expect(mock_client).to receive(:query).with(@mock_query)
 
             post.save
+        end
+
+        it "does have id to equal last_id" do
+            post.save
+
+            expect(post.id).to eq(@last_id)
+        end
+
+        context "text have hashtag" do
+            before(:each) do
+                allow(Hashtag).to receive(:contained?).and_return(true)
+            end
+
+            it "does save hashtags" do
+                expect(post).to receive(:save_hashtags)
+    
+                post.save
+            end
+        end
+
+        context "text don't have hashtag" do
+            before(:each) do
+                allow(Hashtag).to receive(:contained?).and_return(false)
+            end
+
+            it "does not save hashtags" do
+                expect(post).to_not receive(:save_hashtags)
+    
+                post.save
+            end
         end
     end
 
