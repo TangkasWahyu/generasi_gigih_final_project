@@ -27,14 +27,12 @@ describe User do
     end
 
     describe "#save" do
-        context "when user attribute is user_valid_attribute" do
-            it "should call insert_query with user attribute" do
-                insert_query = "insert into users (username, email, bio_description) values ('#{user.username}', '#{user.email}', '#{user.bio_description}')"
-                
-                expect(mock_client).to receive(:query).with(insert_query)
+        it "does insert query" do
+            insert_query = "insert into users (username, email, bio_description) values ('#{user.username}', '#{user.email}', '#{user.bio_description}')"
+            
+            expect(mock_client).to receive(:query).with(insert_query)
 
-                user.save
-            end
+            user.save
         end
     end
     
