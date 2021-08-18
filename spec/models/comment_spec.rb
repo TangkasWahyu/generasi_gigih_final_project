@@ -24,7 +24,7 @@ describe Comment do
 				allow(Hashtag).to receive(:contained?)
 			end
 		
-			it "mock_client receive query with mock_query and insert_post_ref_query" do
+			it "does query with mock query and insert post ref query" do
 				insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{id}, #{post_id})"
 
 				expect(mock_client).to receive(:query).with(mock_query)
