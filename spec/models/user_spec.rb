@@ -62,7 +62,7 @@ describe User do
     end
 
     describe "#send" do
-        it "call user" do
+        it "does send mock test" do
             mock_text = double
 
             expect(mock_text).to receive(:send_by).with(user)
