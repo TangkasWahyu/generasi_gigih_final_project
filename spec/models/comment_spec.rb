@@ -4,33 +4,33 @@ require_relative '../../models/comment'
 describe Comment do
     describe "#save" do
 		context "have user and user have post with id" do
-			before(:each) do
-				@id = double
-				@post_id = double
-				mock_user = double
-				comment_attribute = {
-					"id" => @id,
-					"text" => double,
-					"user" => mock_user
-				}
-				@comment = Comment.new(comment_attribute)
-				@mock_query = double
-				@mock_client = double
+			let(:id) { double } 
+			let(:post_id) { double } 
+			let(:mock_user) { double }
+			let(:mock_query) { double } 
+			let(:mock_client) { double } 
+			let(:comment_attribute) {{
+				"id" => id,
+				"text" => double,
+				"user" => mock_user
+			}}
+			let(:comment) { Comment.new comment_attribute } 
 
-				allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
-				allow(mock_user).to receive_message_chain(:post, :id).and_return(@post_id)
-				allow(@comment).to receive(:get_insert_query).and_return(@mock_query)
-				allow(@mock_client).to receive(:last_id).and_return(@id)
+			before(:each) do
+				allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+				allow(mock_user).to receive_message_chain(:post, :id).and_return(post_id)
+				allow(comment).to receive(:get_insert_query).and_return(mock_query)
+				allow(mock_client).to receive(:last_id).and_return(id)
 				allow(Hashtag).to receive(:contained?)
 			end
 		
 			it "mock_client receive query with mock_query and insert_post_ref_query" do
-				insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{@id}, #{@post_id})"
+				insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{id}, #{post_id})"
 
-				expect(@mock_client).to receive(:query).with(@mock_query)
-				expect(@mock_client).to receive(:query).with(insert_post_ref_query)
+				expect(mock_client).to receive(:query).with(mock_query)
+				expect(mock_client).to receive(:query).with(insert_post_ref_query)
 
-				@comment.save
+				comment.save
 			end
 		end
     end
