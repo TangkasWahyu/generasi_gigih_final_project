@@ -192,12 +192,12 @@ describe Post do
                     }
                     @post_have_attachment_and_user = Post.new(post_have_attachment_and_user_attribute)
 
-                    allow(mock_attachment).to receive(:save_by)
+                    allow(mock_attachment).to receive(:attached_by)
                     allow(mock_attachment).to receive(:saved_filename).and_return(@mock_saved_filename)
                 end
 
                 it "does save attachment with mock user" do
-                    expect(mock_attachment).to receive(:save_by).with(@mock_user)
+                    expect(mock_attachment).to receive(:attached_by).with(@mock_user)
 
                     @post_have_attachment_and_user.get_insert_query
                 end

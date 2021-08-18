@@ -21,43 +21,65 @@ describe Attachment do
         end
     end
 
-    describe "#save_by" do
-        context "given mock_user" do
-            it "should call file_path and mock_file_read" do
-                f_mock = double
-                mock_file_read = double
-                mock_user = double
-                mock_random_number = double
-                mock_extension = double
-                file_path = "./public/#{mock_random_number}#{mock_extension}"
-                attachment = Attachment.new(attachment_attribute)
+    describe "#attached_by" do
+        context "type is allowed have user and saved file name" do
+            before(:each) do
+                @mock_saved_filename = double
+                attachment_attribute = {
+                    "filename" => "filename",
+                    "type" => "video/mp4",
+                    "tempfile" => file_mock,
+                    "saved_filename" => @mock_saved_filename,
+                    "user" => double
+                }
+                @attachment = Attachment.new(attachment_attribute)
     
-                allow(attachment).to receive(:is_allowed?).and_return(true)
-                allow(attachment).to receive(:get_random_number_by).with(mock_user).and_return(mock_random_number)
-                allow(File).to receive(:extname).with(attachment_attribute["filename"]).and_return(mock_extension)
-                allow(attachment.file).to receive(:read).and_return(mock_file_read)
-                expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
-                expect(f_mock).to receive(:write).with(mock_file_read)
-    
-                attachment.save_by(mock_user)
+                allow(@attachment).to receive(:is_allowed?).and_return(true)
+            end
+
+            context "given mock user" do
+                before(:each) do
+                    allow(@attachment).to receive(:set_filename)
+                    allow(@attachment.file).to receive(:read).and_return(@mock_file_read)
+                end
+
+                it "does save file in file_path" do
+                    f_mock = double
+                    mock_user = double
+                    file_path = "./public/#{@mock_saved_filename}"
+                    
+                    expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
+                    expect(f_mock).to receive(:write).with(@mock_file_read)
+        
+                    @attachment.attached_by(mock_user)
+                end
             end
         end
     end
 
-    describe "#get_random_number_by" do
-        context "given mock_user" do
-            it "should be to equal expected" do
+    describe "#get_random_number" do
+        context "have mock_user" do
+            before(:each) do
                 mock_user = double
+                attachment_attribute = {
+                    "filename" => "filename",
+                    "type" => "video/mp4",
+                    "tempfile" => file_mock,
+                    "user" => mock_user
+                }
+                @attachment = Attachment.new(attachment_attribute)
                 mock_user_id = double
                 mock_time_array = Array.new(10, double)
-                attachment = Attachment.new(attachment_attribute)
-                joined06_mock_time_array = mock_time_array[0,6].join
-                expected = "#{joined06_mock_time_array}#{mock_user_id}"
-    
+                @joined06_mock_time_array = mock_time_array[0,6].join
+
                 allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
-                allow(mock_user).to receive(:id).and_return(mock_user_id)
+                allow(mock_user).to receive_message_chain(:id).and_return(@mock_user_id)
+            end
+
+            it "does return random number" do
+                expected = "#{@joined06_mock_time_array}#{@mock_user_id}"
     
-                actual = attachment.get_random_number_by(mock_user)
+                actual = @attachment.get_random_number
     
                 expect(actual).to eq(expected)
             end

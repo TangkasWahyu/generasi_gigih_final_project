@@ -35,7 +35,7 @@ class Post
 
     def get_insert_query
         if is_attached?
-            @attachment.save_by(@user)
+            @attachment.attached_by(@user)
 
             insert_query = "insert into posts (user_id, text, attachment_path) values ('#{@user.id}','#{@text}', '#{@attachment.saved_filename}')"
         else
