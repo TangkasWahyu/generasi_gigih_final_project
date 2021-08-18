@@ -37,15 +37,23 @@ describe User do
     end
     
     describe ".fetch_by_id" do
-        context "given id is 1" do
-            it "should call fetch_by_id_query with id equal 1 and get user with id 1" do
-                id = "1"
+        context "given id" do
+            let(:id) { "1" }
+            let(:rawData) { [user_valid_attribute] }
+
+            before(:each) do
+                allow(mock_client).to receive(:query).and_return(rawData)
+            end
+
+            it "does fetch by id query with id" do
                 fetch_by_id_query = "select * from users where id = #{id}"
-                rawData = [user_valid_attribute]                
 
                 expect(mock_client).to receive(:query).with(fetch_by_id_query).and_return(rawData)
-                expect(fetch_by_id_query).to include(id) 
 
+                user = User.fetch_by_id(id)
+            end
+
+            it "does return user(id) to equal with id" do
                 user = User.fetch_by_id(id)
 
                 expect(user.id).to eq(id) 
