@@ -72,21 +72,50 @@ describe UserController do
             end
         end
 
-        context "given valid_parameter_with_attachment" do
-            it "should call user_id, post_attribute, attachment_attribute_mock" do
-                attachment_attribute_mock = double
-                attachment_mock = double
-                valid_parameter_with_attachment = {
-                    "id" => user_id,
-                    "text" => text,
-                    "attachment" => attachment_attribute_mock
-                }
+        context "given valid parameter with attachment" do
+            let(:post_mock) { double } 
+            let(:attachment_attribute_mock) { double } 
+            let(:attachment_mock) { double } 
+            let(:valid_parameter_with_attachment) {{
+                "id" => user_id,
+                "text" => text,
+                "attachment" => attachment_attribute_mock
+            }} 
 
+            before(:each) do
+                allow(User).to receive(:fetch_by_id).and_return(user_mock)
+                allow(Post).to receive(:new).and_return(post_mock)
+                allow(Attachment).to receive(:new).and_return(attachment_mock)
+                allow(post_mock).to receive(:set_attachment)
+                allow(user_mock).to receive(:send)
+            end
+
+            it "does fetch user by id" do
                 expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
+
+                UserController.post(valid_parameter_with_attachment)
+            end
+
+            it "does create post" do
                 expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
-                expect(Attachment).to receive(:new).with(attachment_attribute_mock).and_return(attachment_mock)
-                allow(post_mock).to receive(:set_attachment).with(attachment_mock)
-                allow(user_mock).to receive(:send).with(post_mock)
+
+                UserController.post(valid_parameter_with_attachment)
+            end
+
+            it "does create attachment" do
+                expect(Attachment).to receive(:new).with(attachment_attribute_mock)
+
+                UserController.post(valid_parameter_with_attachment)
+            end
+
+            it "does set attachment on post" do
+                expect(post_mock).to receive(:set_attachment).with(attachment_mock)
+
+                UserController.post(valid_parameter_with_attachment)
+            end
+            
+            it "does send post" do
+                expect(user_mock).to receive(:send).with(post_mock)
 
                 UserController.post(valid_parameter_with_attachment)
             end
