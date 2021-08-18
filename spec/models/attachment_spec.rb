@@ -192,7 +192,6 @@ describe Attachment do
             end
         end
     end
-    
 
     describe "#get_random_number" do
         context "have mock_user" do
