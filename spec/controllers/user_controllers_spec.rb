@@ -85,13 +85,13 @@ describe UserController do
             end
 
             it "does fetch user by id" do
-                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
+                expect(User).to receive(:fetch_by_id).with(user_id)
 
                 UserController.post(valid_parameter_with_attachment)
             end
 
             it "does create post" do
-                expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
+                expect(Post).to receive(:new).with(post_attribute)
 
                 UserController.post(valid_parameter_with_attachment)
             end
