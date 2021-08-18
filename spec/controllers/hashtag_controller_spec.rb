@@ -15,13 +15,11 @@ describe HashtagController do
     end
 
     describe ".get_by_hashtag" do
-		context "given valid params hash that contain hashtag_text key" do
-			it "should call hashtag_text value" do
-				hashtag_text = "#monday"
-				valid_params = {
-					"hashtag_text" => hashtag_text
-				}
-
+		context "given valid params" do
+            let(:hashtag_text){ "#monday" }
+            let(:valid_params){{ "hashtag_text" => hashtag_text }}
+            
+			it "does fetch by hashtag text" do
 				expect(Post).to receive(:fetch_by_hashtag_text).with(hashtag_text)
 
 				HashtagController.get_by_hashtag_text(valid_params)
