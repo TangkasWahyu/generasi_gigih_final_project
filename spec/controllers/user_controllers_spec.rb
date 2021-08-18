@@ -39,20 +39,19 @@ describe UserController do
 
     describe ".post" do
         let(:post_attribute) {{ "text" => text }}
+        let(:post_mock) { double } 
+        let(:valid_parameter) {{
+            "id" => user_id,
+            "text" => text
+        }} 
+
+        before(:each) do
+            allow(User).to receive(:fetch_by_id).and_return(user_mock)
+            allow(Post).to receive(:new).and_return(post_mock)
+            allow(user_mock).to receive(:send)
+        end
 
         context "given valid parameter" do
-            let(:post_mock) { double } 
-            let(:valid_parameter) {{
-                "id" => user_id,
-                "text" => text
-            }} 
-
-            before(:each) do
-                allow(User).to receive(:fetch_by_id).and_return(user_mock)
-                allow(Post).to receive(:new).and_return(post_mock)
-                allow(user_mock).to receive(:send)
-            end
-
             it "does fetch user by id" do
                 expect(User).to receive(:fetch_by_id).with(user_id)
 
@@ -73,21 +72,16 @@ describe UserController do
         end
 
         context "given valid parameter with attachment" do
-            let(:post_mock) { double } 
             let(:attachment_attribute_mock) { double } 
             let(:attachment_mock) { double } 
             let(:valid_parameter_with_attachment) {{
-                "id" => user_id,
-                "text" => text,
+                **valid_parameter,
                 "attachment" => attachment_attribute_mock
             }} 
 
             before(:each) do
-                allow(User).to receive(:fetch_by_id).and_return(user_mock)
-                allow(Post).to receive(:new).and_return(post_mock)
                 allow(Attachment).to receive(:new).and_return(attachment_mock)
                 allow(post_mock).to receive(:set_attachment)
-                allow(user_mock).to receive(:send)
             end
 
             it "does fetch user by id" do
