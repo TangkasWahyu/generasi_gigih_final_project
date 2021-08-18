@@ -72,8 +72,8 @@ describe User do
     end
 
     describe "#on" do
-        context "given mock_post" do
-            it "should return same user and user_with_post(post) to equal mock_post" do
+        context "given mock post" do
+            it "does return same user and user(post) to equal mock_post" do
                 mock_post = double
     
                 user_with_post = user.on(mock_post)
