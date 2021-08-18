@@ -57,35 +57,6 @@ describe Attachment do
         end
     end
 
-    describe "#get_random_number" do
-        context "have mock_user" do
-            before(:each) do
-                mock_user = double
-                attachment_attribute = {
-                    "filename" => "filename",
-                    "type" => "video/mp4",
-                    "tempfile" => file_mock,
-                    "user" => mock_user
-                }
-                @attachment = Attachment.new(attachment_attribute)
-                mock_user_id = double
-                mock_time_array = Array.new(10, double)
-                @joined06_mock_time_array = mock_time_array[0,6].join
-
-                allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
-                allow(mock_user).to receive_message_chain(:id).and_return(@mock_user_id)
-            end
-
-            it "does return random number" do
-                expected = "#{@joined06_mock_time_array}#{@mock_user_id}"
-    
-                actual = @attachment.get_random_number
-    
-                expect(actual).to eq(expected)
-            end
-        end
-    end
-    
     describe "#is_allowed?" do
         context "attachment type is video/mp4" do
             it "should be true" do
@@ -193,5 +164,33 @@ describe Attachment do
             end
         end
     end
-end
 
+    describe "#get_random_number" do
+        context "have mock_user" do
+            before(:each) do
+                mock_user = double
+                attachment_attribute = {
+                    "filename" => "filename",
+                    "type" => "video/mp4",
+                    "tempfile" => file_mock,
+                    "user" => mock_user
+                }
+                @attachment = Attachment.new(attachment_attribute)
+                mock_user_id = double
+                mock_time_array = Array.new(10, double)
+                @joined06_mock_time_array = mock_time_array[0,6].join
+
+                allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
+                allow(mock_user).to receive_message_chain(:id).and_return(@mock_user_id)
+            end
+
+            it "does return random number" do
+                expected = "#{@joined06_mock_time_array}#{@mock_user_id}"
+    
+                actual = @attachment.get_random_number
+    
+                expect(actual).to eq(expected)
+            end
+        end
+    end
+end

@@ -23,18 +23,18 @@ class Attachment
         end
     end
 
+    def is_allowed?
+        return true if ["video/mp4", "image/png", "image/gif", "image/jpeg"].include?(@type) || (@type.include?("text"))
+
+        @saved_filename = "NULL"
+        false
+    end
+
     def set_filename
         @saved_filename = "#{get_random_number_by(user)}#{File.extname(@filename)}"
     end
 
     def get_random_number
         "#{Time.new.to_a[0,6].join}#{@user.id}"
-    end
-
-    def is_allowed?
-        return true if ["video/mp4", "image/png", "image/gif", "image/jpeg"].include?(@type) || (@type.include?("text"))
-
-        @saved_filename = "NULL"
-        false
     end
 end
