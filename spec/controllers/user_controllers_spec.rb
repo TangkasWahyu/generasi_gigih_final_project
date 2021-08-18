@@ -117,27 +117,49 @@ describe UserController do
     end
 
     describe ".comment" do
+        let(:post_mock) { double } 
         let(:comment_mock) { double }
+        let(:user_have_post_mock) { double }
         let(:post_id) { "1" }
-        let(:comment_attribute) {{
+        let(:valid_parameter) {{
+            "user_id" => user_id,
+            "post_id" => post_id,
             "text" => text
-        }}
+        }} 
+        let(:comment_attribute) {{ "text" => text }}
 
-        context "given valid params" do
-            it "should call user_id, post_id, comment_attribute" do
-                params = {
-                    "user_id" => user_id,
-                    "post_id" => post_id,
-                    "text" => text
-                }
+        before(:each) do
+            allow(User).to receive(:fetch_by_id).and_return(user_mock)
+            allow(Post).to receive(:fetch_by_id).and_return(post_mock)
+            allow(Comment).to receive(:new).and_return(comment_mock)
+            allow(user_mock).to receive(:on).and_return(user_have_post_mock)
+            allow(user_have_post_mock).to receive(:send)
+        end
 
-                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
-                expect(Post).to receive(:fetch_by_id).with(post_id).and_return(post_mock)
-                expect(Comment).to receive(:new).with(comment_attribute).and_return(comment_mock)
-                allow(user_mock).to receive(:on).with(post_mock).and_return(user_mock)
-                allow(user_mock).to receive(:send).with(comment_mock)
+        context "given valid parameter" do
+            it "does fetch user by id" do
+                expect(User).to receive(:fetch_by_id).with(user_id)
 
-                UserController.comment(params)
+                UserController.comment(valid_parameter)
+            end
+
+            it "does fetch post by id" do
+                expect(Post).to receive(:fetch_by_id).with(post_id)
+
+                UserController.comment(valid_parameter)
+            end
+
+            it "does create comment" do
+                expect(Comment).to receive(:new).with(comment_attribute)
+
+                UserController.comment(valid_parameter)
+            end
+
+            it "does send comment on post" do
+                expect(user_mock).to receive(:on).with(post_mock)
+                expect(user_have_post_mock).to receive(:send).with(comment_mock)
+
+                UserController.comment(valid_parameter)
             end
         end
 
