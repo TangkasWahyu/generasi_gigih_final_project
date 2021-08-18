@@ -13,7 +13,7 @@ class Attachment
         return unless is_allowed?
 
         @user = user
-        set_filename
+        @saved_filename = get_filename
 
         save
     end
@@ -25,8 +25,8 @@ class Attachment
         false
     end
 
-    def set_filename
-        @saved_filename = "#{get_random_number}#{File.extname(@filename)}"
+    def get_filename
+        "#{get_random_number}#{File.extname(@filename)}"
     end
 
     def save

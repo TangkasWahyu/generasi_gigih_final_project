@@ -32,17 +32,30 @@ describe Attachment do
                 }
                 @attachment = Attachment.new(attachment_attribute)
     
-                allow(@attachment).to receive(:is_allowed?).and_return(true)
-                allow(@attachment).to receive(:set_filename)
+                allow(@attachment).to receive(:get_filename).and_return(@mock_file_name)
                 allow(@attachment).to receive(:save)
             end
 
-            it "does have user" do
-                mock_user = double
+            context "is allowed" do
+                before(:each) do
+                    allow(@attachment).to receive(:is_allowed?).and_return(true)
+                end
+                
+                it "does have user" do
+                    mock_user = double
 
-                @attachment.attached_by(mock_user)
+                    @attachment.attached_by(mock_user)
 
-                expect(@attachment.user).to eq(mock_user)
+                    expect(@attachment.user).to eq(mock_user)
+                end
+
+                it "does have saved file name" do
+                    mock_user = double
+
+                    @attachment.attached_by(mock_user)
+
+                    expect(@attachment.saved_filename).to eq(@mock_file_name)
+                end
             end
         end
     end
@@ -187,7 +200,7 @@ describe Attachment do
         end
     end
 
-    describe "#set_filename" do
+    describe "#get_filename" do
         context "have user" do
             before(:each) do
                 attachment_attribute_have_user = {
@@ -205,12 +218,12 @@ describe Attachment do
                 allow(File).to receive(:extname).and_return(@mock_extension)
             end
 
-            it "does have saved filename to equal expected" do
+            it "does return saved filename to equal expected" do
                 expected = "#{@mock_random_number}#{@mock_extension}"
 
-                @attachment_have_user.set_filename
+                actual = @attachment_have_user.get_filename
 
-                expect(@attachment_have_user.saved_filename).to eq(expected)
+                expect(actual).to eq(expected)
             end
         end
     end
