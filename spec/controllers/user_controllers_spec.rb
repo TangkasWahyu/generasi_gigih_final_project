@@ -61,13 +61,13 @@ describe UserController do
             it "does create post" do
                 expect(Post).to receive(:new).with(post_attribute)
 
-                UserController.post(post_attribute)
+                UserController.post(valid_parameter)
             end
 
             it "does send post" do
                 expect(user_mock).to receive(:send).with(post_mock)
 
-                UserController.post(post_attribute)
+                UserController.post(valid_parameter)
             end
         end
 
