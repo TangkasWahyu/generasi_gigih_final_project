@@ -165,6 +165,35 @@ describe Attachment do
         end
     end
 
+    describe "#set_filename" do
+        context "have user" do
+            before(:each) do
+                attachment_attribute_have_user = {
+                    "filename" => "filename",
+                    "type" => "video/mp4",
+                    "tempfile" => file_mock,
+                    "user" => double
+                }
+
+                @mock_random_number = double
+                @mock_extension = double
+                @attachment_have_user = Attachment.new(attachment_attribute_have_user)
+
+                allow(@attachment_have_user).to receive(:get_random_number).and_return(@mock_random_number)
+                allow(File).to receive(:extname).and_return(@mock_extension)
+            end
+
+            it "does have saved filename to equal expected" do
+                expected = "#{@mock_random_number}#{@mock_extension}"
+
+                @attachment_have_user.set_filename
+
+                expect(@attachment_have_user.saved_filename).to eq(expected)
+            end
+        end
+    end
+    
+
     describe "#get_random_number" do
         context "have mock_user" do
             before(:each) do

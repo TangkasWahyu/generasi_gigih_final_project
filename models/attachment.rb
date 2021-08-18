@@ -31,7 +31,7 @@ class Attachment
     end
 
     def set_filename
-        @saved_filename = "#{get_random_number_by(user)}#{File.extname(@filename)}"
+        @saved_filename = "#{get_random_number}#{File.extname(@filename)}"
     end
 
     def get_random_number
