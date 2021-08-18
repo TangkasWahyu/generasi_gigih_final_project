@@ -38,22 +38,37 @@ describe UserController do
     end
 
     describe ".post" do
-        let(:post_attribute) {{
-            "text" => text
-        }}
+        let(:post_attribute) {{ "text" => text }}
 
-        context "given valid_parameter" do
-            it "should call user_id, post_attribute" do
-                valid_parameter = {
-                    "id" => user_id,
-                    "text" => text
-                }
+        context "given valid parameter" do
+            let(:post_mock) { double } 
+            let(:valid_parameter) {{
+                "id" => user_id,
+                "text" => text
+            }} 
 
-                expect(User).to receive(:fetch_by_id).with(user_id).and_return(user_mock)
-                expect(Post).to receive(:new).with(post_attribute).and_return(post_mock)
-                allow(user_mock).to receive(:send).with(post_mock)
+            before(:each) do
+                allow(User).to receive(:fetch_by_id).and_return(user_mock)
+                allow(Post).to receive(:new).and_return(post_mock)
+                allow(user_mock).to receive(:send)
+            end
+
+            it "does fetch user by id" do
+                expect(User).to receive(:fetch_by_id).with(user_id)
 
                 UserController.post(valid_parameter)
+            end
+            
+            it "does create post" do
+                expect(Post).to receive(:new).with(post_attribute)
+
+                UserController.post(post_attribute)
+            end
+
+            it "does send post" do
+                expect(user_mock).to receive(:send).with(post_mock)
+
+                UserController.post(post_attribute)
             end
         end
 
