@@ -4,30 +4,9 @@ require_relative '../../models/attachment'
 
 describe Post do
     let(:text){ "Hello world" }
-    let(:text_contain_hashtag){ "Hello world #monday" }
-    let(:mock_attachment){ double }
     let(:post_attribute) {{
         "text" => text
     }}
-    let(:post_valid_attribute) {{
-        "text" => text
-    }}
-    let(:post_valid_with_attachment_attribute) {{
-        "text" => text,
-        "attachment" => mock_attachment
-    }}
-    let(:post_valid_attribute_with_id) {{
-        "id" => "1",
-        "text" => text
-    }}
-    let(:post_valid_attribute_with_id_text_contain_hashtag) {{
-        "id" => "1",
-        "text" => text_contain_hashtag
-    }}
-    let(:post_with_attachment) { Post.new post_valid_with_attachment_attribute }
-    let(:post) { Post.new post_valid_attribute }
-    let(:post_with_id) { Post.new post_valid_attribute_with_id }
-    let(:post_with_id_text_contain_hashtag) { Post.new post_valid_attribute_with_id_text_contain_hashtag }
     let(:mock_client) {double}
 
     before(:each) do
@@ -90,7 +69,6 @@ describe Post do
 
     describe "#is_characters_maximum_limit?" do
         context "have text characters length below 1000" do
-            let(:post_attribute) {{ "text" => "Hello world #monday" }}
             let(:post) { Post.new post_attribute }
 
             it "does return false" do
@@ -177,6 +155,7 @@ describe Post do
         context "have user" do
             let(:mock_user) { double }
             let(:user_id) { double }
+            let(:mock_attachment) { double }
 
             before(:each) do
                 allow(mock_user).to receive(:id).and_return(user_id)
@@ -231,6 +210,12 @@ describe Post do
     
     describe "#is_attached?" do
         context "have attachment" do
+            let(:post_with_attachment_attribute) {{
+                **post_attribute,
+                "attachment" => double
+            }}
+            let(:post_with_attachment) { Post.new post_with_attachment_attribute }
+
             it "does return true" do
                 actual = post_with_attachment.is_attached?
 
@@ -239,6 +224,8 @@ describe Post do
         end
 
         context "does not have attachment" do
+            let(:post) { Post.new post_attribute }
+
             it "does return false" do
                 actual = post.is_attached?
 
@@ -248,33 +235,43 @@ describe Post do
     end
     
     describe "#save_hashtags" do
-        let(:hashtag_text) { double }
-        let(:hashtag_texts) { [hashtag_text] }
-        let(:hashtag) { double }
+        context "have id and text contain hashtag" do
+            let(:hashtag_text) { double }
+            let(:hashtag_texts) { [hashtag_text] }
+            let(:hashtag) { double }
+            let(:text_contain_hashtag) { "hello world #monday" }
+            let(:post_attribute_with_id_text_contain_hashtag) {{
+                "id" => "1",
+                "text" => text_contain_hashtag
+            }}
+            let(:post_have_id_text_contain_hashtag) { Post.new post_attribute_with_id_text_contain_hashtag }
+    
+            before(:each) do
+                allow(Hashtag).to receive(:get_hashtags_by_text).and_return(hashtag_texts)
+                allow(Hashtag).to receive(:new).and_return(hashtag)
+                allow(hashtag).to receive(:save_on)
+            end
 
-        before(:each) do 
-            allow(Hashtag).to receive(:get_hashtags_by_text).and_return(hashtag_texts)
-            allow(Hashtag).to receive(:new).and_return(hashtag)
-            allow(hashtag).to receive(:save_on)
-        end
-
-        it "does get hashtags from post text" do
-            expect(Hashtag).to receive(:get_hashtags_by_text).with(text_contain_hashtag)
-
-            actual = post_with_id_text_contain_hashtag.save_hashtags
-
-            expect(actual).to eq(hashtag_texts)
-        end
-
-        it "should save hashtags" do
-            expect(hashtag).to receive(:save_on).with(post_with_id)
-
-            post_with_id.save_hashtags
+            it "does get hashtags from post text" do
+                expect(Hashtag).to receive(:get_hashtags_by_text).with(text_contain_hashtag)
+    
+                actual = post_have_id_text_contain_hashtag.save_hashtags
+    
+                expect(actual).to eq(hashtag_texts)
+            end
+    
+            it "should save hashtags" do
+                expect(hashtag).to receive(:save_on).with(post_have_id_text_contain_hashtag)
+    
+                post_have_id_text_contain_hashtag.save_hashtags
+            end
         end
     end
 
     describe "#set_attachment" do
         context "given mock_attachment" do
+            let(:post) { Post.new post_attribute }
+
             it "does have attachment to equal mock_attachment" do
                 mock_attachment = double
 
@@ -288,7 +285,13 @@ describe Post do
     describe ".fetch_by_id" do
         context "given id" do
             let(:id) { "1" }
-            let(:rawData) { [post_valid_attribute_with_id] }
+            let(:text_contain_hashtag) { "hello world #monday" }
+            let(:post_with_id_attribute) {{
+                "id" => id,
+                "text" => text_contain_hashtag
+            }}
+            let(:post_with_id) { Post.new post_with_id_attribute }
+            let(:rawData) { [post_with_id_attribute] }
 
             before(:each) do
                 allow(mock_client).to receive(:query).and_return(rawData)
@@ -306,7 +309,7 @@ describe Post do
                 post = Post.fetch_by_id(id)
 
                 expect(post.id).to eq(id)
-                expect(post.text).to eq(post_valid_attribute_with_id["text"])
+                expect(post.text).to eq(post_with_id_attribute["text"])
             end
         end
     end
@@ -314,7 +317,13 @@ describe Post do
     describe ".fetch_by_hashtag_text" do
         context "given hashtag text" do
             let(:hashtag_text) { "monday" }
-            let(:rawData) { [post_valid_attribute_with_id_text_contain_hashtag] }
+            let(:text_contain_hashtag) { "hello world #monday" }
+            let(:post_with_id_text_contain_hashtag_attribute) {{
+                "id" => double,
+                "text" => text_contain_hashtag
+            }}
+            let(:rawData) { [post_with_id_text_contain_hashtag_attribute] }
+            let(:post_have_id_text_contain_hashtag) { Post.new post_with_id_text_contain_hashtag_attribute }
 
             before(:each) do
                 allow(mock_client).to receive(:query).and_return(rawData)
@@ -328,11 +337,11 @@ describe Post do
                 Post.fetch_by_hashtag_text(hashtag_text)
             end
 
-            it "does get first posts(id and text) to equal post_with_id_text_contain_hashtag" do
+            it "does get first posts(id and text) to equal post_have_id_text_contain_hashtag" do
                 posts = Post.fetch_by_hashtag_text(hashtag_text)
                 
-                expect(posts.first.id).to eq(post_with_id_text_contain_hashtag.id)
-                expect(posts.first.text).to eq(post_with_id_text_contain_hashtag.text)
+                expect(posts.first.id).to eq(post_have_id_text_contain_hashtag.id)
+                expect(posts.first.text).to eq(post_have_id_text_contain_hashtag.text)
             end
             
         end
