@@ -25,11 +25,6 @@ describe Attachment do
         context "given mock user" do
             before(:each) do
                 @mock_file_name = double
-                attachment_attribute = {
-                    "filename" => "filename",
-                    "type" => "video/mp4",
-                    "tempfile" => file_mock
-                }
                 @attachment = Attachment.new(attachment_attribute)
     
                 allow(@attachment).to receive(:get_filename).and_return(@mock_file_name)
@@ -64,41 +59,37 @@ describe Attachment do
         context "have user and saved file name" do
             before(:each) do
                 @mock_saved_filename = double
-                attachment_attribute = {
-                    "filename" => "filename",
-                    "type" => "video/mp4",
-                    "tempfile" => file_mock,
+                attachment_attribute_with_user_and_file_name = {
+                    **attachment_attribute,
                     "saved_filename" => @mock_saved_filename,
                     "user" => double
                 }
-                @attachment = Attachment.new(attachment_attribute)
+                @attachment_have_user_and_file_name = Attachment.new(attachment_attribute_with_user_and_file_name)
+                allow(@attachment_have_user_and_file_name.file).to receive(:read).and_return(@mock_file_read)
             end
 
-            context "given mock user" do
-                before(:each) do
-                    allow(@attachment.file).to receive(:read).and_return(@mock_file_read)
-                end
-
-                it "does save file in file_path" do
-                    f_mock = double
-                    file_path = "./public/#{@mock_saved_filename}"
-                    
-                    expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
-                    expect(f_mock).to receive(:write).with(@mock_file_read)
-        
-                    @attachment.save
-                end
+            it "does save file in file_path" do
+                f_mock = double
+                file_path = "./public/#{@mock_saved_filename}"
+                
+                expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
+                expect(f_mock).to receive(:write).with(@mock_file_read)
+    
+                @attachment_have_user_and_file_name.save
             end
         end
     end
 
     describe "#is_allowed?" do
+        let(:attachment_attribute_without_type) {{
+            "filename" => "filename",
+            "tempfile" => file_mock
+        }}
         context "attachment type is video/mp4" do
             it "should be true" do
                 attachment_attribute_with_type_video_mp4 = {
-                    "filename" => "filename", 
-                    "type" => "video/mp4",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "video/mp4"
                 }
                 attachment_with_type_video_mp4 = Attachment.new(attachment_attribute_with_type_video_mp4)
                 
@@ -111,9 +102,8 @@ describe Attachment do
         context "attachment type is image/png" do
             it "should be true" do
                 attachment_attribute_with_type_image_png = {
-                    "filename" => "filename", 
-                    "type" => "image/png",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "image/png"
                 }
                 attachment_with_type_image_png = Attachment.new(attachment_attribute_with_type_image_png)
                 
@@ -126,9 +116,8 @@ describe Attachment do
         context "attachment type is image/gif" do
             it "should be true" do
                 attachment_attribute_with_type_image_gif = {
-                    "filename" => "filename", 
-                    "type" => "image/gif",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "image/gif"
                 }
                 attachment_with_type_image_gif = Attachment.new(attachment_attribute_with_type_image_gif)
                 
@@ -141,9 +130,8 @@ describe Attachment do
         context "attachment type is image/jpeg" do
             it "should be true" do
                 attachment_attribute_with_type_image_jpeg = {
-                    "filename" => "filename", 
-                    "type" => "image/jpeg",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "image/jpeg"
                 }
                 attachment_with_type_image_jpeg = Attachment.new(attachment_attribute_with_type_image_jpeg)
                 
@@ -156,9 +144,8 @@ describe Attachment do
         context "attachment type is text/plain" do
             it "should be true" do
                 attachment_attribute_with_type_text_plain = {
-                    "filename" => "filename", 
-                    "type" => "text/plain",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "text/plain"
                 }
                 attachment_with_type_text_plain = Attachment.new(attachment_attribute_with_type_text_plain)
                 
@@ -171,9 +158,8 @@ describe Attachment do
         context "attachment type is text/csv" do
             it "should be true" do
                 attachment_attribute_with_type_text_csv = {
-                    "filename" => "filename", 
-                    "type" => "text/csv",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "text/csv"
                 }
                 attachment_with_type_text_csv = Attachment.new(attachment_attribute_with_type_text_csv)
                 
@@ -186,9 +172,8 @@ describe Attachment do
         context "attachment type is application/x-tar" do
             it "should be false and set attachment(saved_filename) to equal NULL" do
                 attachment_attribute_with_type_application_x_tar = {
-                    "filename" => "filename", 
-                    "type" => "application/x-tar",
-                    "tempfile" => file_mock
+                    **attachment_attribute_without_type,
+                    "type" => "application/x-tar"
                 }
                 attachment_with_type_text_application_x_tar = Attachment.new(attachment_attribute_with_type_application_x_tar)
                 
@@ -204,9 +189,7 @@ describe Attachment do
         context "have user" do
             before(:each) do
                 attachment_attribute_have_user = {
-                    "filename" => "filename",
-                    "type" => "video/mp4",
-                    "tempfile" => file_mock,
+                    **attachment_attribute,
                     "user" => double
                 }
 
@@ -232,13 +215,11 @@ describe Attachment do
         context "have mock_user" do
             before(:each) do
                 mock_user = double
-                attachment_attribute = {
-                    "filename" => "filename",
-                    "type" => "video/mp4",
-                    "tempfile" => file_mock,
+                attachment_attribute_with_user = {
+                    **attachment_attribute,
                     "user" => mock_user
                 }
-                @attachment = Attachment.new(attachment_attribute)
+                @attachment_have_user = Attachment.new(attachment_attribute_with_user)
                 mock_user_id = double
                 mock_time_array = Array.new(10, double)
                 @joined06_mock_time_array = mock_time_array[0,6].join
@@ -250,7 +231,7 @@ describe Attachment do
             it "does return random number" do
                 expected = "#{@joined06_mock_time_array}#{@mock_user_id}"
     
-                actual = @attachment.get_random_number
+                actual = @attachment_have_user.get_random_number
     
                 expect(actual).to eq(expected)
             end
