@@ -9,6 +9,7 @@ class UserController
         user.save
     end
 
+    
     def self.post(params)
         post_attribute = {
             "text" => params["text"]
