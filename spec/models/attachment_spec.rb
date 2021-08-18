@@ -22,7 +22,33 @@ describe Attachment do
     end
 
     describe "#attached_by" do
-        context "type is allowed have user and saved file name" do
+        context "given mock user" do
+            before(:each) do
+                @mock_file_name = double
+                attachment_attribute = {
+                    "filename" => "filename",
+                    "type" => "video/mp4",
+                    "tempfile" => file_mock
+                }
+                @attachment = Attachment.new(attachment_attribute)
+    
+                allow(@attachment).to receive(:is_allowed?).and_return(true)
+                allow(@attachment).to receive(:set_filename)
+                allow(@attachment).to receive(:save)
+            end
+
+            it "does have user" do
+                mock_user = double
+
+                @attachment.attached_by(mock_user)
+
+                expect(@attachment.user).to eq(mock_user)
+            end
+        end
+    end
+
+    describe "save" do
+        context "have user and saved file name" do
             before(:each) do
                 @mock_saved_filename = double
                 attachment_attribute = {
@@ -33,25 +59,21 @@ describe Attachment do
                     "user" => double
                 }
                 @attachment = Attachment.new(attachment_attribute)
-    
-                allow(@attachment).to receive(:is_allowed?).and_return(true)
             end
 
             context "given mock user" do
                 before(:each) do
-                    allow(@attachment).to receive(:set_filename)
                     allow(@attachment.file).to receive(:read).and_return(@mock_file_read)
                 end
 
                 it "does save file in file_path" do
                     f_mock = double
-                    mock_user = double
                     file_path = "./public/#{@mock_saved_filename}"
                     
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(@mock_file_read)
         
-                    @attachment.attached_by(mock_user)
+                    @attachment.save
                 end
             end
         end

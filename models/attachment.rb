@@ -13,14 +13,9 @@ class Attachment
         return unless is_allowed?
 
         @user = user
-
         set_filename
-        file_path = "./public/#{@saved_filename}"
-        file_read = @file.read
-        
-        File.open(file_path, 'w') do |f|
-            f.write(file_read)
-        end
+
+        save
     end
 
     def is_allowed?
@@ -32,6 +27,15 @@ class Attachment
 
     def set_filename
         @saved_filename = "#{get_random_number}#{File.extname(@filename)}"
+    end
+
+    def save
+        file_path = "./public/#{@saved_filename}"
+        file_read = @file.read
+        
+        File.open(file_path, 'w') do |f|
+            f.write(file_read)
+        end
     end
 
     def get_random_number
