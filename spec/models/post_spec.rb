@@ -106,7 +106,7 @@ describe Post do
                         allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
                     end
         
-                    it "does save" do
+                    it "does save with attachment path" do
                         expected = "insert into posts (user_id, text, attachment_path) values ('#{user_id}','#{text}', '#{mock_saved_filename}')"
                         
                         expect(mock_client).to receive(:query).with(expected)
