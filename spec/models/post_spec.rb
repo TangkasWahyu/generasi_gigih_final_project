@@ -31,18 +31,29 @@ describe Post do
             let(:user_id) { double }
             let(:insert_post_query) { "insert into posts (user_id, text) values ('#{user_id}','#{text}')" }
 
-            context "text character is not limit" do
-                before(:each) do
-                    allow(post).to receive(:is_characters_maximum_limit?).and_return(false)
-                    allow(mock_client).to receive(:last_id).and_return(last_id)
-                    allow(mock_user).to receive(:id).and_return(user_id)
-                    allow(mock_client).to receive(:query)
-                end
+            before(:each) do
+                allow(mock_client).to receive(:last_id).and_return(last_id)
+                allow(mock_user).to receive(:id).and_return(user_id)
+                allow(mock_client).to receive(:query)
+            end
 
+            context "text character is not limit" do
                 it "does save" do
                     expect(mock_client).to receive(:query).with(insert_post_query)
         
                     post.send_by(mock_user)
+                end
+                
+                context "text characters length is 1000" do
+                    let(:text) { 'o' * 1000 }
+                    let(:post_attribute) {{ "text" => text }}
+                    let(:post) { Post.new post_attribute }
+        
+                    it "does save" do
+                        expect(mock_client).to receive(:query).with(insert_post_query)
+            
+                        post.send_by(mock_user)  
+                    end
                 end
 
                 context "have hashtag" do
@@ -104,45 +115,21 @@ describe Post do
                     end
                 end
             end
-        end
-    end
-
-    describe "#is_characters_maximum_limit?" do
-        context "have text characters length below 1000" do
-            let(:post) { Post.new post_attribute }
-
-            it "does return false" do
-                actual = post.is_characters_maximum_limit?
-
-                expect(actual).to be_falsy   
-            end
-        end
-
-        context "post text characters length is 1000" do
-            let(:text) { 'o' * 1000 }
-            let(:post_attribute) {{ "text" => text }}
-            let(:post) { Post.new post_attribute }
-
-            it "does return false" do
-                actual = post.is_characters_maximum_limit?
-
-                expect(actual).to be_falsy   
-            end
-        end
-
-        context "post text characters length is 1001" do
-            let(:text) { 'o' * 1001 }
-            let(:post_attribute) {{ "text" => text }}
-            let(:post) { Post.new post_attribute }
-
-            it "does return true" do
-                actual = post.is_characters_maximum_limit?
-
-                expect(actual).to be_truthy   
+    
+            context "text characters length is 1001" do
+                let(:text) { 'o' * 1001 }
+                let(:post_attribute) {{ "text" => text }}
+                let(:post) { Post.new post_attribute }
+    
+                it "does not save" do
+                    expect(mock_client).not_to receive(:query).with(insert_post_query)
+        
+                    post.send_by(mock_user)  
+                end
             end
         end
     end
-
+    
     describe "#set_attachment" do
         context "given mock_attachment" do
             let(:post) { Post.new post_attribute }
