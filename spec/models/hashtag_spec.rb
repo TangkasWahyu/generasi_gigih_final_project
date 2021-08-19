@@ -123,18 +123,27 @@ describe Hashtag do
     end
 
     describe ".fetch_trending" do
-        it "should call fetch_trending_24_hours_query" do
-            mock_client = double
-            mock_hashtag = double
-            mock_trending_hashtags = [mock_hashtag, mock_hashtag, mock_hashtag]
-            fetch_trending_24_hours_query = "select hashtags.text, count(hashtags.text) as total from posts left join hashtags on hashtags.post_id = posts.id where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) group by hashtags.text order by total desc limit 5;"
+        let(:mock_client) { double } 
+        let(:monday_hashtag_attribute) {{
+            "id" => double,
+            "text" => "#monday"
+        }}
+        let(:tuesday_hashtag_attribute) {{
+            "id" => double,
+            "text" => "#tuesday"
+        }}
+        let(:trending_hashtags) { [monday_hashtag_attribute, tuesday_hashtag_attribute] } 
 
+        before(:each) do
             allow(Mysql2::Client).to receive(:new).and_return(mock_client)
-            expect(mock_client).to receive(:query).with(fetch_trending_24_hours_query).and_return(mock_trending_hashtags)
-            allow(mock_hashtag).to receive(:[]).and_return("text")
-            allow(Hashtag).to receive(:new).and_return(mock_hashtag)
+            allow(mock_client).to receive(:query).and_return(trending_hashtags)
+        end
 
-            Hashtag.fetch_trending
+        it "does get trending hashtags" do
+            hashtags = Hashtag.fetch_trending
+
+            expect(hashtags[0].text).to eq(monday_hashtag_attribute["text"]) 
+            expect(hashtags[1].text).to eq(tuesday_hashtag_attribute["text"]) 
         end
     end
     
