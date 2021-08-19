@@ -1,5 +1,6 @@
 require_relative '../test_helper'
 require_relative '../../models/attachment'
+require_relative '../../models/user'
 
 describe Attachment do
     let(:file_mock) { double }
@@ -22,9 +23,16 @@ describe Attachment do
     end
 
     describe "#attached_by" do
-        context "given mock user" do
-            let(:mock_user) { double } 
-            let(:mock_user_id) { double } 
+        context "given user" do
+			let(:user_id) { "1" }
+            let(:user_attribute) {{
+                "username" => "Dipsi",
+                "email" => "dipsi@teletabis.co.id",
+                "bio_description" => "am I Dipsi?",
+                "id" => user_id,
+            }}
+            let(:user) { User.new user_attribute }
+
             let(:mock_extension) { double } 
             let(:mock_file_read) { double } 
             let(:f_mock) { double } 
@@ -34,11 +42,10 @@ describe Attachment do
             }}
             let(:mock_time_array) { Array.new(10, double) } 
             let(:joined06_mock_time_array) { mock_time_array[0,6].join } 
-            let(:file_path) { "./public/#{joined06_mock_time_array}#{mock_user_id}#{mock_extension}" } 
+            let(:file_path) { "./public/#{joined06_mock_time_array}#{user_id}#{mock_extension}" } 
 
             before(:each) do
                 allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
-                allow(mock_user).to receive_message_chain(:id).and_return(mock_user_id)
                 allow(File).to receive(:extname).and_return(mock_extension)
                 allow(file_mock).to receive(:read).and_return(mock_file_read)
             end
@@ -54,7 +61,7 @@ describe Attachment do
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_video_mp4.attached_by(mock_user) 
+                    attachment_with_type_video_mp4.attached_by(user) 
                 end
             end
     
@@ -69,7 +76,7 @@ describe Attachment do
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_image_png.attached_by(mock_user) 
+                    attachment_with_type_image_png.attached_by(user) 
                 end
             end
     
@@ -84,7 +91,7 @@ describe Attachment do
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_image_gif.attached_by(mock_user) 
+                    attachment_with_type_image_gif.attached_by(user) 
                 end
             end
     
@@ -99,7 +106,7 @@ describe Attachment do
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_image_jpeg.attached_by(mock_user) 
+                    attachment_with_type_image_jpeg.attached_by(user) 
                 end
             end
     
@@ -115,7 +122,7 @@ describe Attachment do
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_text_plain.attached_by(mock_user) 
+                    attachment_with_type_text_plain.attached_by(user) 
                 end
             end
             
@@ -130,7 +137,7 @@ describe Attachment do
                     expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_text_csv.attached_by(mock_user) 
+                    attachment_with_type_text_csv.attached_by(user) 
                 end
             end
     
@@ -145,7 +152,7 @@ describe Attachment do
                     expect(File).not_to receive(:open).with(file_path, 'w').and_yield(f_mock)
                     expect(f_mock).not_to receive(:write).with(mock_file_read)
 
-                    attachment_with_type_text_application_x_tar.attached_by(mock_user) 
+                    attachment_with_type_text_application_x_tar.attached_by(user) 
                 end
             end
         end
