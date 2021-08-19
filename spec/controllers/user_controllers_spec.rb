@@ -122,24 +122,6 @@ describe UserController do
                 allow(comment_mock).to receive(:set_attachment)
             end
 
-            it "does fetch user by id" do
-                expect(User).to receive(:fetch_by_id).with(user_id)
-
-                UserController.comment(valid_parameter_with_attachment)
-            end
-
-            it "does fetch post by id" do
-                expect(Post).to receive(:fetch_by_id).with(post_id)
-
-                UserController.comment(valid_parameter_with_attachment)
-            end
-
-            it "does create comment" do
-                expect(Comment).to receive(:new).with(comment_attribute)
-
-                UserController.comment(valid_parameter_with_attachment)
-            end
-
             it "does set attachment on post" do
                 expect(comment_mock).to receive(:set_attachment).with(attachment_mock)
 
