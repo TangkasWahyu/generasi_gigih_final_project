@@ -46,18 +46,6 @@ describe UserController do
         end
 
         context "given valid parameter" do
-            it "does fetch user by id" do
-                expect(User).to receive(:fetch_by_id).with(user_id)
-
-                UserController.post(valid_parameter)
-            end
-            
-            it "does create post" do
-                expect(Post).to receive(:new).with(post_attribute)
-
-                UserController.post(valid_parameter)
-            end
-
             it "does send post" do
                 expect(user_mock).to receive(:send).with(post_mock)
 
