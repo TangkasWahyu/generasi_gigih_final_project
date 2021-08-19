@@ -26,15 +26,16 @@ describe Attachment do
             let(:mock_user) { double } 
             let(:mock_user_id) { double } 
             let(:mock_extension) { double } 
+            let(:mock_file_read) { double } 
             let(:attachment) { Attachment.new attachment_attribute }
             let(:mock_time_array) { Array.new(10, double) } 
             let(:joined06_mock_time_array) { mock_time_array[0,6].join } 
 
             before(:each) do
-                allow(attachment).to receive(:save)
                 allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
                 allow(mock_user).to receive_message_chain(:id).and_return(mock_user_id)
                 allow(File).to receive(:extname).and_return(mock_extension)
+                allow(file_mock).to receive(:read).and_return(mock_file_read)
             end
 
             context "is allowed" do
@@ -42,40 +43,15 @@ describe Attachment do
                     allow(attachment).to receive(:is_allowed?).and_return(true)
                 end
 
-                it "does have saved file name" do
-                    expected = "#{joined06_mock_time_array}#{mock_user_id}#{mock_extension}"
+                it "does have save file in expected file path" do
+                    f_mock = double
+                    file_path = "./public/#{joined06_mock_time_array}#{mock_user_id}#{mock_extension}"
+                    
+                    expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
+                    expect(f_mock).to receive(:write).with(mock_file_read)
 
                     attachment.attached_by(mock_user)
-    
-                    expect(attachment.saved_filename).to eq(expected)
                 end
-            end
-        end
-    end
-
-    describe "save" do
-        context "have user and saved file name" do
-            let(:mock_saved_filename) { double } 
-            let(:mock_file_read) { double } 
-            let(:attachment_attribute_with_user_and_file_name) {{
-                **attachment_attribute,
-                "saved_filename" => mock_saved_filename,
-                "user" => double
-            }} 
-            let(:attachment_have_user_and_file_name) { Attachment.new attachment_attribute_with_user_and_file_name } 
-
-            before(:each) do
-                allow(file_mock).to receive(:read).and_return(mock_file_read)
-            end
-
-            it "does save file in file_path" do
-                f_mock = double
-                file_path = "./public/#{mock_saved_filename}"
-                
-                expect(File).to receive(:open).with(file_path, 'w').and_yield(f_mock)
-                expect(f_mock).to receive(:write).with(mock_file_read)
-    
-                attachment_have_user_and_file_name.save
             end
         end
     end
