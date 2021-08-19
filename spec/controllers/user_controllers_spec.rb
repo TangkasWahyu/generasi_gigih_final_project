@@ -34,7 +34,7 @@ describe UserController do
     describe ".post" do
         let(:post_attribute) {{ "text" => text }}
         let(:post_mock) { double } 
-        let(:valid_parameter) {{
+        let(:valid_params) {{
             "id" => user_id,
             "text" => text
         }} 
@@ -45,19 +45,19 @@ describe UserController do
             allow(user_mock).to receive(:send)
         end
 
-        context "given valid parameter" do
+        context "given valid params" do
             it "does send post" do
                 expect(user_mock).to receive(:send).with(post_mock)
 
-                UserController.post(valid_parameter)
+                UserController.post(valid_params)
             end
         end
 
-        context "given valid parameter with attachment" do
+        context "given valid params with attachment" do
             let(:attachment_attribute_mock) { double } 
             let(:attachment_mock) { double } 
-            let(:valid_parameter_with_attachment) {{
-                **valid_parameter,
+            let(:valid_params_with_attachment) {{
+                **valid_params,
                 "attachment" => attachment_attribute_mock
             }} 
 
@@ -69,13 +69,13 @@ describe UserController do
             it "does set attachment on post" do
                 expect(post_mock).to receive(:set_attachment).with(attachment_mock)
 
-                UserController.post(valid_parameter_with_attachment)
+                UserController.post(valid_params_with_attachment)
             end
             
             it "does send post" do
                 expect(user_mock).to receive(:send).with(post_mock)
 
-                UserController.post(valid_parameter_with_attachment)
+                UserController.post(valid_params_with_attachment)
             end
         end
     end
@@ -86,7 +86,7 @@ describe UserController do
         let(:user_have_post_mock) { double }
         let(:post_id) { "1" }
         let(:comment_attribute) {{ "text" => text }}
-        let(:valid_parameter) {{
+        let(:valid_params) {{
             "user_id" => user_id,
             "post_id" => post_id,
             "text" => text
@@ -100,20 +100,20 @@ describe UserController do
             allow(user_have_post_mock).to receive(:send)
         end
 
-        context "given valid parameter" do
+        context "given valid params" do
             it "does send comment on post" do
                 expect(user_mock).to receive(:on).with(post_mock)
                 expect(user_have_post_mock).to receive(:send).with(comment_mock)
 
-                UserController.comment(valid_parameter)
+                UserController.comment(valid_params)
             end
         end
 
-        context "given valid parameter with attachment" do
+        context "given valid params with attachment" do
             let(:attachment_attribute_mock) { double } 
             let(:attachment_mock) { double } 
-            let(:valid_parameter_with_attachment) {{
-                **valid_parameter,
+            let(:valid_params_with_attachment) {{
+                **valid_params,
                 "attachment" => attachment_attribute_mock
             }} 
 
@@ -125,14 +125,14 @@ describe UserController do
             it "does set attachment on post" do
                 expect(comment_mock).to receive(:set_attachment).with(attachment_mock)
 
-                UserController.comment(valid_parameter_with_attachment)
+                UserController.comment(valid_params_with_attachment)
             end
 
             it "does send comment on post" do
                 expect(user_mock).to receive(:on).with(post_mock)
                 expect(user_have_post_mock).to receive(:send).with(comment_mock)
 
-                UserController.comment(valid_parameter_with_attachment)
+                UserController.comment(valid_params_with_attachment)
             end
         end
     end
