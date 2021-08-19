@@ -13,11 +13,11 @@ describe Post do
         allow(Mysql2::Client).to receive(:new).and_return(mock_client)
     end
 
-    describe ".initialize" do
-        context "given valid attribute" do
-            it "should create object that equal with valid_attribute" do
-                post = Post.new(post_attribute)
+    describe "#initialize" do
+        context "given post attribute" do
+            let(:post) { Post.new(post_attribute) } 
 
+            it "should create object(text) to equal post attribute(text)" do
                 expect(post.text).to eq(post_attribute["text"])
             end
         end
