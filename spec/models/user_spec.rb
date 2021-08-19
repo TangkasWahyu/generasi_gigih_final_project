@@ -45,14 +45,6 @@ describe User do
                 allow(mock_client).to receive(:query).and_return(rawData)
             end
 
-            it "does fetch by id query with id" do
-                fetch_by_id_query = "select * from users where id = #{id}"
-
-                expect(mock_client).to receive(:query).with(fetch_by_id_query).and_return(rawData)
-
-                user = User.fetch_by_id(id)
-            end
-
             it "does return user(id) to equal with id" do
                 user = User.fetch_by_id(id)
 
