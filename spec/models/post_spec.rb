@@ -108,7 +108,6 @@ describe Post do
         let(:last_id) { double }
         let(:mock_user) { double }
         let(:user_id) { double }
-
         let(:post_attribute_and_user_attribute) {{
             **post_attribute,
             "user" => mock_user
@@ -129,14 +128,28 @@ describe Post do
         end
 
         context "have hashtag" do
+            let(:hashtag_text) { double }
+            let(:hashtag_texts) { [hashtag_text] }
+            let(:hashtag) { double }
+            let(:text_contain_hashtag) { "hello world #monday" }
+            let(:post_attribute_with_id_text_contain_hashtag) {{
+                "id" => "1",
+                "user" => mock_user,
+                "text" => text_contain_hashtag,
+
+            }}
+            let(:post_have_id_text_contain_hashtag) { Post.new post_attribute_with_id_text_contain_hashtag }
+    
             before(:each) do
-                allow(Hashtag).to receive(:contained?).and_return(true)
+                allow(Hashtag).to receive(:get_hashtags_by_text).and_return(hashtag_texts)
+                allow(Hashtag).to receive(:new).and_return(hashtag)
+                allow(hashtag).to receive(:save_on)
             end
 
             it "does save hashtags" do
-                expect(post_attribute_and_user).to receive(:save_hashtags)
+                expect(hashtag).to receive(:save_on).with(post_have_id_text_contain_hashtag)
     
-                post_attribute_and_user.save
+                post_have_id_text_contain_hashtag.save
             end
         end
 
@@ -173,40 +186,6 @@ describe Post do
                 expect(mock_client).to receive(:query).with(expected)
 
                 post_have_attachment_and_user.save
-            end
-        end
-    end
-    
-    describe "#save_hashtags" do
-        context "have id and text contain hashtag" do
-            let(:hashtag_text) { double }
-            let(:hashtag_texts) { [hashtag_text] }
-            let(:hashtag) { double }
-            let(:text_contain_hashtag) { "hello world #monday" }
-            let(:post_attribute_with_id_text_contain_hashtag) {{
-                "id" => "1",
-                "text" => text_contain_hashtag
-            }}
-            let(:post_have_id_text_contain_hashtag) { Post.new post_attribute_with_id_text_contain_hashtag }
-    
-            before(:each) do
-                allow(Hashtag).to receive(:get_hashtags_by_text).and_return(hashtag_texts)
-                allow(Hashtag).to receive(:new).and_return(hashtag)
-                allow(hashtag).to receive(:save_on)
-            end
-
-            it "does get hashtags from post text" do
-                expect(Hashtag).to receive(:get_hashtags_by_text).with(text_contain_hashtag)
-    
-                actual = post_have_id_text_contain_hashtag.save_hashtags
-    
-                expect(actual).to eq(hashtag_texts)
-            end
-    
-            it "should save hashtags" do
-                expect(hashtag).to receive(:save_on).with(post_have_id_text_contain_hashtag)
-    
-                post_have_id_text_contain_hashtag.save_hashtags
             end
         end
     end
