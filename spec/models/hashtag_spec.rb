@@ -5,10 +5,10 @@ require_relative '../../models/post'
 describe Hashtag do
     describe "#initialize" do
         context "given monday" do
-            let(:actual) { Hashtag.new("monday") } 
+            let(:hashtag) { Hashtag.new("monday") } 
 
             it "does create object(text) to equal monday" do
-                expect(actual.text).to eq("monday")
+                expect(hashtag.text).to eq("monday")
             end
         end
     end

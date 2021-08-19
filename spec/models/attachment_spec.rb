@@ -12,12 +12,12 @@ describe Attachment do
                 "type" => "video/mp4",
                 "tempfile" => file_mock
             }}
-            let(:actual) { Attachment.new attachment_attribute }
+            let(:attachment) { Attachment.new attachment_attribute }
 
             it "does create object(filename, type, file) to equal attachment attribute(filename, type, tempfile)" do
-                expect(actual.filename).to eq(attachment_attribute["filename"])
-                expect(actual.type).to eq(attachment_attribute["type"])
-                expect(actual.file).to eq(attachment_attribute["tempfile"])
+                expect(attachment.filename).to eq(attachment_attribute["filename"])
+                expect(attachment.type).to eq(attachment_attribute["type"])
+                expect(attachment.file).to eq(attachment_attribute["tempfile"])
             end
         end
     end
