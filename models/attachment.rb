@@ -42,5 +42,5 @@ class Attachment
         "#{Time.new.to_a[0,6].join}#{@user.id}"
     end
 
-    private :get_random_number, :get_filename, :save
+    private :get_random_number, :get_filename, :save, :is_allowed?
 end
