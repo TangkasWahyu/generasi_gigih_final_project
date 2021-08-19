@@ -1,6 +1,7 @@
 require_relative '../test_helper'
 require_relative '../../models/post'
 require_relative '../../models/attachment'
+require_relative '../../models/user'
 
 describe Post do
     let(:text){ "Hello world" }
@@ -24,16 +25,22 @@ describe Post do
     end
 
     describe "#send_by" do
-        context "given mock_user" do
-            let(:mock_user) { double }
-            let(:post) { Post.new post_attribute }
+        context "given user" do
             let(:last_id) { double }
-            let(:user_id) { double }
+            let(:user_id) { "1" }
+            let(:user_attribute) {{
+                "username" => "Dipsi",
+                "email" => "dipsi@teletabis.co.id",
+                "bio_description" => "am I Dipsi?",
+                "id" => user_id
+            }}
+            let(:user) { User.new user_attribute }
+            let(:post) { Post.new post_attribute }
+
             let(:insert_post_query) { "insert into posts (user_id, text) values ('#{user_id}','#{text}')" }
 
             before(:each) do
                 allow(mock_client).to receive(:last_id).and_return(last_id)
-                allow(mock_user).to receive(:id).and_return(user_id)
                 allow(mock_client).to receive(:query)
             end
 
@@ -41,7 +48,7 @@ describe Post do
                 it "does save" do
                     expect(mock_client).to receive(:query).with(insert_post_query)
         
-                    post.send_by(mock_user)
+                    post.send_by(user)
                 end
                 
                 context "text characters length is 1000" do
@@ -52,7 +59,7 @@ describe Post do
                     it "does save" do
                         expect(mock_client).to receive(:query).with(insert_post_query)
             
-                        post.send_by(mock_user)  
+                        post.send_by(user)  
                     end
                 end
 
@@ -62,7 +69,6 @@ describe Post do
                     let(:hashtag) { double }
                     let(:text_contain_hashtag) { "hello world #monday" }
                     let(:post_with_text_contain_hashtag_attribute) {{
-                        "user" => mock_user,
                         "text" => text_contain_hashtag
                     }}
                     let(:post_have_id_text_contain_hashtag) { Post.new post_with_text_contain_hashtag_attribute }
@@ -76,7 +82,7 @@ describe Post do
                     it "does save hashtags" do
                         expect(hashtag).to receive(:save_on).with(post_have_id_text_contain_hashtag)
             
-                        post_have_id_text_contain_hashtag.send_by(mock_user)
+                        post_have_id_text_contain_hashtag.send_by(user)
                     end
                 end
 
@@ -88,7 +94,7 @@ describe Post do
                     it "does not save hashtags" do
                         expect(post).to_not receive(:save_hashtags)
             
-                        post.send_by(mock_user)
+                        post.send_by(user)
                     end
                 end
 
@@ -111,7 +117,7 @@ describe Post do
                         
                         expect(mock_client).to receive(:query).with(expected)
         
-                        post_have_attachment.send_by(mock_user)
+                        post_have_attachment.send_by(user)
                     end
                 end
             end
@@ -124,7 +130,7 @@ describe Post do
                 it "does not save" do
                     expect(mock_client).not_to receive(:query).with(insert_post_query)
         
-                    post.send_by(mock_user)  
+                    post.send_by(user)  
                 end
             end
         end
