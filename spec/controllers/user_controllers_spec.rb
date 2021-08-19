@@ -23,13 +23,7 @@ describe UserController do
                 allow(user_mock).to receive(:save)
             end
 
-            it "does create user" do
-                expect(User).to receive(:new).with(user_attribute)
-
-                UserController.save(user_attribute)
-            end
-
-            it "does save created user" do
+            it "does save user" do
                 expect(user_mock).to receive(:save) 
 
                 UserController.save(user_attribute)
