@@ -106,35 +106,37 @@ describe Post do
     describe "#save" do
         let(:mock_query) { double }
         let(:last_id) { double }
-        let(:post) { Post.new post_attribute }
+        let(:mock_user) { double }
+        let(:user_id) { double }
+
+        let(:post_attribute_and_user_attribute) {{
+            **post_attribute,
+            "user" => mock_user
+        }}
+        let(:post_attribute_and_user) { Post.new post_attribute_and_user_attribute }
+        let(:insert_post_query) { "insert into posts (user_id, text) values ('#{user_id}','#{text}')" }
 
         before(:each) do
-            allow(post).to receive(:get_insert_query).and_return(mock_query)
+            allow(mock_user).to receive(:id).and_return(user_id)
             allow(mock_client).to receive(:last_id).and_return(last_id)
             allow(mock_client).to receive(:query)
         end
 
-        it "does insert_query" do
-            expect(mock_client).to receive(:query).with(mock_query)
+        it "does save" do
+            expect(mock_client).to receive(:query).with(insert_post_query)
 
-            post.save
+            post_attribute_and_user.save
         end
 
-        it "does have id to equal last_id" do
-            post.save
-
-            expect(post.id).to eq(last_id)
-        end
-
-        context "text have hashtag" do
+        context "have hashtag" do
             before(:each) do
                 allow(Hashtag).to receive(:contained?).and_return(true)
             end
 
             it "does save hashtags" do
-                expect(post).to receive(:save_hashtags)
+                expect(post_attribute_and_user).to receive(:save_hashtags)
     
-                post.save
+                post_attribute_and_user.save
             end
         end
 
@@ -144,66 +146,33 @@ describe Post do
             end
 
             it "does not save hashtags" do
-                expect(post).to_not receive(:save_hashtags)
+                expect(post_attribute_and_user).to_not receive(:save_hashtags)
     
-                post.save
+                post_attribute_and_user.save
             end
         end
-    end
 
-    describe "#get_insert_query" do
-        context "have user" do
-            let(:mock_user) { double }
-            let(:user_id) { double }
+        context "have attachment" do
             let(:mock_attachment) { double }
+            let(:mock_saved_filename) { double }
+            let(:post_have_attachment_and_user_attribute) {{
+                **post_attribute,
+                "attachment" => mock_attachment,
+                "user" => mock_user
+            }}
+            let(:post_have_attachment_and_user) { Post.new post_have_attachment_and_user_attribute }
 
             before(:each) do
-                allow(mock_user).to receive(:id).and_return(user_id)
+                allow(mock_attachment).to receive(:attached_by)
+                allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
             end
 
-            context "have attachment" do
-                let(:mock_saved_filename) { double }
-                let(:post_have_attachment_and_user_attribute) {{
-                    **post_attribute,
-                    "attachment" => mock_attachment,
-                    "user" => mock_user
-                }}
-                let(:post_have_attachment_and_user) { Post.new post_have_attachment_and_user_attribute }
+            it "does save" do
+                expected = "insert into posts (user_id, text, attachment_path) values ('#{user_id}','#{text}', '#{mock_saved_filename}')"
+                
+                expect(mock_client).to receive(:query).with(expected)
 
-                before(:each) do
-                    allow(mock_attachment).to receive(:attached_by)
-                    allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
-                end
-
-                it "does save attachment with mock user" do
-                    expect(mock_attachment).to receive(:attached_by).with(mock_user)
-
-                    post_have_attachment_and_user.get_insert_query
-                end
-
-                it "get insert_query_with_attachment" do
-                    expected = "insert into posts (user_id, text, attachment_path) values ('#{user_id}','#{text}', '#{mock_saved_filename}')"
-                    
-                    actual = post_have_attachment_and_user.get_insert_query
-    
-                    expect(actual).to eq(expected)  
-                end
-            end
-    
-            context "does not have attachment" do
-                let(:post_attribute_and_user_attribute) {{
-                    **post_attribute,
-                    "user" => mock_user
-                }}
-                let(:post_attribute_and_user) { Post.new post_attribute_and_user_attribute }
-
-                it "does get insert_query" do
-                    expected = "insert into posts (user_id, text) values ('#{user_id}','#{text}')"
-                    
-                    actual = post_attribute_and_user.get_insert_query
-    
-                    expect(actual).to eq(expected)  
-                end
+                post_have_attachment_and_user.save
             end
         end
     end

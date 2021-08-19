@@ -84,4 +84,6 @@ class Post
 
         posts
     end
+
+    private :get_insert_query
 end
