@@ -23,33 +23,31 @@ describe Attachment do
 
     describe "#attached_by" do
         context "given mock user" do
-            let(:mock_file_name) { double }
+            let(:mock_user) { double } 
+            let(:mock_user_id) { double } 
+            let(:mock_extension) { double } 
             let(:attachment) { Attachment.new attachment_attribute }
+            let(:mock_time_array) { Array.new(10, double) } 
+            let(:joined06_mock_time_array) { mock_time_array[0,6].join } 
 
             before(:each) do
-                allow(attachment).to receive(:get_filename).and_return(mock_file_name)
                 allow(attachment).to receive(:save)
+                allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
+                allow(mock_user).to receive_message_chain(:id).and_return(mock_user_id)
+                allow(File).to receive(:extname).and_return(mock_extension)
             end
 
             context "is allowed" do
                 before(:each) do
                     allow(attachment).to receive(:is_allowed?).and_return(true)
                 end
-                
-                it "does have user" do
-                    mock_user = double
-
-                    attachment.attached_by(mock_user)
-
-                    expect(attachment.user).to eq(mock_user)
-                end
 
                 it "does have saved file name" do
-                    mock_user = double
+                    expected = "#{joined06_mock_time_array}#{mock_user_id}#{mock_extension}"
 
                     attachment.attached_by(mock_user)
-
-                    expect(attachment.saved_filename).to eq(mock_file_name)
+    
+                    expect(attachment.saved_filename).to eq(expected)
                 end
             end
         end
@@ -184,35 +182,6 @@ describe Attachment do
 
                 expect(expected).to be_falsy
                 expect(attachment_with_type_text_application_x_tar.saved_filename).to eq("NULL")
-            end
-        end
-    end
-
-    describe "#get_filename" do
-        context "have user" do
-            let(:mock_user) { double } 
-            let(:mock_user_id) { double } 
-            let(:attachment_attribute_have_user) {{
-                **attachment_attribute,
-                "user" => mock_user
-            }} 
-            let(:mock_extension) { double } 
-            let(:attachment_have_user) { Attachment.new attachment_attribute_have_user } 
-            let(:mock_time_array) { Array.new(10, double) } 
-            let(:joined06_mock_time_array) { mock_time_array[0,6].join } 
-
-            before(:each) do
-                allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
-                allow(mock_user).to receive_message_chain(:id).and_return(mock_user_id)
-                allow(File).to receive(:extname).and_return(mock_extension)
-            end
-
-            it "does return saved filename to equal expected" do
-                expected = "#{joined06_mock_time_array}#{mock_user_id}#{mock_extension}"
-
-                actual = attachment_have_user.get_filename
-
-                expect(actual).to eq(expected)
             end
         end
     end
