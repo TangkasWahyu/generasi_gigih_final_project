@@ -15,4 +15,6 @@ class Comment < Post
         insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{@id}, #{@user.post.id})"
         client.query(insert_post_ref_query)
     end
+
+    private :save
 end

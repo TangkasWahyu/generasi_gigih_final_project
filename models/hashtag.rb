@@ -7,9 +7,9 @@ class Hashtag
         @text = text
     end
 
-    def save_on(text)
+    def save_on(post)
         client = create_db_client
-        insert_hashtag_query = "insert into hashtags (text, post_id) values ('#{@text}', #{text.id})"
+        insert_hashtag_query = "insert into hashtags (text, post_id) values ('#{@text}', #{post.id})"
 
         client.query(insert_hashtag_query)
         hashtag_id = client.last_id
