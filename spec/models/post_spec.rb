@@ -208,32 +208,6 @@ describe Post do
         end
     end
     
-    describe "#is_attached?" do
-        context "have attachment" do
-            let(:post_with_attachment_attribute) {{
-                **post_attribute,
-                "attachment" => double
-            }}
-            let(:post_with_attachment) { Post.new post_with_attachment_attribute }
-
-            it "does return true" do
-                actual = post_with_attachment.is_attached?
-
-                expect(actual).to be_truthy
-            end
-        end
-
-        context "does not have attachment" do
-            let(:post) { Post.new post_attribute }
-
-            it "does return false" do
-                actual = post.is_attached?
-
-                expect(actual).to be_falsy
-            end
-        end
-    end
-    
     describe "#save_hashtags" do
         context "have id and text contain hashtag" do
             let(:hashtag_text) { double }
