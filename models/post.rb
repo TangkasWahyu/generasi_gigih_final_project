@@ -85,5 +85,5 @@ class Post
         posts
     end
 
-    private :get_insert_query, :save_hashtags
+    private :get_insert_query, :save_hashtags, :save
 end

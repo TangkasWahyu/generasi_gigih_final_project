@@ -27,42 +27,82 @@ describe Post do
         context "given mock_user" do
             let(:mock_user) { double }
             let(:post) { Post.new post_attribute }
+            let(:last_id) { double }
+            let(:user_id) { double }
+            let(:insert_post_query) { "insert into posts (user_id, text) values ('#{user_id}','#{text}')" }
 
             context "text character is not limit" do
                 before(:each) do
                     allow(post).to receive(:is_characters_maximum_limit?).and_return(false)
-                    allow(post).to receive(:save)
+                    allow(mock_client).to receive(:last_id).and_return(last_id)
+                    allow(mock_user).to receive(:id).and_return(user_id)
+                    allow(mock_client).to receive(:query)
                 end
-                
-                it "does have user to equal mock_user" do
-                    post.send_by(mock_user)
 
-                    expect(post.user).to eq(mock_user) 
-                end 
-    
                 it "does save" do
-                    expect(post).to receive(:save)
-    
+                    expect(mock_client).to receive(:query).with(insert_post_query)
+        
                     post.send_by(mock_user)
-                end 
-            end
-
-            context "text character is limit" do
-                before(:each) do
-                    allow(post).to receive(:is_characters_maximum_limit?).and_return(true)
                 end
-                
-                it "does not have user" do
-                    post.send_by(mock_user)
 
-                    expect(post.user).to be_nil
-                end 
-    
-                it "does not save" do
-                    expect(post).to_not receive(:save)
-    
-                    post.send_by(mock_user)
-                end 
+                context "have hashtag" do
+                    let(:hashtag_text) { double }
+                    let(:hashtag_texts) { [hashtag_text] }
+                    let(:hashtag) { double }
+                    let(:text_contain_hashtag) { "hello world #monday" }
+                    let(:post_with_text_contain_hashtag_attribute) {{
+                        "user" => mock_user,
+                        "text" => text_contain_hashtag
+                    }}
+                    let(:post_have_id_text_contain_hashtag) { Post.new post_with_text_contain_hashtag_attribute }
+            
+                    before(:each) do
+                        allow(Hashtag).to receive(:get_hashtags_by_text).and_return(hashtag_texts)
+                        allow(Hashtag).to receive(:new).and_return(hashtag)
+                        allow(hashtag).to receive(:save_on)
+                    end
+        
+                    it "does save hashtags" do
+                        expect(hashtag).to receive(:save_on).with(post_have_id_text_contain_hashtag)
+            
+                        post_have_id_text_contain_hashtag.send_by(mock_user)
+                    end
+                end
+
+                context "text don't have hashtag" do
+                    before(:each) do
+                        allow(Hashtag).to receive(:contained?).and_return(false)
+                    end
+        
+                    it "does not save hashtags" do
+                        expect(post).to_not receive(:save_hashtags)
+            
+                        post.send_by(mock_user)
+                    end
+                end
+
+                context "have attachment" do
+                    let(:mock_attachment) { double }
+                    let(:mock_saved_filename) { double }
+                    let(:post_with_attachment_attribute) {{
+                        **post_attribute,
+                        "attachment" => mock_attachment,
+                    }}
+                    let(:post_have_attachment) { Post.new post_with_attachment_attribute }
+        
+                    before(:each) do
+                        allow(mock_attachment).to receive(:attached_by)
+                        allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
+                    end
+        
+                    it "does save" do
+                        expected = "insert into posts (user_id, text, attachment_path) values ('#{user_id}','#{text}', '#{mock_saved_filename}')"
+                        
+                        expect(mock_client).to receive(:query).with(expected)
+        
+                        post_have_attachment.send_by(mock_user)
+                    end
+                end
             end
         end
     end
@@ -99,89 +139,6 @@ describe Post do
                 actual = post.is_characters_maximum_limit?
 
                 expect(actual).to be_truthy   
-            end
-        end
-    end
-
-    describe "#save" do
-        let(:last_id) { double }
-        let(:mock_user) { double }
-        let(:user_id) { double }
-        let(:post_attribute_with_user) {{
-            **post_attribute,
-            "user" => mock_user
-        }}
-        let(:post_have_user) { Post.new post_attribute_with_user }
-        let(:insert_post_query) { "insert into posts (user_id, text) values ('#{user_id}','#{text}')" }
-
-        before(:each) do
-            allow(mock_user).to receive(:id).and_return(user_id)
-            allow(mock_client).to receive(:last_id).and_return(last_id)
-            allow(mock_client).to receive(:query)
-        end
-
-        it "does save" do
-            expect(mock_client).to receive(:query).with(insert_post_query)
-
-            post_have_user.save
-        end
-
-        context "have hashtag" do
-            let(:hashtag_text) { double }
-            let(:hashtag_texts) { [hashtag_text] }
-            let(:hashtag) { double }
-            let(:text_contain_hashtag) { "hello world #monday" }
-            let(:post_with_text_contain_hashtag_attribute) {{
-                "user" => mock_user,
-                "text" => text_contain_hashtag
-            }}
-            let(:post_have_id_text_contain_hashtag) { Post.new post_with_text_contain_hashtag_attribute }
-    
-            before(:each) do
-                allow(Hashtag).to receive(:get_hashtags_by_text).and_return(hashtag_texts)
-                allow(Hashtag).to receive(:new).and_return(hashtag)
-                allow(hashtag).to receive(:save_on)
-            end
-
-            it "does save hashtags" do
-                expect(hashtag).to receive(:save_on).with(post_have_id_text_contain_hashtag)
-    
-                post_have_id_text_contain_hashtag.save
-            end
-        end
-
-        context "text don't have hashtag" do
-            before(:each) do
-                allow(Hashtag).to receive(:contained?).and_return(false)
-            end
-
-            it "does not save hashtags" do
-                expect(post_have_user).to_not receive(:save_hashtags)
-    
-                post_have_user.save
-            end
-        end
-
-        context "have attachment" do
-            let(:mock_attachment) { double }
-            let(:mock_saved_filename) { double }
-            let(:post_with_attachment_and_user_attribute) {{
-                **post_attribute_with_user,
-                "attachment" => mock_attachment,
-            }}
-            let(:post_have_attachment_and_user) { Post.new post_with_attachment_and_user_attribute }
-
-            before(:each) do
-                allow(mock_attachment).to receive(:attached_by)
-                allow(mock_attachment).to receive(:saved_filename).and_return(mock_saved_filename)
-            end
-
-            it "does save" do
-                expected = "insert into posts (user_id, text, attachment_path) values ('#{user_id}','#{text}', '#{mock_saved_filename}')"
-                
-                expect(mock_client).to receive(:query).with(expected)
-
-                post_have_attachment_and_user.save
             end
         end
     end
