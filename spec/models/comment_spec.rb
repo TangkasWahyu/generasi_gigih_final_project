@@ -2,35 +2,39 @@ require_relative '../test_helper'
 require_relative '../../models/comment'
 
 describe Comment do
-    describe "#save" do
-		context "have user and user have post with id" do
+    describe "#send_by" do
+		context "given mock user" do
 			let(:id) { double } 
-			let(:post_id) { double } 
 			let(:mock_user) { double }
-			let(:mock_query) { double } 
+            let(:mock_user_id) { double }
+			let(:mock_post) { double } 
+			let(:post_id) { double } 
 			let(:mock_client) { double } 
+			let(:last_id) { double }
+			let(:text){ "Hello world" }
 			let(:comment_attribute) {{
 				"id" => id,
-				"text" => double,
+				"text" => text,
 				"user" => mock_user
 			}}
 			let(:comment) { Comment.new comment_attribute } 
+            let(:insert_post_query) { "insert into posts (user_id, text) values ('#{mock_user_id}','#{text}')" }
+            let(:insert_post_ref_query) { "insert into postRefs (post_id, post_ref_id) values (#{id}, #{post_id})" }
 
 			before(:each) do
 				allow(Mysql2::Client).to receive(:new).and_return(mock_client)
-				allow(mock_user).to receive_message_chain(:post, :id).and_return(post_id)
-				allow(comment).to receive(:get_insert_query).and_return(mock_query)
-				allow(mock_client).to receive(:last_id).and_return(id)
-				allow(Hashtag).to receive(:contained?)
+                allow(mock_user).to receive(:post).and_return(mock_post)
+                allow(mock_post).to receive(:id).and_return(post_id)
+                allow(mock_client).to receive(:last_id).and_return(last_id)
+                allow(mock_user).to receive(:id).and_return(mock_user_id)
+                allow(mock_client).to receive(:query)
 			end
 		
-			it "does query with mock query and insert post ref query" do
-				insert_post_ref_query = "insert into postRefs (post_id, post_ref_id) values (#{id}, #{post_id})"
-
-				expect(mock_client).to receive(:query).with(mock_query)
+			it "does save comment" do
+				expect(mock_client).to receive(:query).with(insert_post_query)
 				expect(mock_client).to receive(:query).with(insert_post_ref_query)
 
-				comment.save
+				comment.send_by(mock_user)
 			end
 		end
     end
