@@ -1,5 +1,6 @@
 require_relative '../test_helper'
 require_relative '../../models/hashtag'
+require_relative '../../models/post'
 
 describe Hashtag do
     describe "#initialize" do
@@ -13,22 +14,31 @@ describe Hashtag do
     end
 
     describe "#save_on" do
-        context "given mock_post" do
-            it "should call insert_query" do
-                mock_client = double
-                mock_last_id = double
-                mock_post = double
-                mock_post_id = double
-                text = "monday"
-                hashtag = Hashtag.new(text)
-                insert_hashtag_query = "insert into hashtags (text, post_id) values ('#{text}', #{mock_last_id})"
-    
-                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
-                allow(mock_post).to receive(:id).and_return(mock_post_id)
-                expect(mock_client).to receive(:query).with(insert_hashtag_query)
-                allow(mock_client).to receive(:last_id).and_return(mock_last_id)
+        context "given post" do
+            let(:post_text){ "Hello world? #monday" }
+			let(:post_id) { "1" } 
+			let(:post_attribute) {{
+				"text" => post_text,
+                "id" => post_id
+			}}
+            let(:post) { Post.new post_attribute }
 
-                hashtag.save_on(mock_post)
+            let(:text) { "monday" }
+            let(:hashtag) { Hashtag.new text }
+
+			let(:mock_client) { double } 
+			let(:mock_last_id) { double } 
+            let(:insert_hashtag_query) { "insert into hashtags (text, post_id) values ('#{text}', #{post_id})" }
+
+            before(:each) do
+                allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+                allow(mock_client).to receive(:last_id).and_return(mock_last_id)
+            end
+
+            it "does save hashtag" do
+                expect(mock_client).to receive(:query).with(insert_hashtag_query)
+
+                hashtag.save_on(post)
             end
         end
     end
