@@ -41,4 +41,6 @@ class Attachment
     def get_random_number
         "#{Time.new.to_a[0,6].join}#{@user.id}"
     end
+
+    private :get_random_number
 end

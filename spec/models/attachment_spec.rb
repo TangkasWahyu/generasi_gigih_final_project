@@ -190,51 +190,28 @@ describe Attachment do
 
     describe "#get_filename" do
         context "have user" do
-            let(:attachment_attribute_have_user) {{
-                **attachment_attribute,
-                "user" => double
-            }} 
-            let(:mock_random_number) { double } 
-            let(:mock_extension) { double } 
-            let(:attachment_have_user) { Attachment.new attachment_attribute_have_user } 
-
-            before(:each) do
-                allow(attachment_have_user).to receive(:get_random_number).and_return(mock_random_number)
-                allow(File).to receive(:extname).and_return(mock_extension)
-            end
-
-            it "does return saved filename to equal expected" do
-                expected = "#{mock_random_number}#{mock_extension}"
-
-                actual = attachment_have_user.get_filename
-
-                expect(actual).to eq(expected)
-            end
-        end
-    end
-
-    describe "#get_random_number" do
-        context "have mock_user" do
             let(:mock_user) { double } 
             let(:mock_user_id) { double } 
-            let(:attachment_attribute_with_user) {{
+            let(:attachment_attribute_have_user) {{
                 **attachment_attribute,
                 "user" => mock_user
-            }}
-            let(:attachment_have_user) { Attachment.new attachment_attribute_with_user } 
+            }} 
+            let(:mock_extension) { double } 
+            let(:attachment_have_user) { Attachment.new attachment_attribute_have_user } 
             let(:mock_time_array) { Array.new(10, double) } 
             let(:joined06_mock_time_array) { mock_time_array[0,6].join } 
 
             before(:each) do
                 allow(Time).to receive_message_chain(:new, :to_a).and_return(mock_time_array)
                 allow(mock_user).to receive_message_chain(:id).and_return(mock_user_id)
+                allow(File).to receive(:extname).and_return(mock_extension)
             end
 
-            it "does return random number" do
-                expected = "#{joined06_mock_time_array}#{mock_user_id}"
-    
-                actual = attachment_have_user.get_random_number
-    
+            it "does return saved filename to equal expected" do
+                expected = "#{joined06_mock_time_array}#{mock_user_id}#{mock_extension}"
+
+                actual = attachment_have_user.get_filename
+
                 expect(actual).to eq(expected)
             end
         end
