@@ -3,13 +3,11 @@ require_relative '../../models/hashtag'
 
 describe Hashtag do
     describe "#initialize" do
-        context "given monday text" do
-            it "should create object.text that equal with monday text" do
-                text = "monday"
-                
-                expected = Hashtag.new(text)
+        context "given monday" do
+            let(:actual) { Hashtag.new("monday") } 
 
-                expect(expected.text).to eq(text)
+            it "does create object(text) to equal monday" do
+                expect(actual.text).to eq("monday")
             end
         end
     end
