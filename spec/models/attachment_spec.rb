@@ -3,20 +3,20 @@ require_relative '../../models/attachment'
 
 describe Attachment do
     let(:file_mock) { double }
-    let(:attachment_attribute) {{
-        "filename" => "filename",
-        "type" => "video/mp4",
-        "tempfile" => file_mock
-    }}
     
     describe "#initialize" do
-        context "given attachment_attribute" do
-            it "should expected(filename, file) equal to attachment_attribute(filename, tempfile)" do
-                expected = Attachment.new(attachment_attribute)
-        
-                expect(expected.filename).to eq(attachment_attribute["filename"])
-                expect(expected.type).to eq(attachment_attribute["type"])
-                expect(expected.file).to eq(attachment_attribute["tempfile"])
+        context "given attachment attribute" do
+            let(:attachment_attribute) {{
+                "filename" => "filename",
+                "type" => "video/mp4",
+                "tempfile" => file_mock
+            }}
+            let(:actual) { Attachment.new attachment_attribute }
+
+            it "does create object(filename, type, file) to equal attachment attribute(filename, type, tempfile)" do
+                expect(actual.filename).to eq(attachment_attribute["filename"])
+                expect(actual.type).to eq(attachment_attribute["type"])
+                expect(actual.file).to eq(attachment_attribute["tempfile"])
             end
         end
     end
