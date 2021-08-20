@@ -46,18 +46,20 @@ describe Hashtag do
     describe ".contained?" do
         context "given text contain #monday" do
             let(:text) { "Hello world #monday" } 
-            let(:actual) { Hashtag.contained? text } 
 
             it "does return true" do
+               actual = Hashtag.contained?(text)
+
                 expect(actual).to be_truthy 
             end
         end
 
         context "given text contain no hashtag" do
             let(:text) { "Hello world" } 
-            let(:actual) { Hashtag.contained? text } 
 
             it "does return false" do
+               actual = Hashtag.contained?(text)
+
                 expect(actual).to be_falsy
             end
         end
@@ -67,9 +69,10 @@ describe Hashtag do
         context "text contain #monday" do
             let(:text) { "Hello world #monday" } 
             let(:expected) { ["#monday"] } 
-            let(:actual) { Hashtag.get_hashtags_by_text text } 
 
             it "does return #monday" do
+               actual = Hashtag.get_hashtags_by_text(text)
+
                 expect(actual).to eq(expected)
             end
         end
@@ -77,9 +80,10 @@ describe Hashtag do
         context "text contain no hashtag" do
             let(:text) { "Hello world" } 
             let(:expected) { [] } 
-            let(:actual) { Hashtag.get_hashtags_by_text text } 
             
             it "does return empty array" do
+               actual = Hashtag.get_hashtags_by_text(text)
+
                 expect(actual).to eq(expected)
             end
         end
@@ -87,9 +91,10 @@ describe Hashtag do
         context "text contain #Monday" do
             let(:text) { "Hello world #Monday" } 
             let(:expected) { ["#monday"] } 
-            let(:actual) { Hashtag.get_hashtags_by_text text } 
 
             it "does return array that contain #monday only" do
+               actual = Hashtag.get_hashtags_by_text(text)
+
                 expect(actual).to eq(expected)
             end
         end
@@ -97,9 +102,10 @@ describe Hashtag do
         context "text contain #Monday and #tuesday" do
             let(:text) { "Hello world #monday #tuesday" } 
             let(:expected) { ["#monday", "#tuesday"] } 
-            let(:actual) { Hashtag.get_hashtags_by_text text } 
 
             it "does return array that contain #monday and #tuesday only" do
+               actual = Hashtag.get_hashtags_by_text(text)
+
                 expect(actual).to eq(expected)
             end
         end
@@ -107,9 +113,10 @@ describe Hashtag do
         context "text contain #monday and #monday" do
             let(:text) { "Hello world #monday #monday" } 
             let(:expected) { expected = ["#monday"] } 
-            let(:actual) { Hashtag.get_hashtags_by_text text } 
 
             it "does return array that contain #monday only" do
+               actual = Hashtag.get_hashtags_by_text(text)
+
                 expect(actual).to eq(expected)
             end
         end
