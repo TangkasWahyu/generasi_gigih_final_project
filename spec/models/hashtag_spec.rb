@@ -45,11 +45,10 @@ describe Hashtag do
 
     describe ".contained?" do
         context "given text contain #monday" do
-            it "should return true" do
-                text = "Hello world #monday"
-
-                actual = Hashtag.contained?(text)
-
+            let(:text) { "Hello world #monday" } 
+            let(:actual) { Hashtag.contained? text } 
+            
+            it "does return true" do
                 expect(actual).to be_truthy 
             end
         end
