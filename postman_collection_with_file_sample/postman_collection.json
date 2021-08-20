@@ -31,13 +31,13 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/save",
+					"raw": "http://34.93.62.87:4567/users/save",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -64,13 +64,13 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/1/post",
+					"raw": "http://34.93.62.87:4567/users/1/post",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -98,13 +98,13 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/1/post",
+					"raw": "http://34.93.62.87:4567/users/1/post",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -132,18 +132,18 @@
 						{
 							"key": "attachment",
 							"type": "file",
-							"src": "/C:/Users/User/Documents/file sample/sample.txt"
+							"src": "/C:/Users/User/Documents/generasi_gigih_final_project/postman_collection_with_file_sample/file sample/test_sample.txt"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/1/post",
+					"raw": "http://34.93.62.87:4567/users/1/post",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -176,13 +176,13 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/1/post",
+					"raw": "http://34.93.62.87:4567/users/1/post",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -210,13 +210,13 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/1/posts/1/comment",
+					"raw": "http://34.93.62.87:4567/users/1/posts/1/comment",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -242,17 +242,22 @@
 							"key": "text",
 							"value": "the first comment in this API #comment #satu #one",
 							"type": "text"
+						},
+						{
+							"key": "attachment",
+							"type": "file",
+							"src": "/C:/Users/User/Documents/generasi_gigih_final_project/postman_collection_with_file_sample/file sample/test_sample.txt"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:4567/users/1/posts/1/comment",
+					"raw": "http://34.93.62.87:4567/users/1/posts/1/comment",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -272,13 +277,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:4567/hashtags/trending",
+					"raw": "http://34.93.62.87:4567/hashtags/trending",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
@@ -295,13 +300,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:4567/hashtags/one/posts",
+					"raw": "http://34.93.62.87:4567/hashtags/one/posts",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"34",
+						"93",
+						"62",
+						"87"
 					],
 					"port": "4567",
 					"path": [
