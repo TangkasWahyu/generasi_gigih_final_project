@@ -75,12 +75,11 @@ describe Hashtag do
         end
 
         context "text contain no hashtag" do
-            it "return empty array" do
-                expected = []
-                text = "Hello world"
-
-                actual = Hashtag.get_hashtags_by_text(text)
-
+            let(:text) { "Hello world" } 
+            let(:expected) { [] } 
+            let(:actual) { Hashtag.get_hashtags_by_text text } 
+            
+            it "does return empty array" do
                 expect(actual).to eq(expected)
             end
         end
