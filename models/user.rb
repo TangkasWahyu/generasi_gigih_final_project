@@ -22,9 +22,9 @@ class User
         client = create_db_client
         users = Array.new
     
-        rawData = client.query("select * from users where id = #{id}")
+        raw_data = client.query("select * from users where id = #{id}")
     
-        rawData.each do |data|
+        raw_data.each do |data|
             user = User.new(data);
             users.push(user)
         end
