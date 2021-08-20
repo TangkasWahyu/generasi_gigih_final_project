@@ -95,12 +95,11 @@ describe Hashtag do
         end
 
         context "text contain #Monday and #tuesday" do
-            it "return array that contain #monday and #tuesday only" do
-                expected = ["#monday", "#tuesday"]
-                text = "Hello world #monday #tuesday"
-                
-                actual = Hashtag.get_hashtags_by_text(text)
+            let(:text) { "Hello world #monday #tuesday" } 
+            let(:expected) { ["#monday", "#tuesday"] } 
+            let(:actual) { Hashtag.get_hashtags_by_text text } 
 
+            it "does return array that contain #monday and #tuesday only" do
                 expect(actual).to eq(expected)
             end
         end
