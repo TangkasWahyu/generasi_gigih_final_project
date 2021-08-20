@@ -47,18 +47,17 @@ describe Hashtag do
         context "given text contain #monday" do
             let(:text) { "Hello world #monday" } 
             let(:actual) { Hashtag.contained? text } 
-            
+
             it "does return true" do
                 expect(actual).to be_truthy 
             end
         end
 
         context "given text contain no hashtag" do
-            it "should return false" do
-                text = "Hello world"
+            let(:text) { "Hello world" } 
+            let(:actual) { Hashtag.contained? text } 
 
-                actual = Hashtag.contained?(text)
-
+            it "does return false" do
                 expect(actual).to be_falsy
             end
         end
