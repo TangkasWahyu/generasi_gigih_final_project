@@ -70,10 +70,7 @@ describe User do
     
                 user_with_post = user.on(mock_post)
                 
-                expect(user_with_post.id).to eq(user.id)
-                expect(user_with_post.username).to eq(user.username)
-                expect(user_with_post.email).to eq(user.email)
-                expect(user_with_post.bio_description).to eq(user.bio_description)
+                expect(user_with_post.to_s).to eq(user.to_s)
                 expect(user_with_post.post).to eq(mock_post)
             end
         end
