@@ -18,7 +18,7 @@ describe Post do
         context "given post attribute" do
             let(:post) { Post.new(post_attribute) } 
 
-            it "should create object(text) to equal post attribute(text)" do
+            it "does create object(text) to equal post attribute(text)" do
                 expect(post.text).to eq(post_attribute["text"])
             end
         end
