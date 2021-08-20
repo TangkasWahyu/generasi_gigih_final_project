@@ -18,7 +18,7 @@ describe User do
 
     describe ".initialize" do
         context "given valid attribute" do
-            it "should create object that equal with user_valid_attribute" do
+            it "does create(username, email, bio_description) object that equal with user_valid_attribute(username, email, bio_description)" do
                 expect(user.username).to  eq(user_valid_attribute["username"])
                 expect(user.email).to  eq(user_valid_attribute["email"])
                 expect(user.bio_description).to  eq(user_valid_attribute["bio_description"])
