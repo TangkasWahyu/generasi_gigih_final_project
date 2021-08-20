@@ -60,9 +60,9 @@ class Post
         client = create_db_client
         posts = Array.new
     
-        rawData = client.query("select * from posts where id = #{id}")
+        raw_data = client.query("select * from posts where id = #{id}")
     
-        rawData.each do |data|
+        raw_data.each do |data|
             post = Post.new(data);
             posts.push(post)
         end
@@ -75,9 +75,9 @@ class Post
         posts = Array.new
         fetch_by_hashtag_text_query = "select * from posts left join postRefs on posts.id = postRefs.post_id where postRefs.post_ref_id is null and posts.text like '%##{hashtag_text}%';"
     
-        rawData = client.query(fetch_by_hashtag_text_query)
+        raw_data = client.query(fetch_by_hashtag_text_query)
     
-        rawData.each do |data|
+        raw_data.each do |data|
             post = Post.new(data);
             posts.push(post)
         end
