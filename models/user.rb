@@ -41,4 +41,8 @@ class User
 
         self
     end
+
+    def to_s
+        "#{@username} #{@email} #{@bio_description} #{@id} #{@post}"
+    end
 end

@@ -18,7 +18,7 @@ describe User do
 
     describe ".initialize" do
         context "given valid attribute" do
-            it "does create(username, email, bio_description) object that equal with user_valid_attribute(username, email, bio_description)" do
+            it "does create(username, email, bio_description) object that equal with user_valid_attribute" do
                 expect(user.username).to  eq(user_valid_attribute["username"])
                 expect(user.email).to  eq(user_valid_attribute["email"])
                 expect(user.bio_description).to  eq(user_valid_attribute["bio_description"])
@@ -75,6 +75,27 @@ describe User do
                 expect(user_with_post.email).to eq(user.email)
                 expect(user_with_post.bio_description).to eq(user.bio_description)
                 expect(user_with_post.post).to eq(mock_post)
+            end
+        end
+    end
+
+    describe "to_s" do
+        context "given user valid attribute" do
+            let(:user_valid_attribute) {{
+                "id" => "1",
+                "username" => "mark",
+                "email" => "mark@mail.com",
+                "bio_description" => "20 years old and grow",
+                "post" => double
+            }}
+            let(:user) { User.new user_valid_attribute }
+
+            it "does return string to equal expected" do
+                expected = "#{user_valid_attribute["username"]} #{user_valid_attribute["email"]} #{user_valid_attribute["bio_description"]} #{user_valid_attribute["id"]} #{user_valid_attribute["post"]}"
+    
+                actual = user.to_s
+                
+                expect(actual).to eq(expected)
             end
         end
     end
