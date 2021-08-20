@@ -53,4 +53,13 @@ rspec
 ## Postman Collection
 [Postman collection with file sample](https://github.com/YudoWorks/generasi_gigih_final_project/tree/main/postman_collection_with_file_sample)
 
+### API Documentation 
+| Features | urls |
+| ------ | ------ |
+| save user | http://34.93.62.87:4567/users/save |
+| user send post | http://34.93.62.87:4567/users/[user_id]/post |
+| user send comment on post | http://34.93.62.87:4567/users/[user_id]/posts/[post_id]/comment |
+| get trending post | http://34.93.62.87:4567/hashtags/trending |
+| get trending post base on hashtag text | http://34.93.62.87:4567/hashtags/[hashtag_text]/posts |
+
 💪 Generasi Gigih Backend 2021
