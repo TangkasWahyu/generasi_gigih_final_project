@@ -5,8 +5,8 @@
 Social media application which can be used to share information with other people. This application will only be used by people that work in a certain company so we cannot use existing public social media. This application have feature:
 
 - Create user
-- Send post by user, post should have text and could have hashtag and attachment
-- Send comment by user, comment should have text and could have hashtag and attachment
+- Send post by user, post should have text and could have hashtag(s) and attachment
+- Send comment by user, comment should have text and could have hashtag(s) and attachment
 - Get trending 5 hashtags in last 24 hour
 - Get posts by hashtag text
 
