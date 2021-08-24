@@ -27,7 +27,12 @@ class Hashtag
     client = create_db_client
     top_5_trending_24_hours_hashtags = []
 
-    fetch_trending_24_hours_query = 'select hashtags.text, count(hashtags.text) as total from posts left join hashtags on hashtags.post_id = posts.id where date >= DATE_SUB(NOW(), INTERVAL 1 DAY) group by hashtags.text order by total desc limit 5;'
+    fetch_trending_24_hours_query = 'select hashtags.text, count(hashtags.text) as total from posts'\
+    'left join hashtags on hashtags.post_id = posts.id'\
+    'where date >= DATE_SUB(NOW(), INTERVAL 1 DAY)'\
+    'group by hashtags.text'\
+    'order by total desc limit 5;'
+
     raw_data = client.query(fetch_trending_24_hours_query)
 
     raw_data.each do |data|

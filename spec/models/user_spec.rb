@@ -92,7 +92,11 @@ describe User do
       let(:user) { User.new user_valid_attribute }
 
       it 'does return string to equal expected' do
-        expected = "#{user_valid_attribute['username']} #{user_valid_attribute['email']} #{user_valid_attribute['bio_description']} #{user_valid_attribute['id']} #{user_valid_attribute['post']}"
+        expected = "#{user_valid_attribute['username']} "\
+        "#{user_valid_attribute['email']} "\
+        "#{user_valid_attribute['bio_description']} "\
+        "#{user_valid_attribute['id']} "\
+        "#{user_valid_attribute['post']}"
 
         actual = user.to_s
 
