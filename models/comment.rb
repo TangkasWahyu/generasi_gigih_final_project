@@ -2,8 +2,6 @@ require_relative 'post'
 require_relative 'hashtag'
 
 class Comment < Post
-  attr_reader :post
-
   def save
     super
     client = create_db_client
