@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "d974daba-67fa-44d6-9037-b31bac98f953",
-		"name": "generasi_gigih_final_project",
+		"name": "generasi_gigih_final_project localhost",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -31,13 +31,9 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/save",
-					"protocol": "http",
+					"raw": "localhost:4567/users/save",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -64,13 +60,9 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/1/post",
-					"protocol": "http",
+					"raw": "localhost:4567/users/1/post",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -98,17 +90,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/1/post",
-					"protocol": "http",
+					"raw": "localhost:4567users/1/post",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
-					"port": "4567",
+					"port": "4567users",
 					"path": [
-						"users",
 						"1",
 						"post"
 					]
@@ -137,13 +124,9 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/1/post",
-					"protocol": "http",
+					"raw": "localhost:4567/users/1/post",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -176,13 +159,9 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/1/post",
-					"protocol": "http",
+					"raw": "localhost:4567/users/1/post",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -210,13 +189,9 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/1/posts/1/comment",
-					"protocol": "http",
+					"raw": "localhost:4567/users/1/posts/1/comment",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -251,13 +226,9 @@
 					]
 				},
 				"url": {
-					"raw": "http://34.93.62.87:4567/users/1/posts/1/comment",
-					"protocol": "http",
+					"raw": "localhost:4567/users/1/posts/1/comment",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -277,13 +248,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://34.93.62.87:4567/hashtags/trending",
-					"protocol": "http",
+					"raw": "localhost:4567/hashtags/trending",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
@@ -300,13 +267,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://34.93.62.87:4567/hashtags/one/posts",
-					"protocol": "http",
+					"raw": "localhost:4567/hashtags/one/posts",
 					"host": [
-						"34",
-						"93",
-						"62",
-						"87"
+						"localhost"
 					],
 					"port": "4567",
 					"path": [
